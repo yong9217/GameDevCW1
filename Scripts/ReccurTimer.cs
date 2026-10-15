@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ReccurTimer : MonoBehaviour
@@ -8,8 +9,7 @@ public class ReccurTimer : MonoBehaviour
     float curTicks = 0f;
     float resetThreshold = 0f;
 
-    SortedList<float, List<Action>> tasks = new SortedList<float, List<Action>>();
-    Dictionary<float, float> offsets = new Dictionary<float, float>();
+    SortedList<float, TimeNode> tasks = new SortedList<float, TimeNode>();
 
     public void Init(float t)
     {
@@ -29,12 +29,9 @@ public class ReccurTimer : MonoBehaviour
 
     public void OnTimeInvoke(float b, Action ac)
     {
-        if(!tasks.TryAdd(b, new List<Action> { ac }))
+        if(!tasks.TryAdd(b, new TimeNode(ac)))
         {
-            tasks[b].Add(ac);
-        } else
-        {
-            offsets.Add(b,0f);
+            tasks[b].tasks.Add(ac);
         }
     }
 
@@ -47,28 +44,55 @@ public class ReccurTimer : MonoBehaviour
         if(curTicks >= resetThreshold)
         {
             curTicks -= resetThreshold * Mathf.Floor(curTicks/resetThreshold);
-            foreach (float k in offsets.Keys)
+
+            foreach (KeyValuePair<float, TimeNode> kv in tasks)
             {
-                offsets[k] += curTicks;
-                if(k > offsets[k])
+                kv.Value.Reset(resetThreshold);
+            }
+
+            Debug.Log("Reset!");
+        }
+
+        // float cTime = offset + curTicks;
+
+        foreach (float k in tasks.Keys.ToList())
+        {
+            TimeNode node = tasks[k];
+
+            if(curTicks > node.nextCall)
+            {                
+                node.nextCall += k;
+                node.Call();
+                foreach (Action t in node.tasks)
                 {
-                    offsets[k] -= k;
+                    t.Invoke();
                 }
             }
-
-            Debug.Log(curTicks);
         }
+    }
+}
 
-        foreach (KeyValuePair<float, List<Action>> kv in tasks)
-        {
-            float mod = (kv.Key - offsets[kv.Key])/curTicks;
-            float nSecsBetweenMods = (mod - Mathf.Floor(mod))*kv.Key;
-            float t = nSecsBetweenMods - dTime;
+public class TimeNode
+{
+    public List<Action> tasks;
+    public int nCalls;
+    public float nextCall;
 
-            if(t <= 0)
-            {
-                kv.Value.ForEach(a => a.Invoke());
-            }
-        }
+    public TimeNode(Action ac)
+    {
+        tasks = new List<Action>{ac};
+        nCalls = 0;
+        nextCall = 0f;
+    }
+
+    public void Reset(float resT)
+    {
+        nCalls = 0;
+        nextCall -= resT;
+    }
+
+    public void Call()
+    {
+        nCalls++;
     }
 }

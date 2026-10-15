@@ -507,6 +507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   timer: {fileID: 1029708099}
   t: abc
+  init: 7
 --- !u!4 &1226214910
 Transform:
   m_ObjectHideFlags: 0
