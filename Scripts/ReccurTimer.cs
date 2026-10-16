@@ -9,6 +9,8 @@ public class ReccurTimer : MonoBehaviour
     float curTicks = 0f;
     float resetThreshold = 0f;
 
+    int nCycles = 0;
+
     public bool paused;
 
     SortedList<float, TimeNode> tasks = new SortedList<float, TimeNode>();
@@ -54,10 +56,10 @@ public class ReccurTimer : MonoBehaviour
                     kv.Value.Reset(resetThreshold);
                 }
 
+                nCycles++;
+
                 Debug.Log("Reset!");
             }
-
-            // float cTime = offset + curTicks;
 
             foreach (float k in tasks.Keys.ToList())
             {
@@ -74,6 +76,18 @@ public class ReccurTimer : MonoBehaviour
                 }
             }
         }
+    }
+
+    public override string ToString()
+    {
+        string ot = $"Timer ({(paused ? "|>" : "||")}) at {curTicks} / {resetThreshold} secs [{nCycles} cycles :: Total elapsed: {nCycles*resetThreshold + curTicks} secs]\n";
+
+        foreach (float k in tasks.Keys.ToList())
+        {
+            ot += $"Every {k} secs :: {tasks[k]}\n";
+        }
+
+        return ot;
     }
 }
 
@@ -99,5 +113,12 @@ public class TimeNode
     public void Call()
     {
         nCalls++;
+    }
+
+    public override string ToString()
+    {
+        string ot = $"TimeNode {tasks.Count} tasks | nCalls: {nCalls}, nextCall: {nextCall}";
+
+        return ot;
     }
 }

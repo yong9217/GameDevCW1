@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerEconomy : MonoBehaviour
 {
@@ -11,9 +10,8 @@ public class PlayerEconomy : MonoBehaviour
 
     float totalCash;
 
-    public bool suppressDebug;
-    InputAction debug;
-    bool b = true;
+    public Debugger debug;
+    public string debugKey;
 
     void Awake()
     {
@@ -24,13 +22,6 @@ public class PlayerEconomy : MonoBehaviour
         {
             totalCash = 100f;
         }
-
-        debug = InputSystem.actions.FindAction("Debug");
-
-        if(debug == null)
-        {
-            Debug.LogWarning("Unable to find Debug action. Go to ");
-        }
     }
 
     void Start()
@@ -39,6 +30,11 @@ public class PlayerEconomy : MonoBehaviour
         {
             totalCash += CashInAmounts;
         });
+
+        debug.Add(debugKey, () =>
+        {
+            Debug.Log(this);
+        }, eventName: "Wallet");
     }
 
     public bool Spend(float buy)
@@ -70,23 +66,5 @@ public class PlayerEconomy : MonoBehaviour
         ot += $"Influx: {CashInAmounts} $ / {timeBetweenCashIns} secs (Started with {startCash} $)";
 
         return ot;
-    }
-
-    void Update()
-    {
-        if (!suppressDebug)
-        {
-            if (debug.IsPressed())
-            {
-                if (b)
-                {
-                    Debug.Log(this);
-                    b = false;
-                }
-            } else
-            {
-                b = true;
-            }
-        }
     }
 }
