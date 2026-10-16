@@ -9,6 +9,8 @@ public class ReccurTimer : MonoBehaviour
     float curTicks = 0f;
     float resetThreshold = 0f;
 
+    public bool paused;
+
     SortedList<float, TimeNode> tasks = new SortedList<float, TimeNode>();
 
     public void Init(float t)
@@ -27,9 +29,9 @@ public class ReccurTimer : MonoBehaviour
         }
     }
 
-    public void OnTimeInvoke(float b, Action ac)
+    public void OnTimeInvoke(float b, Action ac, float at = 0f)
     {
-        if(!tasks.TryAdd(b, new TimeNode(ac)))
+        if(!tasks.TryAdd(b, new TimeNode(ac, at)))
         {
             tasks[b].tasks.Add(ac);
         }
@@ -38,34 +40,37 @@ public class ReccurTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float dTime = Time.deltaTime;
-        curTicks += dTime;
-
-        if(curTicks >= resetThreshold)
+        if (!paused)
         {
-            curTicks -= resetThreshold * Mathf.Floor(curTicks/resetThreshold);
+            float dTime = Time.deltaTime;
+            curTicks += dTime;
 
-            foreach (KeyValuePair<float, TimeNode> kv in tasks)
+            if(curTicks >= resetThreshold)
             {
-                kv.Value.Reset(resetThreshold);
+                curTicks -= resetThreshold * Mathf.Floor(curTicks/resetThreshold);
+
+                foreach (KeyValuePair<float, TimeNode> kv in tasks)
+                {
+                    kv.Value.Reset(resetThreshold);
+                }
+
+                Debug.Log("Reset!");
             }
 
-            Debug.Log("Reset!");
-        }
+            // float cTime = offset + curTicks;
 
-        // float cTime = offset + curTicks;
+            foreach (float k in tasks.Keys.ToList())
+            {
+                TimeNode node = tasks[k];
 
-        foreach (float k in tasks.Keys.ToList())
-        {
-            TimeNode node = tasks[k];
-
-            if(curTicks > node.nextCall)
-            {                
-                node.nextCall += k;
-                node.Call();
-                foreach (Action t in node.tasks)
-                {
-                    t.Invoke();
+                if(curTicks > node.nextCall)
+                {                
+                    node.nextCall += k;
+                    node.Call();
+                    foreach (Action t in node.tasks)
+                    {
+                        t.Invoke();
+                    }
                 }
             }
         }
@@ -78,11 +83,11 @@ public class TimeNode
     public int nCalls;
     public float nextCall;
 
-    public TimeNode(Action ac)
+    public TimeNode(Action ac, float offset = 0f)
     {
         tasks = new List<Action>{ac};
         nCalls = 0;
-        nextCall = 0f;
+        nextCall = offset;
     }
 
     public void Reset(float resT)
