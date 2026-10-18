@@ -80,7 +80,7 @@ public class ReccurTimer : MonoBehaviour
 
     public override string ToString()
     {
-        string ot = $"Timer ({(paused ? "|>" : "||")}) at {curTicks} / {resetThreshold} secs [{nCycles} cycles :: Total elapsed: {nCycles*resetThreshold + curTicks} secs]\n";
+        string ot = $"Timer ({(paused ? "||" : "|>")}) at {curTicks} / {resetThreshold} secs [{nCycles} cycles :: Total elapsed: {nCycles*resetThreshold + curTicks} secs]\n";
 
         foreach (float k in tasks.Keys.ToList())
         {

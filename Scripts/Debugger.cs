@@ -6,15 +6,13 @@ using UnityEngine.InputSystem;
 public class Debugger : MonoBehaviour
 {
     public bool printDebug;
-    Dictionary<string, DebugTask> callbacks;
+    Dictionary<string, DebugTask> callbacks = new Dictionary<string, DebugTask>();
 
     char toggleKey = 'q';
     string modifierKey = "leftCtrl";
 
     void Awake()
     {
-        callbacks = new Dictionary<string, DebugTask>();
-
         InputAction toggleDebug = new InputAction("Toggle Debug");
         toggleDebug.AddCompositeBinding("ButtonWithOneModifier")
             .With("Button", $"<Keyboard>/" + toggleKey)
