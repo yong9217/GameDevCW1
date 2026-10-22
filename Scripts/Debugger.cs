@@ -36,7 +36,7 @@ public class Debugger : MonoBehaviour
         SetDebug(printDebug);
     }
 
-    public void Add(string key, Action ac, string eventName = null)
+    public void Add(string key, Action ac, string eventName = null, IType input = IType.Keyboard)
     {
         string callName = $"Debug {(eventName == null ? callbacks.Count : eventName)} on {key}";
 
@@ -44,7 +44,7 @@ public class Debugger : MonoBehaviour
 
         debugAction.AddCompositeBinding("ButtonWithOneModifier")
             .With("Button", $"<Keyboard>/{key}")
-            .With("Modifier", $"<Keyboard>/{modifierKey}");
+            .With("Modifier", $"<{input}>/{modifierKey}");
 
         debugAction.canceled += (InputAction.CallbackContext ct) =>
         {
@@ -64,8 +64,7 @@ public class Debugger : MonoBehaviour
         {
             callbacks[callName].task = new Action(() =>
             {
-                callbacks[callName].task();
-                ac();
+                callbacks[callName].task = ac;
             });
         }
 
@@ -94,6 +93,37 @@ public class Debugger : MonoBehaviour
         }
 
         Debug.Log(printDebug ? "Enabled debug" : "Disabled debug");
+    }
+
+    public Vector3[] GetCamBoundaries()
+    {
+        Vector3[] corners = new Vector3[4];
+        corners[0] = Camera.main.ViewportToWorldPoint(new Vector3(0,0,Camera.main.transform.position.y)); //botleft
+        corners[1] = Camera.main.ViewportToWorldPoint(new Vector3(1,0,Camera.main.transform.position.y)); //botright
+        corners[2] = Camera.main.ViewportToWorldPoint(new Vector3(1,1,Camera.main.transform.position.y)); //topright
+        corners[3] = Camera.main.ViewportToWorldPoint(new Vector3(0,1,Camera.main.transform.position.y)); //topleft
+
+        return corners;
+    }
+
+    public Vector2 GetCamSize()
+    {
+        Vector3[] corners = GetCamBoundaries();
+
+        return new Vector2(Mathf.Abs((corners[0]-corners[1]).magnitude), Mathf.Abs((corners[2]-corners[1]).magnitude));
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Vector3[] corners = GetCamBoundaries();
+        for(int i = 0; i < corners.Length; i++)
+        {
+            int next = (i + 1)%corners.Length;
+            Vector3 dir = corners[next] - corners[i];
+            Gizmos.DrawRay(corners[i],dir);
+        }
     }
 
     public override string ToString()
@@ -131,4 +161,10 @@ class DebugTask
     {
         inputEvent.Disable();
     }
+}
+
+public enum IType
+{
+    Keyboard,
+    Mouse
 }

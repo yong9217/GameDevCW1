@@ -35,6 +35,11 @@ public class PlayerEconomy : MonoBehaviour
         {
             Debug.Log(this);
         }, eventName: "Wallet");
+
+        debug.Add("l", () =>
+        {
+            Debug.Log(debug.GetCamSize());
+        }, "Cam Size");
     }
 
     public bool Spend(float buy)
