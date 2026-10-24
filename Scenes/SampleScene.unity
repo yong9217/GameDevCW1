@@ -756,6 +756,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1285442117}
   - component: {fileID: 1285442116}
+  - component: {fileID: 1285442118}
   m_Layer: 0
   m_Name: BuilderUIModern
   m_TagString: Untagged
@@ -812,7 +813,7 @@ PanelRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   serializedVersion: 1
-  m_PanelSettings: {fileID: 11400000, guid: dbc98db30e8c0304d89d7d9c4086458c, type: 2}
+  m_PanelSettings: {fileID: 11400000, guid: 71c2b0397ffb7bf4d8758c66fe60a1f4, type: 2}
   sourceAsset: {fileID: 9197481963319205126, guid: 9e9ac9812f840224780cd6870a992c9e, type: 3}
   m_ParentUI: {fileID: 0}
   m_WorldSpaceSizeMode: 1
@@ -836,6 +837,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &1285442118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285442115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e303d78bdde444244b85fb0ec8b8ab84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  prefabsToButton:
+  - key: 1
+    value: {fileID: 7531529729230545349, guid: ee887a22844c1a54eb4d5300da11df8c, type: 3}
+  - key: 2
+    value: {fileID: 8111722681542410085, guid: 8c15877eba0f04b498a3693cb8a9e8c8, type: 3}
+  - key: 3
+    value: {fileID: 3067045975006929576, guid: 9dab0e10e5b153f4e9492106e838d859, type: 3}
+  msh: {fileID: 816112767}
 --- !u!1 &1329768970
 GameObject:
   m_ObjectHideFlags: 0
