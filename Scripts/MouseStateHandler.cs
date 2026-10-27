@@ -22,7 +22,12 @@ public class MouseStateHandler : MonoBehaviour
                 Vector2 mPos = ct.ReadValue<Vector2>();
                 Vector3 wPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, 20));
                 ActiveState(wPos,mPos);
+                active = false;
             }
+        };
+        click.canceled += (InputAction.CallbackContext ct) =>
+        {
+            Activate();
         };
 
         click.Enable();
