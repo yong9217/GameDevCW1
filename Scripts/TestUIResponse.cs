@@ -16,22 +16,37 @@ public class TestUIResponse : MonoBehaviour
 
     void OnUIReload(PanelRenderer pr, VisualElement root, int ver)
     {
+        root.RegisterCallback<MouseOverEvent>(e =>
+        {
+            Debug.Log("Hovered!");
+            msh.active = false;
+        });
+        root.RegisterCallback<MouseOutEvent>(e =>
+        {
+            Debug.Log("Left!");
+            msh.Activate();
+        });
+
         List<Button> buts = root.Query<Button>().ToList();
 
         //For some reason each button gets overwritten
 
+        //Bcuz i is referenced instead of valued for some reason????
+
         for (int i = 0; i < buts.Count; i++)
         {
+            int k = i;
+
             buts[i].clicked += () =>
             {
-                Debug.Log($"Clicked button {i}");
+                Debug.Log($"Clicked button {buts[k].name}");
 
-                if(prefabsToButton.TryGetValue(i, out GameObject prefab))
+                if(prefabsToButton.TryGetValue(k, out GameObject prefab))
                 {
                     msh.towerPrefab = prefab;
                 } else
                 {
-                    Debug.LogWarning($"No prefab assigned to button {i}");
+                    Debug.LogWarning($"No prefab assigned to button {buts[k].name}");
                 }
             };
         }
