@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="aspect-ratio: auto; height: 0; background-color: rgba(0, 0, 0, 0); width: 0;">
+        <ui:Button text="Tower1" style="position: absolute; top: 63px; left: 119px; height: 38px; width: 104px;"/>
+        <ui:Button text="Tower3" style="position: absolute; top: 175px; left: 126px; height: 37px; width: 104px;"/>
+        <ui:Button text="Tower2" style="position: absolute; top: 119px; left: 125px; height: 33px; width: 100px;"/>
+    </ui:VisualElement>
+</ui:UXML>
