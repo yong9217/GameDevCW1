@@ -29,7 +29,9 @@ public static class EnemyBehaviourSetup
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             if (Path.GetFileNameWithoutExtension(path) != name) continue;
-            if (match != null) throw new InvalidOperationException("Multiple " + name + " prefabs found; remove duplicate art imports first.");
+            if (match != null) {
+                throw new InvalidOperationException("Multiple " + name + " prefabs found; remove duplicate art imports first.");
+            };
             match = path;
         }
         if (match == null) throw new InvalidOperationException("Missing existing art prefab: " + name);

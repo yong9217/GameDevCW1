@@ -441,6 +441,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6017034139643924801}
+  - component: {fileID: 1371487708149180861}
+  - component: {fileID: 1469399248534178979}
   m_Layer: 0
   m_Name: Tower_Cannon
   m_TagString: Untagged
@@ -467,6 +469,44 @@ Transform:
   - {fileID: 9009403451225045986}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1371487708149180861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6445595696222938427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 551bf3b8698ca544a9202569fb5b2afc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatTarget
+  kind: 0
+  maxHealth: 100
+  baseHealth: {fileID: 0}
+  attackBounds: {fileID: 1469399248534178979}
+  destroyTowerOnDeath: 1
+--- !u!65 &1469399248534178979
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6445595696222938427}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.35, y: 5.6944723, z: 4.0482655}
+  m_Center: {x: 0, y: 2.8472362, z: -0.349133}
 --- !u!1 &7551098196178888213
 GameObject:
   m_ObjectHideFlags: 0
