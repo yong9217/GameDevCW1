@@ -6,7 +6,10 @@ public class MouseStateHandler : MonoBehaviour
     public bool active;
     InputAction click;
 
+    public PlayerEconomy bank;
     public GameObject towerPrefab;
+
+    public bool debug;
 
     void Awake()
     {
@@ -40,9 +43,18 @@ public class MouseStateHandler : MonoBehaviour
 
     void ActiveState(Vector3 wpos, Vector2 pos)
     {
-        Debug.Log($"Clicked at ({pos.x},{pos.y})");
-        Debug.Log($"Goes to ({wpos.x},{wpos.y},{wpos.z})");
-
-        Instantiate(towerPrefab, new Vector3(wpos.x,0,wpos.z), Quaternion.identity);
+        if (debug)
+        {
+            Debug.Log($"Clicked at ({pos.x},{pos.y})");
+            Debug.Log($"Goes to ({wpos.x},{wpos.y},{wpos.z})");
+        }
+        
+        if (bank.Purchase(towerPrefab.name))
+        {
+            Instantiate(towerPrefab, new Vector3(wpos.x,0,wpos.z), Quaternion.identity);
+        } else
+        {
+            Debug.Log("Insufficient funds to buy tower!");
+        }
     }
 }

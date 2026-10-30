@@ -230,6 +230,7 @@ MonoBehaviour:
   - key: 2
     value: {fileID: 4926663242447130440, guid: 4bd1d4d0d66699f4096553006a4af103, type: 3}
   msh: {fileID: 1479937794}
+  bank: {fileID: 698331966}
 --- !u!1 &654272539
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,11 +356,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEconomy
   timer: {fileID: 700188133}
   timeBetweenCashIns: 5
-  CashInAmounts: 0
+  CashInAmounts: 6
   startCash: 0
   maxCash: 100
+  towerToCost:
+  - key: {fileID: 4442090434529925730, guid: d51d6f566523ed941be7fe30be7f0b8f, type: 3}
+    value: 1
+  - key: {fileID: 6445595696222938427, guid: 5a4a84bf999792940a051a9dc9d497f5, type: 3}
+    value: 3
+  - key: {fileID: 4926663242447130440, guid: 4bd1d4d0d66699f4096553006a4af103, type: 3}
+    value: 2
   debug: {fileID: 1189514047}
   debugKey: a
+  Monopoly: 0
 --- !u!4 &698331967
 Transform:
   m_ObjectHideFlags: 0
@@ -745,7 +754,7 @@ GameObject:
   - component: {fileID: 1479937795}
   - component: {fileID: 1479937794}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: MouseHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -764,7 +773,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseStateHandler
   active: 1
+  bank: {fileID: 698331966}
   towerPrefab: {fileID: 4442090434529925730, guid: d51d6f566523ed941be7fe30be7f0b8f, type: 3}
+  debug: 0
 --- !u!4 &1479937795
 Transform:
   m_ObjectHideFlags: 0

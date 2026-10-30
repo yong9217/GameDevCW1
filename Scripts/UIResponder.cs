@@ -2,11 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class TestUIResponse : MonoBehaviour
+public class UIResponder : MonoBehaviour
 {
     PanelRenderer pr;
+    Label MoneyHUD;
+    VisualElement MoneyMeter;
     [SerializeField] public Dictionary<int,GameObject> prefabsToButton;
     public MouseStateHandler msh;
+    public PlayerEconomy bank;
 
     void Awake()
     {
@@ -27,11 +30,14 @@ public class TestUIResponse : MonoBehaviour
             msh.Activate();
         });
 
+        MoneyHUD = root.Q<Label>("MoneyHUDLabel");
+        MoneyMeter = root.Q<VisualElement>("MoneyHUDMask");
+        
+        bank.RegUI(this);
+
+        UpdateHUDTotal();
+
         List<Button> buts = root.Query<Button>().ToList();
-
-        //For some reason each button gets overwritten
-
-        //Bcuz i is referenced instead of valued for some reason????
 
         for (int i = 0; i < buts.Count; i++)
         {
@@ -49,6 +55,18 @@ public class TestUIResponse : MonoBehaviour
                     Debug.LogWarning($"No prefab assigned to button {buts[k].name}");
                 }
             };
+        }
+    }
+
+    public void UpdateHUDTotal()
+    {
+        if(MoneyHUD != null && MoneyMeter != null)
+        {
+            MoneyHUD.text = $"{bank.GetTotal()} / {bank.maxCash} $";
+            MoneyMeter.style.width = Length.Percent(bank.GetPercent());
+        } else
+        {
+            Debug.LogError("Have not initialized UI!");
         }
     }
 }

@@ -1,7 +1,11 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement style="aspect-ratio: auto; height: 0; background-color: rgba(0, 0, 0, 0); width: 0;">
-        <ui:Button text="Tower1" style="position: absolute; top: 63px; left: 119px; height: 38px; width: 104px;"/>
-        <ui:Button text="Tower3" style="position: absolute; top: 175px; left: 126px; height: 37px; width: 104px;"/>
-        <ui:Button text="Tower2" style="position: absolute; top: 119px; left: 125px; height: 33px; width: 100px;"/>
+    <ui:VisualElement name="MoneyHUD" style="aspect-ratio: auto; height: 50px; background-color: rgb(0, 111, 7); width: 500px; position: absolute; top: 25px; left: 25px;">
+        <ui:VisualElement name="MoneyHUDMask" style="flex-grow: 1; position: absolute; width: 100%; height: 100%; overflow: hidden; transition-property: width; transition-duration: 0.5s; transition-timing-function: ease-out-elastic;">
+            <ui:VisualElement name="MoneyHUDFill" style="flex-grow: 1; position: absolute; width: 97.5%; height: 80%; background-color: rgb(116, 255, 0); margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; overflow: visible;"/>
+        </ui:VisualElement>
+        <ui:Label text="0 / - $" name="MoneyHUDLabel" style="top: auto; left: auto; font-size: 28px; -unity-text-align: middle-left; position: absolute; width: 100%; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 15px;"/>
     </ui:VisualElement>
+    <ui:Button text="Tower1" name="t1" style="position: absolute; top: 100px; left: 40px; height: 70px; width: 190px; font-size: 28px;"/>
+    <ui:Button text="Tower2" name="t2" style="position: absolute; top: 195px; left: 40px; height: 70px; width: 190px; font-size: 28px;"/>
+    <ui:Button text="Tower3" name="t3" style="position: absolute; top: 290px; left: 40px; height: 70px; width: 190px; font-size: 28px;"/>
 </ui:UXML>

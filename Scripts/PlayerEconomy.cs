@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerEconomy : MonoBehaviour
@@ -7,11 +9,15 @@ public class PlayerEconomy : MonoBehaviour
     public float CashInAmounts;
     public float startCash;
     public float maxCash;
+    [SerializeField] public Dictionary<GameObject, float> towerToCost;
 
     float totalCash;
+    UIResponder uiR;
+    Dictionary<string, float> catalog;
 
     public Debugger debug;
     public string debugKey;
+    public bool Monopoly;
 
     void Awake()
     {
@@ -22,13 +28,15 @@ public class PlayerEconomy : MonoBehaviour
         {
             totalCash = 100f;
         }
+
+        catalog = towerToCost.ToDictionary(kv => kv.Key.name, kv => kv.Value);
     }
 
     void Start()
     {
         timer.OnTimeInvoke(timeBetweenCashIns, () =>
         {
-            totalCash += CashInAmounts;
+            Deposit(CashInAmounts);
         });
 
         debug.Add(debugKey, () =>
@@ -44,12 +52,28 @@ public class PlayerEconomy : MonoBehaviour
 
     public bool Spend(float buy)
     {
-        if(buy < totalCash)
+        bool spent = buy <= totalCash;
+        if(spent)
         {
-            totalCash -= buy;
-            return true;
+            if (!Monopoly)
+            {
+                totalCash -= buy;
+            }
         }
 
+        UpdateCash();
+
+        return spent;
+    }
+
+    public bool Purchase(string tower)
+    {
+        if(catalog.TryGetValue(tower, out float cost))
+        {
+            return Spend(cost);
+        }
+
+        Debug.LogError($"No item called '{tower}' in catalog");
         return false;
     }
 
@@ -59,10 +83,47 @@ public class PlayerEconomy : MonoBehaviour
         if(totalCash > maxCash)
         {
             totalCash = maxCash;
-            return true;
         }
 
-        return false;
+        UpdateCash();
+
+        return totalCash < maxCash;
+    }
+
+    void UpdateCash()
+    {
+        if(uiR != null)
+        {
+            uiR.UpdateHUDTotal();
+        }
+    }
+
+    public float GetTotal()
+    {
+        return totalCash;
+    }
+
+    public float GetProportion()
+    {
+        if(maxCash == 0f)
+        {
+            return Mathf.Infinity;
+        }
+        return totalCash/maxCash;
+    }
+
+    public float GetPercent()
+    {
+        return GetProportion()*100f;
+    }
+
+    public void RegUI(UIResponder r)
+    {
+        if(r == null)
+        {
+            Debug.LogWarning("Registered null UI! This removes the previous UI");
+        }
+        uiR = r;
     }
 
     public override string ToString()
