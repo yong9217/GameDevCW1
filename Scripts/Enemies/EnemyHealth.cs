@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 [DisallowMultipleComponent]
 public sealed class EnemyHealth : MonoBehaviour
 {
+    public static readonly HashSet<EnemyHealth> Active = new HashSet<EnemyHealth>();
+    static int nextTargetOrder;
+    public int TargetOrder { get; private set; }
     [Min(1)] public float maxHealth = 100;
     [Min(0)] public int killReward = 1;
     public PlayerEconomy wallet;
@@ -13,14 +17,22 @@ public sealed class EnemyHealth : MonoBehaviour
 
     public float CurrentHealth { get; private set; }
     public bool IsAlive => CurrentHealth > 0 && !dead;
+    public Vector3 AimPoint => transform.position + Vector3.up * .65f;
     public float CurrentSpeedMultiplier => Time.time < slowedUntil ? slowMultiplier : 1;
     public event Action Died;
 
     bool dead;
     float slowedUntil;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetRegistry() { Active.Clear(); nextTargetOrder = 0; }
+
+    void OnEnable() { if (IsAlive) Active.Add(this); }
+    void OnDisable() => Active.Remove(this);
+
     void Awake()
     {
+        TargetOrder = nextTargetOrder++;
         CurrentHealth = Mathf.Max(1, maxHealth);
     }
 
@@ -37,6 +49,7 @@ public sealed class EnemyHealth : MonoBehaviour
 
         // Commit death before calling other components: repeated/re-entrant hits cannot pay twice.
         dead = true;
+        Active.Remove(this);
         var agent = GetComponent<NavMeshAgent>();
         if (agent && agent.enabled && agent.isOnNavMesh)
         {

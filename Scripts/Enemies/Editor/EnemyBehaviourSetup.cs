@@ -29,9 +29,7 @@ public static class EnemyBehaviourSetup
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
             if (Path.GetFileNameWithoutExtension(path) != name) continue;
-            if (match != null) {
-                throw new InvalidOperationException("Multiple " + name + " prefabs found; remove duplicate art imports first.");
-            };
+            if (match != null) throw new InvalidOperationException("Multiple " + name + " prefabs found; remove duplicate art imports first.");
             match = path;
         }
         if (match == null) throw new InvalidOperationException("Missing existing art prefab: " + name);
@@ -88,6 +86,19 @@ public static class EnemyBehaviourSetup
         try
         {
             ConfigureTargetObject(root, kind, false);
+            var weapon = root.GetComponentInChildren<TowerPreviewWeapon>(true);
+            if (weapon && !weapon.combatConfigured)
+            {
+                weapon.range = weapon.kind == TowerPreviewWeapon.WeaponKind.Cannon ? 13.5f : 9;
+                weapon.damage = weapon.kind == TowerPreviewWeapon.WeaponKind.Crossbow ? 30 :
+                    weapon.kind == TowerPreviewWeapon.WeaponKind.Cannon ? 50 : 15;
+                weapon.interval = weapon.kind == TowerPreviewWeapon.WeaponKind.Crossbow ? .6f :
+                    weapon.kind == TowerPreviewWeapon.WeaponKind.Cannon ? 1.6f : 1;
+                weapon.maxChainTargets = 3;
+                weapon.chainRange = 3.5f;
+                weapon.distanceTieTolerance = .05f;
+                weapon.combatConfigured = true;
+            }
             PrefabUtility.SaveAsPrefabAsset(root, path);
         }
         finally { PrefabUtility.UnloadPrefabContents(root); }
