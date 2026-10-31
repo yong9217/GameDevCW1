@@ -49,14 +49,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerPreviewWeapon
   kind: 2
   lane: 2
+  combatConfigured: 1
   yaw: {fileID: 0}
   muzzle: {fileID: 441732943611128952}
   fixedBase: {fileID: 2918206877987776936}
   recoilPart: {fileID: 0}
   range: 9
-  damage: 45
-  interval: 1.8
-  slowDuration: 1.2
+  damage: 15
+  interval: 1
+  maxChainTargets: 3
+  chainRange: 3.5
+  distanceTieTolerance: 0.05
   attacking: 1
   shots: 0
   hits: 0
@@ -260,8 +263,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1580723356982864900}
-  - component: {fileID: 7249015276947416606}
-  - component: {fileID: 2622862204680684354}
+  - component: {fileID: 5403105177617558640}
+  - component: {fileID: 362612218560856843}
   m_Layer: 0
   m_Name: Tower_Magic
   m_TagString: Untagged
@@ -288,7 +291,7 @@ Transform:
   - {fileID: 300244037977098170}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7249015276947416606
+--- !u!114 &5403105177617558640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -297,15 +300,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4926663242447130440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13c1c79ac5725164daa1d72cedd1c7e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 551bf3b8698ca544a9202569fb5b2afc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatTarget
   kind: 0
   maxHealth: 100
   baseHealth: {fileID: 0}
-  attackBounds: {fileID: 2622862204680684354}
+  attackBounds: {fileID: 362612218560856843}
   destroyTowerOnDeath: 1
---- !u!65 &2622862204680684354
+--- !u!65 &362612218560856843
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3976902477311906827}
+  - component: {fileID: 7604975009758500043}
   - component: {fileID: 713022901386894033}
+  - component: {fileID: 3039979275128037898}
   - component: {fileID: 8223462506457756628}
-  - component: {fileID: 4381749442961835440}
-  - component: {fileID: 4580690750101650819}
   m_Layer: 0
   m_Name: Enemy_Normal
   m_TagString: Untagged
@@ -36,6 +36,23 @@ Transform:
   - {fileID: 7206116936831413989}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7604975009758500043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198898714420655828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa06bbe15e560074b96c94a6d2aed846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  maxHealth: 100
+  killReward: 1
+  wallet: {fileID: 0}
+  corpseLifetime: 3
+  slowMultiplier: 0.5
 --- !u!195 &713022901386894033
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -58,6 +75,30 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &3039979275128037898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198898714420655828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0405f65b863c8c43a34d00c49e0b917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
+  towerDetectionRadius: 10
+  baseDetectionRadius: 4
+  attackRange: 0.8
+  attackDamage: 10
+  attackInterval: 1
+  hitFraction: 0.45
+  moveSpeed: 2
+  repathInterval: 0.2
+  turnSpeed: 360
+  meleeObstacleLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!136 &8223462506457756628
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -81,47 +122,6 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &4381749442961835440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 198898714420655828}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f0775eba5196a04ea584c9b4c081d11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 100
-  killReward: 1
-  wallet: {fileID: 0}
-  corpseLifetime: 3
-  slowMultiplier: 0.5
---- !u!114 &4580690750101650819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 198898714420655828}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fde7c1d14b682fe4e83046efe87e723f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
-  towerDetectionRadius: 10
-  baseDetectionRadius: 4
-  attackRange: 0.8
-  attackDamage: 10
-  attackInterval: 1
-  hitFraction: 0.45
-  moveSpeed: 2
-  repathInterval: 0.2
-  turnSpeed: 360
-  meleeObstacleLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!1 &1234855273364369396
 GameObject:
   m_ObjectHideFlags: 0

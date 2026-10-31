@@ -138,14 +138,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerPreviewWeapon
   kind: 1
   lane: 1
+  combatConfigured: 1
   yaw: {fileID: 5416320097404069575}
   muzzle: {fileID: 6757306132228610171}
   fixedBase: {fileID: 2007547697744359515}
   recoilPart: {fileID: 6925125265887040047}
-  range: 9
-  damage: 75
-  interval: 2
-  slowDuration: 1.2
+  range: 13.5
+  damage: 50
+  interval: 1.6
+  maxChainTargets: 3
+  chainRange: 3.5
+  distanceTieTolerance: 0.05
   attacking: 1
   shots: 0
   hits: 0
@@ -441,8 +444,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6017034139643924801}
-  - component: {fileID: 47138769373520118}
-  - component: {fileID: 8065078801110533569}
+  - component: {fileID: 4182865836853923263}
+  - component: {fileID: 7226608656405438625}
   m_Layer: 0
   m_Name: Tower_Cannon
   m_TagString: Untagged
@@ -469,7 +472,7 @@ Transform:
   - {fileID: 9009403451225045986}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &47138769373520118
+--- !u!114 &4182865836853923263
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -478,15 +481,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6445595696222938427}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13c1c79ac5725164daa1d72cedd1c7e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 551bf3b8698ca544a9202569fb5b2afc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatTarget
   kind: 0
   maxHealth: 100
   baseHealth: {fileID: 0}
-  attackBounds: {fileID: 8065078801110533569}
+  attackBounds: {fileID: 7226608656405438625}
   destroyTowerOnDeath: 1
---- !u!65 &8065078801110533569
+--- !u!65 &7226608656405438625
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
