@@ -6,6 +6,7 @@ public class Base : MonoBehaviour
     public float startHP;
 
     public Debugger debug;
+    public bool destructable;
 
     void Awake()
     {
@@ -27,7 +28,10 @@ public class Base : MonoBehaviour
 
     public void Direct(float dmg)
     {
-        hp += dmg;
+        if (destructable)
+        {
+            hp += dmg;
+        }
 
         if(hp <= 0)
         {

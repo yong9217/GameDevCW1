@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgb(110, 66, 2);"/>
+    <ui:VisualElement name="Viewport" style="flex-grow: 1; background-image: none; width: 153px; height: 239px; background-size: 100% 100%; position: absolute; top: 30px; left: 20px; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
+    <ui:Label text="&lt;Enemy Type&gt;" name="Title" style="position: absolute; top: 35px; left: 190px; font-size: 18px;"/>
+    <ui:Label text="&lt;Description&gt;" name="Desc" style="position: absolute; top: 83px; left: 192px; width: 184px; height: 176px;"/>
+</ui:UXML>

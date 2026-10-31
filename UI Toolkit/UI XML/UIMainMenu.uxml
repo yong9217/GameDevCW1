@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" authoring-id="-671776455" editor-extension-mode="False">
+    <ui:VisualElement/>
+    <ui:Button text="Start Game" name="start" style="position: absolute; top: 180px; left: 140px; font-size: 28px; width: 200px;"/>
+    <ui:Button text="Glossary" name="bestiary" style="position: absolute; top: 250px; left: 140px; font-size: 28px; width: 200px;"/>
+    <ui:Button text="Credits" name="credits" style="position: absolute; top: 320px; left: 140px; font-size: 28px; width: 200px;"/>
+    <ui:Button text="Exit" name="exit" style="position: absolute; top: 390px; left: 140px; font-size: 28px; width: 200px;"/>
+    <ui:Label text="Kingdom Sentinels" name="title" style="position: absolute; top: 44px; left: 20px; font-size: 48px; -unity-font-style: bold; right: auto; width: 440px;"/>
+</ui:UXML>
