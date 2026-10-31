@@ -1,5 +1,4 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="UIBestiaryEntry" src="project://database/Assets/GameDevCW1/UI%20Toolkit/UI%20XML/UIBestiaryEntry.uxml?fileID=9197481963319205126&amp;guid=f9ce2ee965416074d956290676c671c0&amp;type=3#UIBestiaryEntry"/>
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgb(255, 211, 133);"/>
     <ui:VisualElement template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 20px; left: 10px;">
         <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgb(110, 66, 2);"/>
@@ -7,9 +6,46 @@
         <ui:Label text="&lt;Enemy Type&gt;" name="Title" style="position: absolute; top: 35px; left: 190px; font-size: 18px;"/>
         <ui:Label text="&lt;Description&gt;" name="Desc" style="position: absolute; top: 83px; left: 192px; width: 184px; height: 176px;"/>
     </ui:VisualElement>
-    <ui:Instance template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 20px; left: 830px;"/>
-    <ui:Instance template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 20px; left: 420px;"/>
-    <ui:Instance template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 335px; left: 10px;"/>
-    <ui:Instance template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 335px; left: 420px;"/>
-    <ui:Instance template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 335px; left: 830px;"/>
+    <ui:VisualElement template="UIBestiaryEntry" name="VisualElement" style="position: absolute; height: 300px; width: 400px; top: 20px; left: 420px;">
+        <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgb(110, 66, 2);"/>
+        <ui:VisualElement name="Viewport" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/GameDevCW1/Materials/HeavyPreviewPort.renderTexture?fileID=8400000&amp;guid=a7a7be9b7d9c7474aab540b06c51e8bd&amp;type=2#HeavyPreviewPort&quot;); width: 153px; height: 239px; background-size: 100% 100%; position: absolute; top: 30px; left: 20px; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
+        <ui:Label text="&lt;Enemy Type&gt;" name="Title" style="position: absolute; top: 35px; left: 190px; font-size: 18px;"/>
+        <ui:Label text="&lt;Description&gt;" name="Desc" style="position: absolute; top: 83px; left: 192px; width: 184px; height: 176px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 20px; left: 830px;">
+        <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgb(110, 66, 2);"/>
+        <ui:VisualElement name="Viewport" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/GameDevCW1/Materials/NormalPreviewPort.renderTexture?fileID=8400000&amp;guid=ab228495d13cc6a4fbc74489884bddae&amp;type=2#NormalPreviewPort&quot;); width: 153px; height: 239px; background-size: 100% 100%; position: absolute; top: 30px; left: 20px; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
+        <ui:Label text="&lt;Enemy Type&gt;" name="Title" style="position: absolute; top: 35px; left: 190px; font-size: 18px;"/>
+        <ui:Label text="&lt;Description&gt;" name="Desc" style="position: absolute; top: 83px; left: 192px; width: 184px; height: 176px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 20px; left: 1240px;">
+        <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgb(110, 66, 2);"/>
+        <ui:VisualElement name="Viewport" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/GameDevCW1/Materials/BossPreviewPort.renderTexture?fileID=8400000&amp;guid=a320610e8aa90f74db7026de786a7a82&amp;type=2#BossPreviewPort&quot;); width: 153px; height: 239px; background-size: 100% 100%; position: absolute; top: 30px; left: 20px; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
+        <ui:Label text="&lt;Enemy Type&gt;" name="Title" style="position: absolute; top: 35px; left: 190px; font-size: 18px;"/>
+        <ui:Label text="&lt;Description&gt;" name="Desc" style="position: absolute; top: 83px; left: 192px; width: 184px; height: 176px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 335px; left: 10px;">
+        <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgb(110, 66, 2);"/>
+        <ui:VisualElement name="Viewport" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/GameDevCW1/Materials/BasePreviewPort.renderTexture?fileID=8400000&amp;guid=954b3704894c84f48a82985a557d8cda&amp;type=2#BasePreviewPort&quot;); width: 153px; height: 239px; background-size: 100% 100%; position: absolute; top: 30px; left: 20px; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
+        <ui:Label text="&lt;Enemy Type&gt;" name="Title" style="position: absolute; top: 35px; left: 190px; font-size: 18px;"/>
+        <ui:Label text="&lt;Description&gt;" name="Desc" style="position: absolute; top: 83px; left: 192px; width: 184px; height: 176px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 335px; left: 420px;">
+        <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgb(110, 66, 2);"/>
+        <ui:VisualElement name="Viewport" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/GameDevCW1/Materials/ArrowPreviewPort.renderTexture?fileID=8400000&amp;guid=309b6868a04987841856b4c173411195&amp;type=2#ArrowPreviewPort&quot;); width: 153px; height: 239px; background-size: 100% 100%; position: absolute; top: 30px; left: 20px; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
+        <ui:Label text="&lt;Enemy Type&gt;" name="Title" style="position: absolute; top: 35px; left: 190px; font-size: 18px;"/>
+        <ui:Label text="&lt;Description&gt;" name="Desc" style="position: absolute; top: 83px; left: 192px; width: 184px; height: 176px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 335px; left: 830px;">
+        <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgb(110, 66, 2);"/>
+        <ui:VisualElement name="Viewport" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/GameDevCW1/Materials/CannonPreviewPort.renderTexture?fileID=8400000&amp;guid=0273911b21ebd6c409a2adce8afce0a8&amp;type=2#CannonPreviewPort&quot;); width: 153px; height: 239px; background-size: 100% 100%; position: absolute; top: 30px; left: 20px; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
+        <ui:Label text="&lt;Enemy Type&gt;" name="Title" style="position: absolute; top: 35px; left: 190px; font-size: 18px;"/>
+        <ui:Label text="&lt;Description&gt;" name="Desc" style="position: absolute; top: 83px; left: 192px; width: 184px; height: 176px;"/>
+    </ui:VisualElement>
+    <ui:VisualElement template="UIBestiaryEntry" style="position: absolute; height: 300px; width: 400px; top: 335px; left: 1240px;">
+        <ui:VisualElement name="Base" style="flex-grow: 1; background-color: rgb(110, 66, 2);"/>
+        <ui:VisualElement name="Viewport" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/GameDevCW1/Materials/MagicPreviewPort.renderTexture?fileID=8400000&amp;guid=c9c00e6377394914793ce4140f208192&amp;type=2#MagicPreviewPort&quot;); width: 153px; height: 239px; background-size: 100% 100%; position: absolute; top: 30px; left: 20px; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);"/>
+        <ui:Label text="&lt;Enemy Type&gt;" name="Title" style="position: absolute; top: 35px; left: 190px; font-size: 18px;"/>
+        <ui:Label text="&lt;Description&gt;" name="Desc" style="position: absolute; top: 83px; left: 192px; width: 184px; height: 176px;"/>
+    </ui:VisualElement>
 </ui:UXML>
