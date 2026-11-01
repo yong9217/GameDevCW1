@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-// Preview effects rebuilt for this scene. No original VFX Graph is claimed here.
+// Existing Built-in tower visuals, connected to production enemy health.
 public sealed class TowerPreviewEffects : MonoBehaviour
 {
     static Texture2D spark;
@@ -60,14 +60,13 @@ public sealed class TowerPreviewEffects : MonoBehaviour
         }
         Destroy(gameObject);
     }
-    public static void Shot(Transform muzzle, TowerPreviewTarget target, bool cannon, float damage, TowerPreviewWeapon owner)
+    public static void Shot(Transform muzzle, EnemyHealth target, bool cannon, float damage, TowerPreviewWeapon owner)
     {
         var g = new GameObject(cannon ? "Preview cannonball flight" : "Preview arrow flight");
         var fx = g.AddComponent<TowerPreviewEffects>(); fx.StartCoroutine(fx.Flight(muzzle.position, target, cannon, damage, owner));
     }
-    IEnumerator Flight(Vector3 start, TowerPreviewTarget target, bool cannon, float damage, TowerPreviewWeapon owner)
+    IEnumerator Flight(Vector3 start, EnemyHealth target, bool cannon, float damage, TowerPreviewWeapon owner)
     {
-        int generation = target.generation;
         if (cannon)
         {
             var ball = Primitive(PrimitiveType.Sphere, "Cannonball", Vector3.one * .22f, new Color(.17f,.19f,.23f)); ball.transform.SetParent(transform, false);
@@ -83,7 +82,7 @@ public sealed class TowerPreviewEffects : MonoBehaviour
         }
         transform.position = start;
         float duration = cannon ? .7f : .36f, t = 0;
-        while (t < 1 && target && target.Alive && target.generation == generation)
+        while (t < 1 && target && target.isActiveAndEnabled && target.IsAlive)
         {
             t = Mathf.Min(1,t + Time.deltaTime / duration);
             Vector3 p = Vector3.Lerp(start, target.AimPoint,t) + Vector3.up * (cannon ? Mathf.Sin(t*Mathf.PI)*1.5f : 0);
@@ -91,9 +90,10 @@ public sealed class TowerPreviewEffects : MonoBehaviour
             if (d.sqrMagnitude > .000001f) transform.rotation = Quaternion.LookRotation(d);
             transform.position = p; yield return null;
         }
-        if (target && target.Alive && target.generation == generation)
+        if (target && target.isActiveAndEnabled && target.IsAlive)
         {
-            target.Damage(damage); owner.hits++;
+            target.Damage(damage);
+            if (owner) owner.hits++;
             Burst(target.AimPoint, cannon ? new Color(1,.45f,.12f) : new Color(1,.85f,.4f), cannon ? .8f : .35f, cannon ? 28 : 9);
         }
         Destroy(gameObject);
