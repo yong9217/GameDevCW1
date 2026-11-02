@@ -37,7 +37,7 @@ public class PlayerEconomy : MonoBehaviour
         timer.OnTimeInvoke(timeBetweenCashIns, () =>
         {
             Deposit(CashInAmounts, "Bank");
-        });
+        }, "Cash-Ins", timeBetweenCashIns);
 
         debug.Add(debugKey, () =>
         {

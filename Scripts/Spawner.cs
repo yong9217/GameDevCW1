@@ -2,18 +2,25 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    //Spawning Parameters
     public GameObject enemyPrefab;
     public float spawnEvery;
-    public float startFrom;
+    public float startFrom; //Time offset
+    public float spawnRadius; //Radius of circle to randomly spawn enemies in
 
-    public float spawnRadius;
-
+    //Timer
     public TimerObject timer;
 
+    //Debug
+
+    //Manually start the spawner without a wave
     public bool manualStart;
 
+    //Wave Manager
     public WaveHandler parent;
     public int waveNum;
+
+    //Flag to indicate if the spawner is active
     bool started = false;
 
     void Awake()
@@ -45,7 +52,7 @@ public class Spawner : MonoBehaviour
             timer.OnTimeInvoke(spawnEvery, () =>
             {
                 Spawn();
-            }, startFrom);
+            }, TaskName(), startFrom);
 
             started = true;
         } else
@@ -57,11 +64,18 @@ public class Spawner : MonoBehaviour
     public void End()
     {
         started = false;
+        timer.EndTask(TaskName());
     }
     
     public bool isActive()
     {
         return started;
+    }
+
+    //MAY NOT be unique in timer
+    string TaskName()
+    {
+        return $"Spawner W{waveNum}";
     }
 
     void Spawn()
