@@ -36,7 +36,7 @@ public class PlayerEconomy : MonoBehaviour
     {
         timer.OnTimeInvoke(timeBetweenCashIns, () =>
         {
-            Deposit(CashInAmounts);
+            Deposit(CashInAmounts, "Bank");
         });
 
         debug.Add(debugKey, () =>
@@ -77,15 +77,26 @@ public class PlayerEconomy : MonoBehaviour
         return false;
     }
 
-    public bool Deposit(float bank)
+    public bool Deposit(float bank, string source = "")
     {
         totalCash += bank;
-        if(totalCash > maxCash)
+
+        float lost = totalCash - maxCash;
+        bool exceed = totalCash > maxCash;
+        string totalDepo = "";
+
+        if(exceed)
         {
             totalCash = maxCash;
+            totalDepo = $"{bank - lost} Lost: {lost}";
+        } else
+        {
+            totalDepo += bank;
         }
 
         UpdateCash();
+
+        Debug.Log($"Deposited {totalDepo} from {(source.Length <= 0 ? "Unknown" : source)}");
 
         return totalCash < maxCash;
     }

@@ -15,6 +15,7 @@ public class ReccurTimer : MonoBehaviour
 
     SortedList<float, TimeNode> tasks = new SortedList<float, TimeNode>();
 
+
     public void Init(float t)
     {
         SetThreshold(t);
@@ -91,7 +92,7 @@ public class ReccurTimer : MonoBehaviour
     }
 }
 
-public class TimeNode
+class TimeNode
 {
     public List<Action> tasks;
     public int nCalls;
@@ -120,5 +121,34 @@ public class TimeNode
         string ot = $"TimeNode {tasks.Count} tasks | nCalls: {nCalls}, nextCall: {nextCall}";
 
         return ot;
+    }
+}
+
+
+
+
+//Used for pausing but I need to figure out how
+class TimeTask
+{
+    public Action task;
+    public string name;
+    public bool active;
+    
+
+    public TimeTask(Action ac, string n = "default", bool now = true)
+    {
+        task = ac;
+        name = n;
+        active = now;
+    }
+}
+
+class PausedTimeTask : TimeTask
+{
+    public float localOffset;
+
+    public PausedTimeTask(Action ac, string n = "default", bool now = true, float off = 0f) : base(ac, n, now)
+    {
+        localOffset = off;
     }
 }
