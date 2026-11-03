@@ -4,10 +4,18 @@ using UnityEngine.UIElements;
 
 public class UIResponder : MonoBehaviour
 {
+    //Component to get assets from
     PanelRenderer pr;
+
+    //Altered assets
     Label MoneyHUD;
     VisualElement MoneyMeter;
+    VisualElement waveMeter;
+
+    //Button actions
     [SerializeField] public Dictionary<int,GameObject> prefabsToButton;
+
+    //GameObjects to modify
     public MouseStateHandler msh;
     public PlayerEconomy bank;
 
@@ -36,6 +44,8 @@ public class UIResponder : MonoBehaviour
         bank.RegUI(this);
 
         UpdateHUDTotal();
+
+        waveMeter = root.Q<VisualElement>("Bar");
 
         List<Button> buts = root.Query<Button>().ToList();
 
@@ -68,5 +78,22 @@ public class UIResponder : MonoBehaviour
         {
             Debug.LogError("Have not initialized UI!");
         }
+    }
+
+    public void UpdateWaveMeter(float percent, bool exact = false)
+    {
+        if(percent < 0f || percent > 100f)
+        {
+            Debug.LogError($"Wave meter is set using [0-100]! Received: {percent}");
+            return;
+        }
+
+        if(percent >= 0f && percent <= 1f && !exact)
+        {
+            Debug.Log("Using input as %. If this was not intended, please set the 'exact' flag to true");
+            percent *= 100f;
+        }
+
+        waveMeter.style.width = Length.Percent(percent);
     }
 }

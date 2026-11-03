@@ -3,10 +3,12 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     //Spawning Parameters
+    public string taskName; //MAY NOT be unique in timer
     public GameObject enemyPrefab;
     public float spawnEvery;
     public float startFrom; //Time offset
     public float spawnRadius; //Radius of circle to randomly spawn enemies in
+    public int maxSpawn; //Maximum number of units to spawn
 
     //Timer
     public TimerObject timer;
@@ -22,6 +24,7 @@ public class Spawner : MonoBehaviour
 
     //Flag to indicate if the spawner is active
     bool started = false;
+    int spawned = 0;
 
     void Awake()
     {
@@ -52,7 +55,7 @@ public class Spawner : MonoBehaviour
             timer.OnTimeInvoke(spawnEvery, () =>
             {
                 Spawn();
-            }, TaskName(), startFrom);
+            }, taskName, startFrom);
 
             started = true;
         } else
@@ -64,7 +67,11 @@ public class Spawner : MonoBehaviour
     public void End()
     {
         started = false;
-        timer.EndTask(TaskName());
+        timer.EndTask(taskName);
+        if (parent)
+        {
+            parent.Remove(this);
+        }
     }
     
     public bool isActive()
@@ -72,19 +79,20 @@ public class Spawner : MonoBehaviour
         return started;
     }
 
-    //MAY NOT be unique in timer
-    string TaskName()
-    {
-        return $"Spawner W{waveNum}";
-    }
-
     void Spawn()
     {
         if (started)
         {
-            Vector2 spawnPoint = Random.insideUnitCircle*spawnRadius;
-            Vector3 spawnPointWorld = new Vector3(spawnPoint.x, 0, spawnPoint.y);
-            Instantiate(enemyPrefab,spawnPointWorld + gameObject.transform.position, Quaternion.identity);
+            if(spawned <= maxSpawn)
+            {
+                Vector2 spawnPoint = Random.insideUnitCircle*spawnRadius;
+                Vector3 spawnPointWorld = new Vector3(spawnPoint.x, 0, spawnPoint.y);
+                Instantiate(enemyPrefab,spawnPointWorld + gameObject.transform.position, Quaternion.identity);
+                spawned++;
+            } else
+            {
+                End();
+            }
         }
     }
 }

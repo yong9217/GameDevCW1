@@ -42,12 +42,17 @@ public class ReccurTimer : MonoBehaviour
     !IMPORTANT!
     Since name uniqueness is not enforced on Add, thus Pause, Resume and End may unintentionally end the wrong task
     */
-    public void OnTimeInvoke(float every, Action ac, string name = "default", float after = 0f)
+    public void OnTimeInvoke(float every, Action ac, string name = "default", float after = 0f, int nTimes = -1)
     {
-        if(!tasks.TryAdd((every,after), new TimeNode(ac, name, after)))
+        if(!tasks.TryAdd((every,after), new TimeNode(ac, name, after, nTimes)))
         {
             tasks[(every,after)].tasks.Add(new TimeTask(ac));
         }
+    }
+
+    public void InvokeOnce(float wait, Action ac, string name = "defualt")
+    {
+        OnTimeInvoke(resetThreshold, ac, name, wait);
     }
 
     //Call to pause the named task
@@ -191,7 +196,10 @@ public class ReccurTimer : MonoBehaviour
                     node.nextCall += k.Item1; //Increment to next call
                     foreach (TimeTask t in node.tasks)
                     {
-                        t.task.Invoke();
+                        if(t.remTimes > 0)
+                        {
+                            t.Execute();
+                        }
                     }
                 }
             }
@@ -221,9 +229,9 @@ class TimeNode
     //float period     Comes from Dictionary key in ReccurTimer
     //float offset
 
-    public TimeNode(Action ac, string name = "default", float offset = 0f)
+    public TimeNode(Action ac, string name = "default", float offset = 0f, int nTimes = -1)
     {
-        tasks = new List<TimeTask>{new TimeTask(ac,name)};
+        tasks = new List<TimeTask>{new TimeTask(ac,name,nTimes)};
         nextCall = offset;
     }
 
@@ -281,16 +289,24 @@ class TimeTask
 {
     public Action task;
     public string name;
+    public int remTimes;
     
-    public TimeTask(Action ac, string n = "default")
+    public TimeTask(Action ac, string n = "default", int t = -1)
     {
         task = ac;
         name = n;
+        remTimes = t;
+    }
+
+    public void Execute()
+    {
+        task.Invoke();
+        remTimes--;
     }
 
     public override string ToString()
     {
-        return $"Task {name} |>";
+        return $"Task {name} |> ({remTimes} calls left)";
     }
 
     //Pause the task
@@ -316,6 +332,6 @@ class PausedTimeTask : TimeTask
 
     public override string ToString()
     {
-        return $"Task {name} || [every: {period}, localOffset: {localOffset}]";
+        return $"Task {name} || [Rem: {remTimes}, every: {period}, localOffset: {localOffset}]";
     }
 }

@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class WaveHandler : MonoBehaviour
 {
+    public UIResponder uir;
+
     Dictionary<int,List<Spawner>> waves = new Dictionary<int, List<Spawner>>();
 
     int curWave = -1;
+    public int maxWaves;
 
     public void Register(Spawner s)
     {
@@ -24,11 +27,7 @@ public class WaveHandler : MonoBehaviour
 
     public void startWave(int n)
     {
-        int ended = endWave();
-        if(ended >= 0)
-        {
-            Debug.Log($"Ending wave {ended}");
-        }
+        endWave();
 
         if(waves.TryGetValue(n, out List<Spawner> ss))
         {
@@ -61,28 +60,62 @@ public class WaveHandler : MonoBehaviour
     }
 
     //Checks that the current wave exists and is actually active
-    //Returns the wave ended
-    public int endWave()
+    //Returns the wave ended OR -1 
+    public int endWaveOnly()
     {
         if (waves.TryGetValue(curWave, out List<Spawner> ss))
         {
-            if (ss.First().isActive())
+            if (ss.Count > 0)
             {
+                Debug.LogWarning($"Wave {curWave} still has active spawners! Force ending...");
+
                 forceEndWave(curWave);
 
                 int ended = curWave;
-
                 curWave = -1;
-
                 return ended;
             } else
             {
-                Debug.LogWarning($"Wave {curWave} was started but spawners weren't activated! Resetting current wave");
+                Debug.Log($"Ending wave {curWave}");
 
+                int ended = curWave;
                 curWave = -1;
+                return ended;
             }
         }
 
         return -1;
+    }
+
+    public void Remove(Spawner s)
+    {
+        if(waves.TryGetValue(s.waveNum, out List<Spawner> ls))
+        {
+            ls.Remove(s);
+
+            if(ls.Count <= 0)
+            {
+                Debug.Log("No more active spawners. Ending wave");
+                endWave();
+            }
+        }
+    }
+
+    public void endWave()
+    {
+        int waveEnded = endWaveOnly();
+
+        if(waveEnded < 0)
+        {
+            Debug.LogWarning($"Could not find wave {curWave} to end!");
+        } else
+        {
+            UpdateHUD(waveEnded);
+        }
+    }
+
+    public void UpdateHUD(int waveEnded)
+    {
+        uir.UpdateWaveMeter(waveEnded/maxWaves);
     }
 }
