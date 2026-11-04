@@ -1018,7 +1018,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
   towerDetectionRadius: 10
   baseDetectionRadius: 4
-  attackRange: 0.8
+  attackRange: 2.8
   attackDamage: 40
   attackInterval: 1.8
   hitFraction: 0.45
