@@ -355,7 +355,7 @@ MonoBehaviour:
   maxHealth: 60
   killReward: 2
   wallet: {fileID: 0}
-  corpseLifetime: 3
+  corpseLifetime: 2
   slowMultiplier: 0.5
 --- !u!195 &8307620502680201641
 NavMeshAgent:
