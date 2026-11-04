@@ -20,13 +20,23 @@ public class UIResponder : MonoBehaviour
     //GameObjects to modify
     public MouseStateHandler msh;
     public PlayerEconomy bank;
+    public PauseAPI pauseMenu;
 
     void Awake()
     {
         pr = GetComponent<PanelRenderer>();
         pr.RegisterUIReloadCallback(OnUIReload);
 
+        pauseKey = new InputAction("Pause");
+        pauseKey.AddBinding("<Keyboard>/escape");
 
+        pauseKey.performed += (InputAction.CallbackContext ct) =>
+        {
+            Debug.Log("Paused!");
+            pauseMenu.ToggleVisible();
+        };
+
+        pauseKey.Enable();
     }
 
     void OnUIReload(PanelRenderer pr, VisualElement root, int ver)
