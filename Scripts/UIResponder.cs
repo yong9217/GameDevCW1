@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class UIResponder : MonoBehaviour
 {
     //Component to get assets from
     PanelRenderer pr;
+    InputAction pauseKey;
 
     //Altered assets
     Label MoneyHUD;
@@ -23,6 +25,8 @@ public class UIResponder : MonoBehaviour
     {
         pr = GetComponent<PanelRenderer>();
         pr.RegisterUIReloadCallback(OnUIReload);
+
+
     }
 
     void OnUIReload(PanelRenderer pr, VisualElement root, int ver)
