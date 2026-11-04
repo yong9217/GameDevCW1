@@ -79,9 +79,14 @@ public class Spawner : MonoBehaviour
         return started;
     }
 
+    public void resetCount()
+    {
+        spawned = 0;
+    }
+
     void Spawn()
     {
-        if (started)
+        if (started && maxSpawn >= 0)
         {
             if(spawned <= maxSpawn)
             {

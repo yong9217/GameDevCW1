@@ -194,12 +194,23 @@ public class ReccurTimer : MonoBehaviour
                 if(curTicks > node.nextCall) //Need to execute?
                 {
                     node.nextCall += k.Item1; //Increment to next call
+
+                    List<TimeTask> ended = new List<TimeTask>();
+
                     foreach (TimeTask t in node.tasks)
                     {
-                        if(t.remTimes > 0)
+                        if(t.remTimes != 0)
                         {
                             t.Execute();
+                        } else
+                        {
+                            ended.Add(t);
                         }
+                    }
+
+                    foreach (TimeTask ed in ended)
+                    {
+                        node.tasks.Remove(ed);
                     }
                 }
             }
@@ -248,8 +259,8 @@ class TimeNode
     {
         if(ix >= 0 && ix < tasks.Count)
         {
-            PausedTimeTask paused = TimeTask.Pause(tasks[ix], every, offset);
-            tasks.RemoveAt(ix);
+            PausedTimeTask paused = TimeTask.Pause(tasks[ix], every, offset); //Save info in PausedTimeTask
+            tasks[ix].remTimes = 0; //Set to 0 so ReccurTime can safely remove
             return paused;
         } else
         {

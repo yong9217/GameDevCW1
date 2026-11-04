@@ -6,6 +6,7 @@ public class MainMenu : MonoBehaviour
 {
     PanelRenderer pr;
     public PanelRenderer bestiary;
+    public PanelRenderer credits;
 
     void Awake()
     {
@@ -31,8 +32,11 @@ public class MainMenu : MonoBehaviour
         };
         root.Q<Button>("bestiary").clicked += () =>
         {
-            Debug.Log("Activated!");
             bestiary.gameObject.SetActive(true);
+        };
+        root.Q<Button>("credits").clicked += () =>
+        {
+            credits.gameObject.SetActive(true);
         };
     }
 }

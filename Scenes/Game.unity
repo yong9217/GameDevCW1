@@ -148,10 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0461209b8b66f419e28553dd4fbe16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spawner
+  taskName: spawner w0 fst
   enemyPrefab: {fileID: 3928838081421445988, guid: 4b70ee6c1f3202e40accb0b216f83f62, type: 3}
   spawnEvery: 10
   startFrom: 0
   spawnRadius: 1
+  maxSpawn: 0
   timer: {fileID: 700188133}
   manualStart: 1
   parent: {fileID: 0}
