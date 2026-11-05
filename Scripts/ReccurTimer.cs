@@ -52,7 +52,8 @@ public class ReccurTimer : MonoBehaviour
 
     public void InvokeOnce(float wait, Action ac, string name = "defualt")
     {
-        OnTimeInvoke(resetThreshold, ac, name, wait);
+        OnTimeInvoke(1, ac, name, wait+curTicks, 1);
+        Debug.Log(this);
     }
 
     //Call to pause the named task
@@ -197,8 +198,21 @@ public class ReccurTimer : MonoBehaviour
 
                     List<TimeTask> ended = new List<TimeTask>();
 
-                    foreach (TimeTask t in node.tasks)
+                    // foreach (TimeTask t in node.tasks)
+                    // {
+                    //     if(t.remTimes != 0)
+                    //     {
+                    //         t.Execute();
+                    //     } else
+                    //     {
+                    //         ended.Add(t);
+                    //         EndTask(t.name);
+                    //     }
+                    // }
+
+                    for (int i = 0; i < node.tasks.Count; i++)
                     {
+                        TimeTask t = node.tasks[i];
                         if(t.remTimes != 0)
                         {
                             t.Execute();
@@ -208,10 +222,19 @@ public class ReccurTimer : MonoBehaviour
                         }
                     }
 
-                    foreach (TimeTask ed in ended)
+                    if(ended.Count > 0)
                     {
-                        node.tasks.Remove(ed);
+                        foreach (TimeTask ed in ended)
+                        {
+                            node.tasks.Remove(ed);
+                        }
+
+                        if(node.tasks.Count <= 0)
+                        {
+                            tasks.Remove(k);
+                        }
                     }
+                    
                 }
             }
         }
