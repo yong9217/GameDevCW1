@@ -5,6 +5,9 @@ public class Base : MonoBehaviour
     float hp;
     public float startHP;
 
+    //End game stuff
+    public GameEnd end;
+
     public Debugger debug;
     public bool destructable;
 
@@ -37,6 +40,8 @@ public class Base : MonoBehaviour
         {
             //Do smtg
             Debug.Log("Base Defeated");
+
+            end.CueDeath();
         }
     }
 

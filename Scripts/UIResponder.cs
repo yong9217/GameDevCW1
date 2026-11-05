@@ -33,7 +33,7 @@ public class UIResponder : MonoBehaviour
         pauseKey.performed += (InputAction.CallbackContext ct) =>
         {
             Debug.Log("Paused!");
-            pauseMenu.ToggleVisible();
+            pauseMenu.TogglePause();
         };
 
         pauseKey.Enable();
@@ -49,7 +49,7 @@ public class UIResponder : MonoBehaviour
         root.RegisterCallback<MouseOutEvent>(e =>
         {
             Debug.Log("Left!");
-            msh.Activate();
+            msh.active = true;;
         });
 
         MoneyHUD = root.Q<Label>("MoneyHUDLabel");

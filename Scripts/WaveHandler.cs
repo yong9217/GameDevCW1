@@ -11,6 +11,17 @@ public class WaveHandler : MonoBehaviour
     int curWave = -1;
     public int maxWaves;
 
+    public Debugger debug;
+    public int executeWave;
+
+    void Awake()
+    {
+        debug.Add("2", () =>
+        {
+            startWave(executeWave);
+        }, "ManualStart");
+    }
+
     public void Register(Spawner s)
     {
         if(s.waveNum < 0)

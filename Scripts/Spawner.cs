@@ -86,9 +86,9 @@ public class Spawner : MonoBehaviour
 
     void Spawn()
     {
-        if (started && maxSpawn >= 0)
+        if (started)
         {
-            if(spawned <= maxSpawn)
+            if(maxSpawn <= 0 || spawned <= maxSpawn)
             {
                 Vector2 spawnPoint = Random.insideUnitCircle*spawnRadius;
                 Vector3 spawnPointWorld = new Vector3(spawnPoint.x, 0, spawnPoint.y);

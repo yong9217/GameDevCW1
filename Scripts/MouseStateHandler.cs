@@ -5,9 +5,11 @@ public class MouseStateHandler : MonoBehaviour
 {
     public bool active;
     InputAction click;
+    bool dragStop;
 
     public PlayerEconomy bank;
     public GameObject towerPrefab;
+    public float towerScale;
 
     public bool debug;
 
@@ -23,25 +25,20 @@ public class MouseStateHandler : MonoBehaviour
 
         click.performed += (InputAction.CallbackContext ct) =>
         {
-            if (active)
+            if (active && dragStop)
             {
                 Vector2 mPos = ct.ReadValue<Vector2>();
                 Vector3 wPos = Camera.main.ScreenToWorldPoint(new Vector3(mPos.x, mPos.y, 20));
                 ActiveState(wPos,mPos);
-                active = false;
+                dragStop = false;
             }
         };
         click.canceled += (InputAction.CallbackContext ct) =>
         {
-            Activate();
+            dragStop = true;
         };
 
         click.Enable();
-    }
-
-    public void Activate()
-    {
-        active = true;
     }
 
     void ActiveState(Vector3 wpos, Vector2 pos)
@@ -67,13 +64,16 @@ public class MouseStateHandler : MonoBehaviour
             return false;
         }
 
-        if (!bank.Purchase(towerPrefab.name))
+        if (!bank.Purchasable(towerPrefab.name))
         {
             Debug.Log("Insufficient funds to buy tower!");
             return false;
         }
 
-        Instantiate(towerPrefab, position, Quaternion.identity);
+        bank.Purchase(towerPrefab.name);
+
+        GameObject tower = Instantiate(towerPrefab, position, Quaternion.identity);
+        tower.transform.localScale = new Vector3(towerScale,towerScale,towerScale);
         return true;
     }
 }

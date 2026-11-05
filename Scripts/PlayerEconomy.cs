@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerEconomy : MonoBehaviour
 {
@@ -53,9 +54,9 @@ public class PlayerEconomy : MonoBehaviour
     public bool Spend(float buy)
     {
         bool spent = buy <= totalCash;
-        if(spent)
+        if(!Monopoly)
         {
-            if (!Monopoly)
+            if (spent)
             {
                 totalCash -= buy;
             }
@@ -64,6 +65,22 @@ public class PlayerEconomy : MonoBehaviour
         UpdateCash();
 
         return spent;
+    }
+
+    public bool Purchasable(float buy)
+    {
+        return buy <= totalCash || Monopoly;
+    }
+
+    public bool Purchasable(string tower)
+    {
+        if(catalog.TryGetValue(tower, out float cost))
+        {
+            return Purchasable(cost);
+        }
+
+        Debug.LogError($"No item called '{tower}' in catalog");
+        return false;
     }
 
     public bool Purchase(string tower)

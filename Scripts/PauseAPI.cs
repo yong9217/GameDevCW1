@@ -5,8 +5,8 @@ public class PauseAPI : MonoBehaviour
 {
     PanelRenderer pr;
 
-    VisualElement mask;
-    VisualElement main;
+    public readonly Stylist stylist = new Stylist();
+    public MouseStateHandler msh;
 
     void Awake()
     {
@@ -16,56 +16,25 @@ public class PauseAPI : MonoBehaviour
 
     void Init(PanelRenderer p, VisualElement root, int ver)
     {
-        mask = root.Q<VisualElement>("mask");
-        main = root.Q<VisualElement>("main");
+        stylist.Add(root.Q<VisualElement>("mask"),-1f,0f);
+        stylist.Add(root.Q<VisualElement>("main"),-1f,0f);
         root.Q<Button>("exit").clicked += () =>
         {
-            ToggleVisible();
+            TogglePause();
         };
         root.Q<Button>("resume").clicked += () =>
         {
-            ToggleVisible();
+            TogglePause();
         };
 
-        ToggleVisible(); //Need to call once bcuz the translates read as 0 at the start but are actually -100%
+        stylist.ToggleVisible(); //Need to call once bcuz the translates read as 0 at the start but are actually -100%
     }
 
-    StyleTranslate YTranslate(float y)
+    public void TogglePause()
     {
-        return new StyleTranslate(new Translate(new Length(0), Length.Percent(y*100f)));
-    }
-
-    void Show()
-    {
-        mask.style.translate = YTranslate(0f);
-        main.style.translate = YTranslate(0f);
-    }
-
-    void Hide()
-    {
-        mask.style.translate = YTranslate(-1f);
-        main.style.translate = YTranslate(-1f);
-    }
-
-    public void SetVisible(bool v)
-    {
-        if (v)
-        {
-            Show();
-        } else
-        {
-            Hide();
-        }
-    }
-
-    public bool IsVisible()
-    {
-        return mask.style.translate.value.y.value == 0f;
-    }
-
-    public void ToggleVisible()
-    {
-        bool b = IsVisible();
-        SetVisible(!b);
+        stylist.ToggleVisible();
+        bool b = stylist.IsVisible();
+        Time.timeScale = b ? 0f : 1f;
+        msh.active = !b;
     }
 }
