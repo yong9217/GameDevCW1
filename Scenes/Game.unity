@@ -1376,10 +1376,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpeechEngine
   textBoxes:
-  - test1
-  - test2
-  - test3
-  showFor: 2
+  - text: Oh NO! The castle is under attack!
+    closable: 0
+    overidden: 0
+    viewTime: 5
+  - text: Quick, use our gold reserves to place an arrow tower!
+    closable: 1
+    overidden: 1
+    viewTime: 0
+  - text: Good job! But that was a scouting party...
+    closable: 0
+    overidden: 0
+    viewTime: 5
+  - text: Keep defeating enemies to get gold
+    closable: 1
+    overidden: 0
+    viewTime: 0
+  - text: We spotted a heavily armored force!
+    closable: 0
+    overidden: 0
+    viewTime: 5
+  - text: Build cannons to blast through their armor!
+    closable: 1
+    overidden: 0
+    viewTime: 0
+  - text: I've got a report of a fast strike force!
+    closable: 0
+    overidden: 0
+    viewTime: 5
+  - text: Quick, build a magic tower to shock many of them at the same time!
+    closable: 1
+    overidden: 0
+    viewTime: 0
+  - text: The leader is approaching! Destroy the remaining enemies!
+    closable: 0
+    overidden: 0
+    viewTime: 5
   timer: {fileID: 700188133}
   debug: {fileID: 1189514047}
 --- !u!1 &1118796816

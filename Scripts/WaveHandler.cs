@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,12 +14,13 @@ public class WaveHandler : MonoBehaviour
 
     public Debugger debug;
     public int executeWave;
+    Action onWaveEnd;
 
     void Awake()
     {
         debug.Add("2", () =>
         {
-            startWave(executeWave);
+            StartWave(executeWave);
         }, "ManualStart");
     }
 
@@ -36,9 +38,9 @@ public class WaveHandler : MonoBehaviour
         }
     }
 
-    public void startWave(int n)
+    public void StartWave(int n)
     {
-        endWave();
+        EndWave();
 
         if(waves.TryGetValue(n, out List<Spawner> ss))
         {
@@ -53,7 +55,7 @@ public class WaveHandler : MonoBehaviour
     }
 
     //Only checks that the wave exists & resets the current wave
-    public bool forceEndWave(int n)
+    public bool ForceEndWave(int n)
     {
         if(waves.TryGetValue(n, out List<Spawner> ss))
         {
@@ -72,7 +74,7 @@ public class WaveHandler : MonoBehaviour
 
     //Checks that the current wave exists and is actually active
     //Returns the wave ended OR -1 
-    public int endWaveOnly()
+    public int EndWaveOnly()
     {
         if (waves.TryGetValue(curWave, out List<Spawner> ss))
         {
@@ -80,7 +82,7 @@ public class WaveHandler : MonoBehaviour
             {
                 Debug.LogWarning($"Wave {curWave} still has active spawners! Force ending...");
 
-                forceEndWave(curWave);
+                ForceEndWave(curWave);
 
                 int ended = curWave;
                 curWave = -1;
@@ -107,14 +109,15 @@ public class WaveHandler : MonoBehaviour
             if(ls.Count <= 0)
             {
                 Debug.Log("No more active spawners. Ending wave");
-                endWave();
+                EndWave();
+                onWaveEnd.Invoke();
             }
         }
     }
 
-    public void endWave()
+    public void EndWave()
     {
-        int waveEnded = endWaveOnly();
+        int waveEnded = EndWaveOnly();
 
         if(waveEnded < 0)
         {
@@ -125,7 +128,12 @@ public class WaveHandler : MonoBehaviour
         }
     }
 
-    public void UpdateHUD(int waveEnded)
+    public void OnWaveEnd(Action ac)
+    {
+        onWaveEnd = ac;
+    }
+
+    void UpdateHUD(int waveEnded)
     {
         uir.UpdateWaveMeter(waveEnded/maxWaves);
     }
