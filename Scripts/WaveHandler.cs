@@ -7,21 +7,29 @@ public class WaveHandler : MonoBehaviour
 {
     public UIResponder uir;
 
-    Dictionary<int,List<Spawner>> waves = new Dictionary<int, List<Spawner>>();
+    Dictionary<int,Wave> waves = new Dictionary<int, Wave>();
 
     int curWave = -1;
     public int maxWaves;
 
     public Debugger debug;
     public int executeWave;
-    Action onWaveEnd;
 
     void Awake()
     {
         debug.Add("2", () =>
         {
-            StartWave(executeWave);
+            Debug.Log(waves.ContainsKey(executeWave));
+            DebugDict();
         }, "ManualStart");
+    }
+
+    public void DebugDict()
+    {
+        foreach (Wave w in waves.Values)
+        {
+            Debug.Log(w);
+        }
     }
 
     public void Register(Spawner s)
@@ -31,9 +39,9 @@ public class WaveHandler : MonoBehaviour
             Debug.LogError("Unable to have negative wave numbers! Rejecting spawner");
         } else
         {
-            if(!waves.TryAdd(s.waveNum, new List<Spawner> { s }))
+            if(!waves.TryAdd(s.waveNum, new Wave(s)))
             {
-                waves[s.waveNum].Add(s);
+                waves[s.waveNum].spawners.Add(s);
             }
         }
     }
@@ -42,24 +50,26 @@ public class WaveHandler : MonoBehaviour
     {
         EndWave();
 
-        if(waves.TryGetValue(n, out List<Spawner> ss))
+        if(waves.TryGetValue(n, out Wave ss))
         {
-            foreach (Spawner sp in ss)
+            foreach (Spawner sp in ss.spawners)
             {
                 sp.Activate();
             }
+
+            curWave = n;
         } else
         {
-            Debug.LogError($"No wave indexed {n}");
+            Debug.LogError($"No wave indexed {n} to start");
         }
     }
 
     //Only checks that the wave exists & resets the current wave
     public bool ForceEndWave(int n)
     {
-        if(waves.TryGetValue(n, out List<Spawner> ss))
+        if(waves.TryGetValue(n, out Wave ss))
         {
-            foreach (Spawner sp in ss)
+            foreach (Spawner sp in ss.spawners)
             {
                 sp.End();
             }
@@ -76,25 +86,34 @@ public class WaveHandler : MonoBehaviour
     //Returns the wave ended OR -1 
     public int EndWaveOnly()
     {
-        if (waves.TryGetValue(curWave, out List<Spawner> ss))
+        if (waves.TryGetValue(curWave, out Wave ss))
         {
-            if (ss.Count > 0)
+            int ended;
+
+            if (ss.spawners.Count > 0)
             {
                 Debug.LogWarning($"Wave {curWave} still has active spawners! Force ending...");
 
                 ForceEndWave(curWave);
 
-                int ended = curWave;
+                ended = curWave;
                 curWave = -1;
-                return ended;
             } else
             {
                 Debug.Log($"Ending wave {curWave}");
 
-                int ended = curWave;
+                ended = curWave;
                 curWave = -1;
-                return ended;
             }
+
+            Debug.Log($"Invoking on end for wave {ended}");
+            
+            ss.Invoke();
+
+            return ended;
+        } else
+        {
+            Debug.LogError($"Could not find wave {curWave} in waves");
         }
 
         return -1;
@@ -102,15 +121,14 @@ public class WaveHandler : MonoBehaviour
 
     public void Remove(Spawner s)
     {
-        if(waves.TryGetValue(s.waveNum, out List<Spawner> ls))
+        if(waves.TryGetValue(s.waveNum, out Wave ls))
         {
-            ls.Remove(s);
+            ls.spawners.Remove(s);
 
-            if(ls.Count <= 0)
+            if(ls.spawners.Count <= 0)
             {
                 Debug.Log("No more active spawners. Ending wave");
                 EndWave();
-                onWaveEnd.Invoke();
             }
         }
     }
@@ -128,13 +146,72 @@ public class WaveHandler : MonoBehaviour
         }
     }
 
+    public void OnWaveEnd(int waveNum, Action ac)
+    {
+        if(waves.TryGetValue(waveNum, out Wave wave))
+        {
+            wave.OnWaveEnd(ac);
+        } else
+        {
+            Debug.LogError($"Unable to find wave {waveNum}");
+        }
+    }
+
+    public void ResetWaveEndAction(int waveNum)
+    {
+        OnWaveEnd(waveNum, () => {});
+    }
+
+    void UpdateHUD(int waveEnded)
+    {
+        uir.UpdateWaveMeter((maxWaves - waveEnded)/maxWaves);
+    }
+    
+}
+
+class Wave
+{
+    Action onWaveEnd;
+    public List<Spawner> spawners;
+
+    public Wave(Spawner s)
+    {
+        onWaveEnd = () => {};
+        spawners = new List<Spawner>{s};
+    }
+
+    public Wave(Spawner s, Action ac) : this(s)
+    {
+        if(ac == null)
+        {
+            Debug.LogWarning("Cannot initialize wave with null OnWaveEnd action!");
+        } else
+        {
+            onWaveEnd = ac;
+        }
+    }
+
     public void OnWaveEnd(Action ac)
     {
         onWaveEnd = ac;
     }
 
-    void UpdateHUD(int waveEnded)
+    public void Invoke()
     {
-        uir.UpdateWaveMeter(waveEnded/maxWaves);
+        onWaveEnd.Invoke();
+    }
+
+    public override string ToString()
+    {
+        string ot = $"spawners.count = {spawners.Count} [";
+
+        foreach (Spawner sp in spawners)
+        {
+            ot += $"{sp}, ";
+        }
+
+        ot += "]\n";
+
+        return ot;
     }
 }

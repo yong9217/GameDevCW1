@@ -12,6 +12,7 @@ public class SpeechEngine : MonoBehaviour
     public List<SpeechBox> textBoxes;
     int next = 0;
     SpeechBox curBox;
+    Action onGUILoad;
 
     public ReccurTimer timer;
     public Debugger debug;
@@ -31,7 +32,7 @@ public class SpeechEngine : MonoBehaviour
 
     void Init(PanelRenderer p, VisualElement r, int ver)
     {
-        root = r.Q<VisualElement>("Tutorial");
+        root = r.Q<VisualElement>("Speech");
         desc = r.Q<Label>("Desc");
         close = r.Q<Button>("exit");
 
@@ -44,10 +45,13 @@ public class SpeechEngine : MonoBehaviour
         {
             Hide();
         };
+
+        onGUILoad();
     }
 
     public void NextSpeech()
     {
+        curBox = textBoxes[next];
         PlaySpeech(next);
         next = (next + 1)%textBoxes.Count;
     }
@@ -87,7 +91,7 @@ public class SpeechEngine : MonoBehaviour
         {
             if (speak.overidden)
             {
-                Debug.Log("Expecting this speech to have a scripted end!");
+                Debug.LogWarning($"Expecting speech {n} to have a scripted end!");
             } else
             {
                 close.visible = true;
@@ -97,7 +101,6 @@ public class SpeechEngine : MonoBehaviour
         {
             timer.InvokeOnce(speak.viewTime, () =>
             {
-                Debug.Log("Hide!");
                 Hide();
             }, "HideSpeech");
         }
@@ -106,6 +109,17 @@ public class SpeechEngine : MonoBehaviour
     public int NextSpeechKey()
     {
         return next;
+    }
+
+    public void OnGUILoad(Action ac)
+    {
+        if(ac == null)
+        {
+            Debug.LogError("Unable to set OnGUILoad action to be null!");
+        } else
+        {
+            onGUILoad = ac;
+        }
     }
 }
 
@@ -139,6 +153,12 @@ public class SpeechBox
 
     public void Invoke()
     {
-        onSpeechEnd.Invoke();
+        if(onSpeechEnd == null)
+        {
+            Debug.LogError($"Box '{text}' has onSpeechEnd null");
+        } else
+        {
+            onSpeechEnd.Invoke();
+        }
     }
 }

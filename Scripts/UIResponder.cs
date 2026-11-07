@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,7 +7,7 @@ using UnityEngine.UIElements;
 public class UIResponder : MonoBehaviour
 {
     //Component to get assets from
-    PanelRenderer pr;
+    public List<PanelRenderer> panels = new List<PanelRenderer>();
     InputAction pauseKey;
 
     //Altered assets
@@ -24,7 +25,14 @@ public class UIResponder : MonoBehaviour
 
     void Awake()
     {
-        pr = GetComponent<PanelRenderer>();
+        foreach (PanelRenderer p in panels)
+        {
+            p.RegisterUIReloadCallback(OnUIHoverDisableMouse);
+        }
+
+        PanelRenderer pr = GetComponent<PanelRenderer>();
+        panels.Add(pr);
+        pr.RegisterUIReloadCallback(OnUIHoverDisableMouse);
         pr.RegisterUIReloadCallback(OnUIReload);
 
         pauseKey = new InputAction("Pause");
@@ -39,7 +47,27 @@ public class UIResponder : MonoBehaviour
         pauseKey.Enable();
     }
 
-    void OnUIReload(PanelRenderer pr, VisualElement root, int ver)
+    public void AddPanel(PanelRenderer pr)
+    {
+        panels.Add(pr);
+
+        pr.RegisterUIReloadCallback(OnUIHoverDisableMouse);
+    }
+
+    public void AddPanel(PanelRenderer pr, PanelRenderer.VersionedUIReloadCallback OnUILoad)
+    {
+        AddPanel(pr);
+
+        if(OnUILoad == null)
+        {
+            Debug.LogError("Unable to add a callback that is null!");
+        } else
+        {
+            pr.RegisterUIReloadCallback(OnUILoad);
+        }
+    }
+
+    void OnUIHoverDisableMouse(PanelRenderer pr, VisualElement root, int ver)
     {
         root.RegisterCallback<MouseOverEvent>(e =>
         {
@@ -51,6 +79,11 @@ public class UIResponder : MonoBehaviour
             Debug.Log("Left!");
             msh.active = true;;
         });
+    }
+
+    void OnUIReload(PanelRenderer pr, VisualElement root, int ver)
+    {
+        OnUIHoverDisableMouse(pr,root,ver);
 
         MoneyHUD = root.Q<Label>("MoneyHUDLabel");
         MoneyMeter = root.Q<VisualElement>("MoneyHUDMask");

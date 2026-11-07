@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,7 @@ public class MouseStateHandler : MonoBehaviour
     public float towerScale;
 
     public bool debug;
+    Action onPlace = () => {};
 
     [Tooltip("Extra empty space required around a new tower, in world units.")]
     [Min(0)] public float placementClearance = .05f;
@@ -74,6 +76,14 @@ public class MouseStateHandler : MonoBehaviour
 
         GameObject tower = Instantiate(towerPrefab, position, Quaternion.identity);
         tower.transform.localScale = new Vector3(towerScale,towerScale,towerScale);
+
+        onPlace();
+
         return true;
+    }
+
+    public void OnPlace(Action ac)
+    {
+        onPlace = ac;
     }
 }

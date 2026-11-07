@@ -50,10 +50,14 @@ public class ReccurTimer : MonoBehaviour
         }
     }
 
+    public void OnTimeNowInvoke(float every, Action ac, string name = "default", float after = 0f, int nTimes = -1)
+    {
+        OnTimeInvoke(every,ac,name,after+curTicks, nTimes);
+    }
+
     public void InvokeOnce(float wait, Action ac, string name = "defualt")
     {
         OnTimeInvoke(1, ac, name, wait+curTicks, 1);
-        Debug.Log(this);
     }
 
     //Call to pause the named task
@@ -184,7 +188,7 @@ public class ReccurTimer : MonoBehaviour
 
                 nCycles++;
 
-                Debug.Log("Reset!");
+                Debug.Log("Timer has reset its tick counts");
             }
 
             //Execute TimeNodes if needed
@@ -197,18 +201,6 @@ public class ReccurTimer : MonoBehaviour
                     node.nextCall += k.Item1; //Increment to next call
 
                     List<TimeTask> ended = new List<TimeTask>();
-
-                    // foreach (TimeTask t in node.tasks)
-                    // {
-                    //     if(t.remTimes != 0)
-                    //     {
-                    //         t.Execute();
-                    //     } else
-                    //     {
-                    //         ended.Add(t);
-                    //         EndTask(t.name);
-                    //     }
-                    // }
 
                     for (int i = 0; i < node.tasks.Count; i++)
                     {

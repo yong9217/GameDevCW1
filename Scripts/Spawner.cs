@@ -52,7 +52,7 @@ public class Spawner : MonoBehaviour
     {
         if (timer)
         {
-            timer.OnTimeInvoke(spawnEvery, () =>
+            timer.OnTimeNowInvoke(spawnEvery, () =>
             {
                 Spawn();
             }, taskName, startFrom);
@@ -88,8 +88,10 @@ public class Spawner : MonoBehaviour
     {
         if (started)
         {
-            if(maxSpawn <= 0 || spawned <= maxSpawn)
+            if(maxSpawn <= 0 || spawned < maxSpawn)
             {
+                Debug.Log($"{name} spawns {enemyPrefab.name} at {spawned}/{maxSpawn}");
+
                 Vector2 spawnPoint = Random.insideUnitCircle*spawnRadius;
                 Vector3 spawnPointWorld = new Vector3(spawnPoint.x, 0, spawnPoint.y);
                 Instantiate(enemyPrefab,spawnPointWorld + gameObject.transform.position, Quaternion.identity);
@@ -99,5 +101,10 @@ public class Spawner : MonoBehaviour
                 End();
             }
         }
+    }
+
+    public override string ToString()
+    {
+        return $"{taskName} (w{waveNum}) spawning {enemyPrefab.name} every {spawnEvery} from {startFrom} in {spawnRadius} at {spawned}/{maxSpawn}";
     }
 }
