@@ -1,5 +1,7 @@
 # Kingdom Sentinels (COMP3218 CW1)
 
+**Version 1.0**
+
 A tower-defence game made in Unity. This repository is the **complete Unity project**
 (`Assets`, `Packages`, `ProjectSettings`), so you can open it and play straight away.
 (这是完整的 Unity 工程，直接用 Unity 打开即可运行。)
