@@ -1,0 +1,74 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="RoyalTheme.uss"/>
+    <ui:VisualElement class="royal-overlay">
+        <ui:VisualElement class="royal-panel royal-panel--glossary">
+            <ui:VisualElement class="royal-inner">
+                <ui:Label text="Glossary" class="royal-title"/>
+                <ui:VisualElement class="royal-divider royal-divider--tight"/>
+                <ui:Label text="ENEMIES" class="royal-section"/>
+                <ui:VisualElement class="royal-entry-row">
+                <ui:VisualElement class="royal-entry">
+                    <ui:VisualElement class="royal-entry-view" style="background-image: url(&quot;/Assets/Materials/NormalPreviewPort.renderTexture&quot;);"/>
+                    <ui:VisualElement class="royal-entry-info">
+                        <ui:Label text="Normal" class="royal-entry-title"/>
+                        <ui:Label text="Average speed and attack." class="royal-entry-desc"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="royal-entry">
+                    <ui:VisualElement class="royal-entry-view" style="background-image: url(&quot;/Assets/Materials/FastPreviewPort.renderTexture&quot;);"/>
+                    <ui:VisualElement class="royal-entry-info">
+                        <ui:Label text="Fast" class="royal-entry-title"/>
+                        <ui:Label text="Quick but fragile. Often comes in packs." class="royal-entry-desc"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="royal-entry">
+                    <ui:VisualElement class="royal-entry-view" style="background-image: url(&quot;/Assets/Materials/HeavyPreviewPort.renderTexture&quot;);"/>
+                    <ui:VisualElement class="royal-entry-info">
+                        <ui:Label text="Heavy" class="royal-entry-title"/>
+                        <ui:Label text="Slow and armoured, but hits hard." class="royal-entry-desc"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="royal-entry">
+                    <ui:VisualElement class="royal-entry-view" style="background-image: url(&quot;/Assets/Materials/BossPreviewPort.renderTexture&quot;);"/>
+                    <ui:VisualElement class="royal-entry-info">
+                        <ui:Label text="Boss" class="royal-entry-title"/>
+                        <ui:Label text="Huge health and a crushing blow." class="royal-entry-desc"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label text="CASTLE AND TOWERS" class="royal-section"/>
+                <ui:VisualElement class="royal-entry-row">
+                <ui:VisualElement class="royal-entry">
+                    <ui:VisualElement class="royal-entry-view" style="background-image: url(&quot;/Assets/Materials/BasePreviewPort.renderTexture&quot;);"/>
+                    <ui:VisualElement class="royal-entry-info">
+                        <ui:Label text="Castle" class="royal-entry-title"/>
+                        <ui:Label text="Your fortress. If it falls, the kingdom falls." class="royal-entry-desc"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="royal-entry">
+                    <ui:VisualElement class="royal-entry-view" style="background-image: url(&quot;/Assets/Materials/ArrowPreviewPort.renderTexture&quot;);"/>
+                    <ui:VisualElement class="royal-entry-info">
+                        <ui:Label text="Arrow Tower" class="royal-entry-title"/>
+                        <ui:Label text="Fast shots at a single target." class="royal-entry-desc"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="royal-entry">
+                    <ui:VisualElement class="royal-entry-view" style="background-image: url(&quot;/Assets/Materials/CannonPreviewPort.renderTexture&quot;);"/>
+                    <ui:VisualElement class="royal-entry-info">
+                        <ui:Label text="Cannon Tower" class="royal-entry-title"/>
+                        <ui:Label text="Long range and heavy hits, but a slow reload." class="royal-entry-desc"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="royal-entry">
+                    <ui:VisualElement class="royal-entry-view" style="background-image: url(&quot;/Assets/Materials/MagicPreviewPort.renderTexture&quot;);"/>
+                    <ui:VisualElement class="royal-entry-info">
+                        <ui:Label text="Magic Tower" class="royal-entry-title"/>
+                        <ui:Label text="Chains up to 3 enemies and slows them." class="royal-entry-desc"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Button text="×" name="exit" class="royal-close"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

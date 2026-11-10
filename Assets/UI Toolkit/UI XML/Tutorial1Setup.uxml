@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Style src="/Assets/UI Toolkit/RoyalTheme/RoyalHud.uss"/>
+    <ui:VisualElement template="TutorialTemplate" name="Speech" style="visibility: visible; display: flex; scale: 0 0; transition-duration: 0.4s; transition-property: scale; transition-timing-function: ease-out-bounce;">
+        <ui:VisualElement name="Tutorial" style="flex-grow: 1; align-self: auto; justify-content: center; align-items: auto; align-content: auto; position: relative; min-height: 120px; width: 360px; top: 0; left: 0; background-color: rgb(239, 226, 192); border-left-color: rgb(107, 74, 36); border-right-color: rgb(107, 74, 36); border-top-color: rgb(107, 74, 36); border-bottom-color: rgb(107, 74, 36); border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; padding-top: 20px; padding-right: 20px; padding-bottom: 26px; padding-left: 20px; flex-basis: initial; visibility: visible; scale: 1 1;">
+            <ui:Label text="Royal Scout" name="Title" style="align-self: center; align-items: center; font-size: 20px;"/>
+            <ui:Label text="" name="Desc" style="align-self: stretch; align-items: stretch; justify-content: center; align-content: flex-start; font-size: 20px; -unity-text-align: upper-center; white-space: normal;"/>
+        </ui:VisualElement>
+        <ui:Button text="×" name="exit" style="position: absolute; top: 18px; left: 310px; height: 26px; width: 26px; font-size: 26px; background-color: rgba(0, 0, 0, 0); color: rgb(138, 106, 58); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; visibility: hidden;"/>
+    </ui:VisualElement>
+</ui:UXML>

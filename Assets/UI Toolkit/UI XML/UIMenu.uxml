@@ -1,0 +1,119 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Style src="/Assets/UI Toolkit/TowerCards.uss"/>
+    <ui:Style src="/Assets/UI Toolkit/RoyalTheme/RoyalHud.uss"/>
+    <ui:VisualElement name="TowerBar" class="tower-bar">
+        <ui:Button name="t1" class="tower-card">
+            <ui:VisualElement class="card-icon icon-arrow" picking-mode="Ignore"/>
+            <ui:VisualElement class="card-info" picking-mode="Ignore">
+                <ui:VisualElement class="card-head" picking-mode="Ignore">
+                    <ui:Label text="Arrow Tower" class="card-name" picking-mode="Ignore"/>
+                    <ui:VisualElement class="card-cost-box" picking-mode="Ignore">
+                        <ui:Label text="" class="card-cost" picking-mode="Ignore"/>
+                        <ui:VisualElement class="cost-coin" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-row" picking-mode="Ignore">
+                    <ui:Label text="Range" class="stat-name" picking-mode="Ignore"/>
+                    <ui:VisualElement class="pips" picking-mode="Ignore">
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                    <ui:Label text="Medium" class="stat-text" picking-mode="Ignore"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-row" picking-mode="Ignore">
+                    <ui:Label text="Damage" class="stat-name" picking-mode="Ignore"/>
+                    <ui:VisualElement class="pips" picking-mode="Ignore">
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                    <ui:Label text="Medium" class="stat-text" picking-mode="Ignore"/>
+                </ui:VisualElement>
+                <ui:Label text="Fast fire, single target" class="card-note" picking-mode="Ignore"/>
+            </ui:VisualElement>
+        </ui:Button>
+        <ui:Button name="t2" class="tower-card">
+            <ui:VisualElement class="card-icon icon-cannon" picking-mode="Ignore"/>
+            <ui:VisualElement class="card-info" picking-mode="Ignore">
+                <ui:VisualElement class="card-head" picking-mode="Ignore">
+                    <ui:Label text="Cannon Tower" class="card-name" picking-mode="Ignore"/>
+                    <ui:VisualElement class="card-cost-box" picking-mode="Ignore">
+                        <ui:Label text="" class="card-cost" picking-mode="Ignore"/>
+                        <ui:VisualElement class="cost-coin" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-row" picking-mode="Ignore">
+                    <ui:Label text="Range" class="stat-name" picking-mode="Ignore"/>
+                    <ui:VisualElement class="pips" picking-mode="Ignore">
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                    <ui:Label text="Long" class="stat-text" picking-mode="Ignore"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-row" picking-mode="Ignore">
+                    <ui:Label text="Damage" class="stat-name" picking-mode="Ignore"/>
+                    <ui:VisualElement class="pips" picking-mode="Ignore">
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                    <ui:Label text="High" class="stat-text" picking-mode="Ignore"/>
+                </ui:VisualElement>
+                <ui:Label text="Slow fire, single target" class="card-note" picking-mode="Ignore"/>
+            </ui:VisualElement>
+        </ui:Button>
+        <ui:Button name="t3" class="tower-card">
+            <ui:VisualElement class="card-icon icon-magic" picking-mode="Ignore"/>
+            <ui:VisualElement class="card-info" picking-mode="Ignore">
+                <ui:VisualElement class="card-head" picking-mode="Ignore">
+                    <ui:Label text="Magic Tower" class="card-name" picking-mode="Ignore"/>
+                    <ui:VisualElement class="card-cost-box" picking-mode="Ignore">
+                        <ui:Label text="" class="card-cost" picking-mode="Ignore"/>
+                        <ui:VisualElement class="cost-coin" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-row" picking-mode="Ignore">
+                    <ui:Label text="Range" class="stat-name" picking-mode="Ignore"/>
+                    <ui:VisualElement class="pips" picking-mode="Ignore">
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                    <ui:Label text="Medium" class="stat-text" picking-mode="Ignore"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="stat-row" picking-mode="Ignore">
+                    <ui:Label text="Damage" class="stat-name" picking-mode="Ignore"/>
+                    <ui:VisualElement class="pips" picking-mode="Ignore">
+                        <ui:VisualElement class="pip on" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip" picking-mode="Ignore"/>
+                        <ui:VisualElement class="pip" picking-mode="Ignore"/>
+                    </ui:VisualElement>
+                    <ui:Label text="Low" class="stat-text" picking-mode="Ignore"/>
+                </ui:VisualElement>
+                <ui:Label text="Chains 3 enemies + slows" class="card-note" picking-mode="Ignore"/>
+            </ui:VisualElement>
+        </ui:Button>
+    </ui:VisualElement>
+    <ui:VisualElement name="MoneyHUD" class="money-hud" picking-mode="Ignore">
+        <ui:VisualElement name="MoneyCoin" class="money-coin" picking-mode="Ignore"/>
+        <ui:Label text="" name="MoneyHUDLabel" class="money-label" picking-mode="Ignore"/>
+    </ui:VisualElement>
+    <ui:VisualElement name="PlacementWarningLayer" class="warning-layer" picking-mode="Ignore">
+        <ui:VisualElement name="PlacementWarning" class="placement-warning" picking-mode="Ignore">
+            <ui:Label text="Cannot build here!" class="warning-title" picking-mode="Ignore"/>
+            <ui:Label text="Towers cannot be placed on trees, rocks, other towers, the castle or enemies. Pick an empty patch of ground." class="warning-text" picking-mode="Ignore"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="WaveHUD" style="flex-grow: 1; position: absolute; height: 968px; width: 552px; top: 28px; right: 20px; align-items: stretch; justify-content: flex-start; align-self: flex-start; align-content: flex-start;">
+        <ui:Label text="Enemy Forces" style="font-size: 58px; white-space: nowrap; text-overflow: clip;"/>
+        <ui:VisualElement name="WaveMeter" style="flex-grow: 1; position: absolute; height: 93px; width: 800px; top: 478px; left: 10px; justify-content: flex-start; align-items: stretch; align-self: flex-start; align-content: flex-start; flex-direction: column-reverse; flex-wrap: nowrap; background-color: rgba(40, 26, 10, 0.7); rotate: 270deg; transform-origin: center; border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; border-left-color: rgb(107, 74, 36); border-right-color: rgb(107, 74, 36); border-top-color: rgb(107, 74, 36); border-bottom-color: rgb(107, 74, 36); border-top-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px;">
+            <ui:VisualElement name="Bar" style="flex-grow: 1; background-color: rgb(150, 62, 34); width: 100%; transition-property: width; transition-duration: 0.15s; transition-timing-function: ease-in-sine; background-size: 100% 100%; color: rgb(150, 62, 34); scale: 1 1; border-top-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px;"/>
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1; position: absolute; height: 15px; width: 47px; top: 725px; left: 364px; background-color: rgb(51, 51, 51);"/>
+        <ui:VisualElement style="flex-grow: 1; position: absolute; height: 15px; width: 47px; top: 525px; left: 364px; background-color: rgb(51, 51, 51);"/>
+        <ui:VisualElement style="flex-grow: 1; position: absolute; height: 15px; width: 47px; top: 325px; left: 364px; background-color: rgb(51, 51, 51);"/>
+        <ui:VisualElement style="flex-grow: 1; position: absolute; height: 15px; width: 47px; top: 150px; left: 368px; background-color: rgb(51, 51, 51);"/>
+    </ui:VisualElement>
+</ui:UXML>

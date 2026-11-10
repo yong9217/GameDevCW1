@@ -1,0 +1,116 @@
+/* In-game HUD skin (wave bar, speech bubble, enemy meter, tower cards, gold). Applied by RoyalHudSkin. */
+
+#GameFlowHUD {
+    background-color: rgb(239, 226, 192);
+    border-width: 5px;
+    border-color: rgb(107, 74, 36);
+    border-radius: 8px;
+}
+#GameFlowLabel {
+    -unity-font-definition: url("Fonts/Cinzel.ttf");
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    color: rgb(74, 50, 22);
+}
+#GameFlowStartNow {
+    -unity-font-definition: url("Fonts/Cinzel.ttf");
+    letter-spacing: 2px;
+    background-color: rgb(122, 59, 34);
+    color: rgb(245, 234, 208);
+    border-width: 3px;
+    border-color: rgb(90, 42, 22);
+    border-radius: 6px;
+}
+#GameFlowStartNow:hover { background-color: rgb(142, 70, 40); }
+
+.money-hud .money-label { -unity-font-definition: url("Fonts/Cinzel.ttf"); }
+
+#WaveHUD > Label {
+    -unity-font-definition: url("Fonts/Cinzel.ttf");
+    color: rgb(245, 234, 208);
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: rgb(60, 30, 0);
+    letter-spacing: 2px;
+}
+#WaveMeter {
+    background-color: rgba(40, 26, 10, 0.7);
+    border-color: rgb(107, 74, 36);
+}
+#WaveMeter #Bar { background-color: rgb(150, 62, 34); }
+
+.tower-card .card-name, .tower-card .card-cost { -unity-font-definition: url("Fonts/Cinzel.ttf"); font-size: 44px; letter-spacing: 0; }
+.tower-card .stat-name, .tower-card .stat-text, .tower-card .card-note { -unity-font-definition: url("Fonts/CrimsonText-Regular.ttf"); }
+
+#Speech #Tutorial {
+    background-color: rgb(239, 226, 192);
+    border-width: 3px;
+    border-color: rgb(107, 74, 36);
+    border-radius: 6px;
+}
+#Speech #Title {
+    -unity-font-definition: url("Fonts/Cinzel.ttf");
+    -unity-font-style: bold;
+    letter-spacing: 2px;
+    color: rgb(122, 59, 34);
+    font-size: 20px;
+}
+#Speech #Desc {
+    -unity-font-definition: url("Fonts/CrimsonText-Regular.ttf");
+    color: rgb(74, 50, 22);
+    font-size: 20px;
+}
+#Speech #exit {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    color: rgb(138, 106, 58);
+    font-size: 26px;
+}
+#Speech #exit:hover { color: rgb(74, 50, 22); }
+
+/* Floating damage numbers above towers and the castle (DamageNumbers.cs). */
+.royal-damage { -unity-font-definition: url("Fonts/Cinzel.ttf"); }
+
+/* One-time "cannot build here" popup (UIResponder.ShowPlacementWarning). Never blocks clicks. */
+.warning-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 480px;   /* tower bar is 450px high (TowerCards.uss): sit just above it */
+    align-items: center;
+}
+.placement-warning {
+    max-width: 1500px;
+    padding: 28px 48px 32px 48px;
+    align-items: center;
+    background-color: rgb(239, 226, 192);
+    border-width: 8px;
+    border-color: rgb(107, 74, 36);
+    border-radius: 18px;
+    opacity: 0;
+    translate: 0 30px;
+    transition-property: opacity, translate;
+    transition-duration: 0.25s;
+}
+.placement-warning.shown {
+    opacity: 1;
+    translate: 0 0;
+}
+.warning-title {
+    -unity-font-definition: url("Fonts/Cinzel.ttf");
+    -unity-font-style: bold;
+    font-size: 56px;
+    letter-spacing: 2px;
+    color: rgb(122, 59, 34);
+    margin: 0 0 10px 0;
+    padding: 0;
+    white-space: nowrap;
+}
+.warning-text {
+    -unity-font-definition: url("Fonts/CrimsonText-Regular.ttf");
+    font-size: 46px;
+    color: rgb(74, 50, 22);
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+    -unity-text-align: middle-center;
+}

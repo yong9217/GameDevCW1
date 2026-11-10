@@ -1,0 +1,216 @@
+/* Bottom tower bar. Card look is driven only by classes set from UIResponder:
+   ready  = enough money to buy it   locked = not enough money   selected = the tower that will be built.
+   Hover / active / focus are deliberately given the same look as the base state, so the mouse never changes a card.
+   Every card keeps the same border width, so selecting a card never shifts the layout. */
+
+.tower-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 450px;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    padding: 30px 40px 30px 40px;
+    background-color: rgba(18, 16, 14, 0.8);
+    border-top-width: 6px;
+    border-top-color: rgba(255, 255, 255, 0.18);
+}
+
+.tower-card {
+    flex-grow: 1;
+    flex-basis: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 24px 0 24px;
+    padding: 14px 24px 14px 24px;
+    border-width: 22px;
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+.card-icon {
+    width: 270px;
+    height: 270px;
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.icon-arrow { background-image: url("/Assets/UI Toolkit/TowerIcons/Icon_Arrow.png"); }
+.icon-cannon { background-image: url("/Assets/UI Toolkit/TowerIcons/Icon_Cannon.png"); }
+.icon-magic { background-image: url("/Assets/UI Toolkit/TowerIcons/Icon_Magic.png"); }
+
+.card-info {
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin-left: 24px;
+    justify-content: center;
+}
+
+.card-head {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+}
+
+.card-name {
+    font-size: 54px;
+    -unity-font-style: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+    margin: 0;
+    padding: 0;
+}
+
+.card-cost {
+    font-size: 54px;
+    -unity-font-style: bold;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin: 0 0 0 16px;
+    padding: 0;
+}
+
+.stat-row {
+    flex-direction: row;
+    align-items: center;
+    height: 58px;
+}
+
+.stat-name {
+    width: 170px;
+    font-size: 42px;
+    margin: 0;
+    padding: 0;
+    -unity-text-align: middle-left;
+}
+
+.pips {
+    flex-direction: row;
+    align-items: center;
+}
+
+.pip {
+    width: 34px;
+    height: 34px;
+    margin: 0 8px 0 0;
+    border-radius: 8px;
+}
+
+.stat-text {
+    font-size: 42px;
+    margin: 0 0 0 10px;
+    padding: 0;
+    white-space: nowrap;
+    -unity-text-align: middle-left;
+}
+
+.card-note {
+    font-size: 38px;
+    margin: 8px 0 0 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -unity-text-align: middle-left;
+}
+
+/* ---- ready: affordable, pale yellow card ---- */
+/* CARD COLOUR  -> background-color below            (pale yellow, #FFF6D6)  */
+/* CARD FRAME   -> border-color below                (muted gold-brown, #AA8C5A) */
+.tower-card.ready,
+.tower-card.ready:hover,
+.tower-card.ready:active,
+.tower-card.ready:focus {
+    background-color: rgb(255, 246, 214);
+    border-color: rgb(170, 140, 90);
+}
+.tower-card.ready .card-name,
+.tower-card.ready .card-cost,
+.tower-card.ready .stat-name,
+.tower-card.ready .stat-text { color: rgb(46, 32, 18); }
+.tower-card.ready .card-note { color: rgb(110, 92, 70); }
+.tower-card.ready .card-icon { -unity-background-image-tint-color: rgb(255, 255, 255); }
+.tower-card.ready .pip { background-color: rgb(224, 210, 168); }
+.tower-card.ready .pip.on { background-color: rgb(214, 118, 18); }
+/* ---- locked: cannot afford, grey ---- */
+.tower-card.locked,
+.tower-card.locked:hover,
+.tower-card.locked:active,
+.tower-card.locked:focus {
+    background-color: rgb(56, 56, 56);
+    border-color: rgb(34, 34, 34);
+}
+.tower-card.locked .card-name,
+.tower-card.locked .card-cost,
+.tower-card.locked .stat-name,
+.tower-card.locked .stat-text { color: rgb(138, 138, 138); }
+.tower-card.locked .card-note { color: rgb(116, 116, 116); }
+.tower-card.locked .card-icon { -unity-background-image-tint-color: rgb(92, 92, 92); }
+.tower-card.locked .pip { background-color: rgb(76, 76, 76); }
+.tower-card.locked .pip.on { background-color: rgb(120, 120, 120); }
+
+/* ---- selected: the tower the next click will build (border only, independent of money) ---- */
+/* SELECTED FRAME -> border-color below (vivid yellow, #FFD000) */
+.tower-card.selected,
+.tower-card.selected:hover,
+.tower-card.selected:active,
+.tower-card.selected:focus {
+    border-color: rgb(255, 208, 0);
+}
+
+/* ---- money HUD (top left): coin icon + amount, no box ---- */
+.money-hud {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.money-coin {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+    background-image: url("/Assets/UI Toolkit/HUDIcons/Icon_Coin.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.money-label {
+    margin: 0 0 0 24px;
+    padding: 0;
+    font-size: 100px;
+    -unity-font-style: bold;
+    color: rgb(255, 228, 92);
+    -unity-text-outline-width: 4px;
+    -unity-text-outline-color: rgb(60, 30, 0);
+    text-shadow: 4px 4px 2px rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+}
+
+/* ---- cost in the card header: number + coin icon (same Icon_Coin.png as the money HUD) ---- */
+.card-cost-box {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    margin: 0 0 0 16px;
+}
+
+.card-cost-box .card-cost { margin: 0; }
+
+.cost-coin {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    margin: 0 0 0 10px;
+    background-image: url("/Assets/UI Toolkit/HUDIcons/Icon_Coin.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* Cannot afford: the coin greys out together with the rest of the card. */
+.tower-card.locked .cost-coin { -unity-background-image-tint-color: rgb(92, 92, 92); }

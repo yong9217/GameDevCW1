@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="RoyalTheme.uss"/>
+    <ui:VisualElement class="royal-menu-root" picking-mode="Ignore">
+        <ui:VisualElement class="royal-panel royal-menu-panel">
+            <ui:VisualElement class="royal-inner">
+                <ui:Label text="Kingdom" class="royal-title royal-menu-title"/>
+                <ui:Label text="Sentinels" class="royal-title royal-menu-title"/>
+                <ui:Label text="— Defend the castle —" class="royal-subtitle"/>
+                <ui:VisualElement class="royal-divider"/>
+                <ui:Button text="Start game" name="start" class="royal-button royal-button--primary"/>
+                <ui:Button text="Glossary" name="bestiary" class="royal-button"/>
+                <ui:Button text="Credits" name="credits" class="royal-button"/>
+                <ui:Button text="Exit" name="exit" class="royal-button"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

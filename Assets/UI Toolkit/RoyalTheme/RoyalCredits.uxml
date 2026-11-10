@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="RoyalTheme.uss"/>
+    <ui:VisualElement class="royal-overlay">
+        <ui:VisualElement class="royal-panel">
+            <ui:VisualElement class="royal-inner">
+                <ui:Label text="Credits" class="royal-title"/>
+                <ui:Label text="— Kingdom Sentinels —" class="royal-subtitle"/>
+                <ui:VisualElement class="royal-divider"/>
+                <ui:VisualElement class="royal-credits">
+                    <ui:Label text="MADE BY" class="royal-credits-heading"/>
+                    <ui:Label text="Yong You Shen" class="royal-credits-name"/>
+                    <ui:Label text="Xia Jin Qing" class="royal-credits-name"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Button text="×" name="exit" class="royal-close"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

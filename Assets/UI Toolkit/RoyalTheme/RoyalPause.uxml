@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="RoyalTheme.uss"/>
+    <ui:VisualElement name="overlay" class="royal-overlay royal-hidden" style="display: none;">
+        <ui:VisualElement class="royal-panel">
+            <ui:VisualElement class="royal-inner">
+                <ui:Label text="Paused" class="royal-title"/>
+                <ui:Label text="— Kingdom Sentinels —" name="subtitle" class="royal-subtitle"/>
+                <ui:VisualElement class="royal-divider"/>
+                <ui:Button text="Resume" name="resume" class="royal-button royal-button--primary"/>
+                <ui:Button text="Restart" name="restart" class="royal-button"/>
+                <ui:Button text="Main menu" name="menu" class="royal-button"/>
+            </ui:VisualElement>
+            <ui:Button text="×" name="exit" class="royal-close"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
