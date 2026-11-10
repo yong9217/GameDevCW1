@@ -143,8 +143,8 @@ MonoBehaviour:
   muzzle: {fileID: 6757306132228610171}
   fixedBase: {fileID: 2007547697744359515}
   recoilPart: {fileID: 6925125265887040047}
-  range: 13.5
-  damage: 100
+  range: 10
+  damage: 80
   interval: 2
   maxChainTargets: 3
   chainRange: 3.5
@@ -485,7 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatTarget
   kind: 0
-  maxHealth: 100
+  maxHealth: 110
   baseHealth: {fileID: 0}
   attackBounds: {fileID: 7226608656405438625}
   destroyTowerOnDeath: 1

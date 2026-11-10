@@ -35,6 +35,8 @@ public class PauseAPI : MonoBehaviour
 
     public void TogglePause()
     {
+        // After defeat the game stays frozen: Esc must not open the pause menu and then resume the lost game.
+        if (!paused && GameEnd.IsDefeated) return;
         paused = !paused;
         if (paused)
         {

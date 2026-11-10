@@ -234,7 +234,9 @@ public class GameFlow : MonoBehaviour
         }
         Vector3 look = centre - position;
         look.y = 0f;
-        Instantiate(prefab, position, look.sqrMagnitude > .01f ? Quaternion.LookRotation(look) : Quaternion.identity);
+        GameObject enemy = Instantiate(prefab, position, look.sqrMagnitude > .01f ? Quaternion.LookRotation(look) : Quaternion.identity);
+        // No walkable ground was found, so this enemy starts off the NavMesh: let it walk straight at the castle instead of standing still.
+        if (!found && enemy.TryGetComponent(out EnemyBrain brain)) brain.EnableOffMeshFallback();
     }
 
     GameObject PrefabFor(EnemyKind kind) => kind switch
@@ -394,12 +396,15 @@ public class GameFlow : MonoBehaviour
         {
             title = "Boss Wave", arcDegrees = 360f,
             prepMessage = "Their leader is coming! Defeat the boss to save the castle!",
-            startMessage = "The leader has arrived!",
+            startMessage = "Their soldiers come first, and the leader is right behind them!",
             groups =
             {
-                new SpawnGroup(EnemyKind.Boss, 1, 1f),
-                new SpawnGroup(EnemyKind.Normal, 6, 2.5f, 2f),
-                new SpawnGroup(EnemyKind.Fast, 4, .6f, 12f),
+                // All the small enemies first (the last one appears at 12.5 s) ...
+                new SpawnGroup(EnemyKind.Normal, 6, 2.5f),
+                new SpawnGroup(EnemyKind.Heavy, 1, 1f, 3f),
+                new SpawnGroup(EnemyKind.Fast, 9, .6f, 4f),
+                // ... then the boss, 3 seconds after the last of them.
+                new SpawnGroup(EnemyKind.Boss, 1, 1f, 15.5f),
             },
         },
     };

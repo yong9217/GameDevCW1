@@ -20,7 +20,10 @@ public sealed class TowerPreviewEffects : MonoBehaviour
     public static GameObject Primitive(PrimitiveType type, string label, Vector3 scale, Color color)
     {
         var g = GameObject.CreatePrimitive(type); g.name = label; g.transform.localScale = scale;
-        var c = g.GetComponent<Collider>(); if (c) Destroy(c);
+        // Visual only, like the trees and grass: projectiles have no collider at all. (Damage is applied by the flight code
+        // when the shot arrives, not by physics.) DestroyImmediate, because Destroy() only acts at the end of the frame and a
+        // fresh arrow could block melee/placement raycasts in the meantime (enemies then lost their swing at the castle).
+        var c = g.GetComponent<Collider>(); if (c) DestroyImmediate(c);
         g.GetComponent<Renderer>().sharedMaterial = Material(color); return g;
     }
     public static void Burst(Vector3 p, Color color, float size, int count = 14)

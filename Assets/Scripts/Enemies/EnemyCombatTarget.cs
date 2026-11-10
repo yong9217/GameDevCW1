@@ -27,6 +27,20 @@ public sealed class EnemyCombatTarget : MonoBehaviour
         health = Mathf.Max(1, maxHealth);
         if (kind == TargetKind.Base && !baseHealth) baseHealth = GetComponent<Base>();
         if (!attackBounds) attackBounds = GetComponent<Collider>();
+        if (kind == TargetKind.Tower) MakeSolid();
+    }
+
+    // Towers block enemies: a carving NavMeshObstacle with the same footprint as the tower's BoxCollider, so enemies
+    // walk around a tower instead of through it. It disappears with the tower. The castle is not changed.
+    void MakeSolid()
+    {
+        var box = attackBounds as BoxCollider;
+        if (!box || GetComponent<UnityEngine.AI.NavMeshObstacle>()) return;
+        var obstacle = gameObject.AddComponent<UnityEngine.AI.NavMeshObstacle>();
+        obstacle.shape = UnityEngine.AI.NavMeshObstacleShape.Box;
+        obstacle.center = box.center;
+        obstacle.size = box.size;
+        obstacle.carving = true;
     }
 
     void OnEnable() => Active.Add(this);

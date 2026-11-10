@@ -24,12 +24,29 @@ public class RTSCameraController : MonoBehaviour
     [Tooltip("Camera starts centred on this (drag the Base here). Empty = world origin.")]
     public Transform startFocus;
 
+    static RTSCameraController instance;
+
     Camera cam;
     Vector3 start;
+    float shakeAmplitude, shakeDuration, shakeEnds;
     Vector2 offset;   // x = screen right, y = screen up, each kept within ±maxOffset
+
+    // Short screen shake for impacts. Uses real time, so it also works while the game is paused.
+    public static void Shake(float amplitude, float duration)
+    {
+        if (!instance || amplitude <= 0f || duration <= 0f) return;
+        // A weaker shake never cuts a stronger one that is still running.
+        float remaining = Mathf.Max(0f, instance.shakeEnds - Time.unscaledTime);
+        float running = instance.shakeDuration > 0f ? instance.shakeAmplitude * remaining / instance.shakeDuration : 0f;
+        if (amplitude < running) return;
+        instance.shakeAmplitude = amplitude;
+        instance.shakeDuration = duration;
+        instance.shakeEnds = Time.unscaledTime + duration;
+    }
 
     void Awake()
     {
+        instance = this;
         cam = GetComponent<Camera>();
         start = startFocus ? new Vector3(startFocus.position.x, 0f, startFocus.position.z) : Vector3.zero;
         Apply();
@@ -41,6 +58,21 @@ public class RTSCameraController : MonoBehaviour
         offset.x = Mathf.Clamp(offset.x, -maxOffset, maxOffset);
         offset.y = Mathf.Clamp(offset.y, -maxOffset, maxOffset);
         Apply();
+        ApplyShake();
+    }
+
+    void OnDestroy()
+    {
+        if (instance == this) instance = null;
+    }
+
+    // Jitters the camera on screen axes; the strength fades out linearly. Apply() resets the position every frame.
+    void ApplyShake()
+    {
+        float remaining = shakeEnds - Time.unscaledTime;
+        if (remaining <= 0f || shakeDuration <= 0f) return;
+        Vector2 jitter = Random.insideUnitCircle * (shakeAmplitude * remaining / shakeDuration);
+        transform.position += transform.right * jitter.x + transform.up * jitter.y;
     }
 
     // W = screen up, S = screen down, A = screen left, D = screen right. The mouse never moves the camera.

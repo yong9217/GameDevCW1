@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e127c7554c693b840b5f8bd05bf61d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Base
-  startHP: 300
+  startHP: 380
   end: {fileID: 0}
   debug: {fileID: 0}
   destructable: 1
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatTarget
   kind: 1
-  maxHealth: 300
+  maxHealth: 380
   baseHealth: {fileID: 8121454398712387273}
   attackBounds: {fileID: 7116168646839561575}
   destroyTowerOnDeath: 1

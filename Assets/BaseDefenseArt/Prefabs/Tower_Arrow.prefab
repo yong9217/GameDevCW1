@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatTarget
   kind: 0
-  maxHealth: 120
+  maxHealth: 100
   baseHealth: {fileID: 0}
   attackBounds: {fileID: 390389939588792410}
   destroyTowerOnDeath: 1

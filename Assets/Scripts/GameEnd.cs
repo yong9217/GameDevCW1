@@ -18,12 +18,25 @@ public class GameEnd : MonoBehaviour
 
     bool over;
 
+    // True once the castle has fallen. The pause menu checks it so Esc cannot un-freeze a lost game.
+    public static bool IsDefeated { get; private set; }
+
+    void Awake() => IsDefeated = false;
+
     public void CueDeath()
     {
         if (over) return;
         over = true;
+        IsDefeated = true;
         msh.locked = true;
-        if (lostFXs) lostFXs.Play();
+        // Freeze the whole game behind the defeat screen. Try again / Main menu set the time scale back to 1.
+        Time.timeScale = 0f;
+        if (lostFXs)
+        {
+            var fx = lostFXs.main;
+            fx.useUnscaledTime = true; // keep the defeat effect animating while the game is frozen
+            lostFXs.Play();
+        }
 
         if (defeatScreen) defeatScreen.Show();
         else if (lostUI) lostUI.stylist.Show();

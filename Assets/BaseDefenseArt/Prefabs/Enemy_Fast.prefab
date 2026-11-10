@@ -392,10 +392,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
   towerDetectionRadius: 10
-  baseDetectionRadius: 4
+  baseDetectionRadius: 2
   attackRange: 0.8
   baseStandOff: 0.5
-  attackDamage: 6
+  attackDamage: 8
   attackInterval: 0.7
   hitFraction: 0.45
   moveSpeed: 3.5
@@ -404,6 +404,14 @@ MonoBehaviour:
   meleeObstacleLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  hitEffect: {fileID: 0}
+  hitEffectScale: 1
+  hitEffectLifetime: 1.5
+  cameraShakeAmplitude: 0
+  cameraShakeDuration: 0.2
+  stuckSeconds: 2
+  stuckMoveDistance: 0.25
+  stuckReachMargin: 0.5
 --- !u!136 &4898369032071341401
 CapsuleCollider:
   m_ObjectHideFlags: 0

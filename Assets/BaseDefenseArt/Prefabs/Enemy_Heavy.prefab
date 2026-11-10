@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa06bbe15e560074b96c94a6d2aed846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 540
+  maxHealth: 500
   killReward: 3
   wallet: {fileID: 0}
   corpseLifetime: 2
@@ -373,8 +373,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
   towerDetectionRadius: 10
-  baseDetectionRadius: 4
+  baseDetectionRadius: 2
   attackRange: 1.6
+  baseStandOff: 0.5
   attackDamage: 20
   attackInterval: 1.4
   hitFraction: 0.45
@@ -384,6 +385,14 @@ MonoBehaviour:
   meleeObstacleLayers:
     serializedVersion: 2
     m_Bits: 4294967295
+  hitEffect: {fileID: 0}
+  hitEffectScale: 1
+  hitEffectLifetime: 1.5
+  cameraShakeAmplitude: 0
+  cameraShakeDuration: 0.2
+  stuckSeconds: 2
+  stuckMoveDistance: 0.25
+  stuckReachMargin: 0.5
 --- !u!136 &9069436784611566023
 CapsuleCollider:
   m_ObjectHideFlags: 0

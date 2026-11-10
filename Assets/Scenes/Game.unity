@@ -2711,20 +2711,24 @@ MonoBehaviour:
   - title: Boss Wave
     arcDegrees: 360
     prepMessage: Their leader is coming! Defeat the boss to save the castle!
-    startMessage: The leader has arrived!
+    startMessage: Their soldiers come first, and the leader is right behind them!
     groups:
-    - enemy: 3
-      count: 1
-      interval: 1
-      startDelay: 0
     - enemy: 0
       count: 6
       interval: 2.5
-      startDelay: 2
+      startDelay: 0
+    - enemy: 2
+      count: 1
+      interval: 1
+      startDelay: 3
     - enemy: 1
-      count: 4
+      count: 9
       interval: 0.6
-      startDelay: 12
+      startDelay: 4
+    - enemy: 3
+      count: 1
+      interval: 1
+      startDelay: 15.5
 --- !u!4 &746458701
 Transform:
   m_ObjectHideFlags: 0
