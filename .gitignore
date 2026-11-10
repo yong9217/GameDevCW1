@@ -38,3 +38,6 @@ crashlytics-build.properties
 # OS junk
 .DS_Store
 Thumbs.db
+
+# Downloaded audio packs waiting to be sorted (outside Assets, never imported)
+/Music/

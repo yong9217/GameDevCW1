@@ -69,6 +69,8 @@ public class GameFlow : MonoBehaviour
     [Min(0f)] public float firstCountdown = 20f;
     [Min(0f)] public float countdownBetweenWaves = 15f;
     [Min(1f)] public float messageSeconds = 8f;
+    [Tooltip("Second of the boss intro music at which the boss appears.")]
+    [Min(0f)] public float bossEntranceInIntro = 5f;
 
     [Header("Messages")]
     [TextArea] public string victoryMessage = "Victory! The castle is safe!";
@@ -115,6 +117,7 @@ public class GameFlow : MonoBehaviour
     {
         waveIndex = 0;
         BeginCountdown(firstCountdown);
+        GameAudio.SetMusic(MusicFor(0));
         UpdateWaveMeter();
     }
 
@@ -174,6 +177,32 @@ public class GameFlow : MonoBehaviour
             StartCoroutine(SpawnGroupRoutine(group, wave.arcDegrees));
         }
         Say(wave.startMessage);
+        GameAudio.Play("jingle_wave");
+        GameAudio.SetMusic(MusicFor(waveIndex));
+        if (MusicFor(waveIndex) == GameAudio.Music.Boss) StartCoroutine(BossIntro(wave));
+    }
+
+    // The boss wave has its own intro piece, played once from start to end. It is timed so that the boss
+    // walks in exactly bossEntranceInIntro seconds into the piece.
+    IEnumerator BossIntro(Wave wave)
+    {
+        float bossAt = -1f;
+        foreach (var group in wave.groups)
+            if (group != null && group.enemy == EnemyKind.Boss && group.count > 0) { bossAt = group.startDelay; break; }
+        float wait = bossAt >= 0f ? Mathf.Max(0f, bossAt - bossEntranceInIntro) : 0f;
+        if (wait > 0f) yield return new WaitForSeconds(wait);
+        GameAudio.PlayStinger("stinger_boss");
+    }
+
+    // Calm music while the tutorial teaches, battle music for the real waves, the boss theme for the last one:
+    // the music rises with the tension of the match.
+    GameAudio.Music MusicFor(int index)
+    {
+        if (index < 0 || index >= waves.Count) return GameAudio.Music.Battle;
+        string title = waves[index].title ?? "";
+        if (title.IndexOf("tutorial", StringComparison.OrdinalIgnoreCase) >= 0) return GameAudio.Music.Calm;
+        if (index == waves.Count - 1 || title.IndexOf("boss", StringComparison.OrdinalIgnoreCase) >= 0) return GameAudio.Music.Boss;
+        return GameAudio.Music.Battle;
     }
 
     void WaveCleared()
@@ -234,6 +263,7 @@ public class GameFlow : MonoBehaviour
         }
         Vector3 look = centre - position;
         look.y = 0f;
+        if (kind == EnemyKind.Boss) GameAudio.Play("boss_arrive");
         GameObject enemy = Instantiate(prefab, position, look.sqrMagnitude > .01f ? Quaternion.LookRotation(look) : Quaternion.identity);
         // No walkable ground was found, so this enemy starts off the NavMesh: let it walk straight at the castle instead of standing still.
         if (!found && enemy.TryGetComponent(out EnemyBrain brain)) brain.EnableOffMeshFallback();
@@ -275,7 +305,7 @@ public class GameFlow : MonoBehaviour
         hudLabel.style.fontSize = 46;
         hudLabel.style.marginRight = 24;
 
-        startNowButton = new Button(StartWave) { name = "GameFlowStartNow", text = "Start now" };
+        startNowButton = new Button(() => { GameAudio.Play("ui_click"); StartWave(); }) { name = "GameFlowStartNow", text = "Start now" };
         var b = startNowButton.style;
         b.fontSize = 40;
         b.paddingLeft = 24; b.paddingRight = 24; b.paddingTop = 6; b.paddingBottom = 6;

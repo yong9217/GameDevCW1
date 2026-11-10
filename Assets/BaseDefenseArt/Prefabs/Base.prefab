@@ -212,7 +212,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.30797192, y: 0.30797192, z: 0.30797192}
+  m_LocalScale: {x: 0.46195787, y: 0.46195787, z: 0.46195787}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7666605183432362027}
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e127c7554c693b840b5f8bd05bf61d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Base
-  startHP: 380
+  startHP: 500
   end: {fileID: 0}
   debug: {fileID: 0}
   destructable: 1
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyCombatTarget
   kind: 1
-  maxHealth: 380
+  maxHealth: 500
   baseHealth: {fileID: 8121454398712387273}
   attackBounds: {fileID: 7116168646839561575}
   destroyTowerOnDeath: 1

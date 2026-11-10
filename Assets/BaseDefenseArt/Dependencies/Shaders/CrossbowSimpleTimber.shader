@@ -2,7 +2,7 @@ Shader "BaseDefense/Crossbow Simple Timber"
 {
     Properties
     {
-        _MainTex("Original texture",2D)="white"{}
+        _MainTex("Original texture",2D)="white"{} [HideInInspector] _GlossaryUnlit("Glossary unlit (set by the glossary only)",Float)=0
         _PaletteStrength("Steel palette simplification",Range(0,1))=.76
         _TextureDetail("Steel tonal detail",Range(0,1))=.37
         _MipBias("Steel fine detail suppression",Range(0,4))=.65
@@ -20,7 +20,7 @@ Shader "BaseDefense/Crossbow Simple Timber"
         CGPROGRAM
         #pragma surface surf Standard fullforwardshadows
         #pragma target 3.0
-        sampler2D _MainTex;
+        sampler2D _MainTex; float _GlossaryUnlit;
         half _PaletteStrength,_TextureDetail,_MipBias,_WoodSimplification,_WoodMipBias;
         fixed4 _MetalColor,_WoodColor,_GoldColor;
         struct Input{float2 uv_MainTex;};
@@ -43,6 +43,8 @@ Shader "BaseDefense/Crossbow Simple Timber"
             fixed3 simpleWood=_WoodColor.rgb*timberTone;
             o.Albedo=lerp(steelResult,simpleWood,timberMask*_WoodSimplification);
             o.Metallic=0;o.Smoothness=.06;o.Alpha=1;
+            // Glossary portraits: flat, unlit colour (no light, no shadow). 0 in the game = unchanged.
+            o.Emission+=o.Albedo*_GlossaryUnlit; o.Albedo*=1-_GlossaryUnlit; o.Smoothness*=1-_GlossaryUnlit;
         }
         ENDCG
     }

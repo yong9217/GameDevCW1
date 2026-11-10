@@ -173,7 +173,12 @@ public class UIResponder : MonoBehaviour
     // A card the player cannot afford is greyed out and does nothing when clicked.
     void OnCardClicked(int k)
     {
-        if (!CardAffordable(k)) return;
+        if (!CardAffordable(k))
+        {
+            GameAudio.Play("ui_deny");
+            return;
+        }
+        GameAudio.Play("ui_click");
         SelectTower(k);
     }
 

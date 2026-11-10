@@ -27,6 +27,7 @@ public class EndScreenUI : MonoBehaviour
     void Init(PanelRenderer panel, VisualElement root, int version)
     {
         overlay = root.Q<VisualElement>("overlay");
+        GameAudio.AddButtonClicks(root);
         if (overlay == null)
         {
             Debug.LogError("EndScreenUI: the panel needs RoyalEndScreen.uxml.", this);

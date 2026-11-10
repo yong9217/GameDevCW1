@@ -315,7 +315,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.28, y: 1.28, z: 1.28}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7448951885800906571}
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 500
-  killReward: 3
+  killReward: 2
   wallet: {fileID: 0}
   corpseLifetime: 2
   slowMultiplier: 0.5
@@ -372,10 +372,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0405f65b863c8c43a34d00c49e0b917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
-  towerDetectionRadius: 10
-  baseDetectionRadius: 2
-  attackRange: 1.6
-  baseStandOff: 0.5
+  towerDetectionRadius: 8
+  baseDetectionRadius: 3
+  attackRange: 1.024
+  baseStandOff: 0.75
   attackDamage: 20
   attackInterval: 1.4
   hitFraction: 0.45
@@ -391,8 +391,8 @@ MonoBehaviour:
   cameraShakeAmplitude: 0
   cameraShakeDuration: 0.2
   stuckSeconds: 2
-  stuckMoveDistance: 0.25
-  stuckReachMargin: 0.5
+  stuckMoveDistance: 0.2
+  stuckReachMargin: 0.4
 --- !u!136 &9069436784611566023
 CapsuleCollider:
   m_ObjectHideFlags: 0

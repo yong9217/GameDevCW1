@@ -96,6 +96,7 @@ public class MouseStateHandler : MonoBehaviour
         if (!TowerPlacement.CanPlace(towerPrefab, position, Quaternion.identity, scale, placementClearance, out string reason))
         {
             Debug.Log("Cannot place tower: " + reason);
+            GameAudio.Play("ui_deny");
             // Only a bad spot counts (not "no tower selected"); only once per game.
             if (!placementWarningShown && TowerPlacement.IsBlockedSpot(reason) && ui)
                 placementWarningShown = ui.ShowPlacementWarning();
@@ -105,6 +106,7 @@ public class MouseStateHandler : MonoBehaviour
         if (!bank.Purchasable(towerPrefab.name))
         {
             Debug.Log("Insufficient funds to buy tower!");
+            GameAudio.Play("ui_deny");
             return false;
         }
 
@@ -112,6 +114,7 @@ public class MouseStateHandler : MonoBehaviour
 
         GameObject tower = Instantiate(towerPrefab, position, Quaternion.identity);
         tower.transform.localScale = scale;
+        GameAudio.Play("build");
 
         onPlace();
 

@@ -110,6 +110,7 @@ public sealed class TowerPreviewWeapon : MonoBehaviour
         if (yaw && direction.sqrMagnitude > .001f && Vector3.Angle(yaw.forward, direction) > 3) return;
         fireAt = Time.time + Mathf.Max(.05f, interval);
         shots++;
+        GameAudio.PlayCombat(kind == WeaponKind.Cannon ? "shot_cannon" : kind == WeaponKind.Crystal ? "shot_magic" : "shot_arrow");
         var launch = muzzle ? muzzle : transform;
         lastMuzzle = launch.position;
         lastAim = currentTarget.AimPoint;

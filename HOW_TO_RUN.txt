@@ -1,0 +1,54 @@
+KINGDOM SENTINELS (COMP3218 CW1) - Version 2.0
+How to run the game
+==========================================================
+
+This repository is the complete Unity project. You do not need to
+copy anything by hand; just open it in Unity and press Play.
+
+REQUIREMENTS
+------------
+- Unity Hub
+- Unity Editor 6000.6.4f1 (Unity 6.6). Other versions may import
+  with errors, so please use exactly this one.
+- An internet connection for the first open (Unity downloads the
+  packages the project needs).
+
+STEPS
+-----
+1. Clone the repository into a NEW, EMPTY folder:
+
+     git clone https://github.com/yong9217/GameDevCW1.git
+
+   Do NOT copy it into an older Unity project or into an existing
+   "Assets" folder. That creates duplicate scripts and compile errors.
+
+2. Open Unity Hub -> Add -> "Add project from disk" -> choose the
+   cloned folder (the one that contains Assets, Packages and
+   ProjectSettings) -> open it with 6000.6.4f1.
+
+3. Wait for the first import. It takes a few minutes. This is normal.
+
+4. Press the Play button. The editor always starts from the main
+   menu, like the built game. Click Start to begin.
+
+CONTROLS
+--------
+- Pick a tower ........ Left-click a tower card (bottom bar)
+- Build the tower ..... Left-click the ground
+- Cancel the tower .... Right-click
+- Move the camera ..... W / A / S / D
+- Pause ............... Esc
+
+Nothing is selected when the game starts. Pick a tower card first,
+otherwise clicking on the map builds nothing.
+
+TROUBLESHOOTING
+---------------
+- A few "missing script" warnings about effect materials may appear
+  in the Console. They come from the effects asset pack, are
+  harmless, and do not affect the game.
+- Red compile errors about duplicate classes (CS0101 / CS0111) mean
+  the project was copied into an old project. Re-clone into a new
+  empty folder as described in step 1.
+- If Unity asks to enter Safe Mode, check the Console for the first
+  red error and fix that one first; the rest usually disappear.

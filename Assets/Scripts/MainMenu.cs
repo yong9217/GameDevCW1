@@ -21,6 +21,7 @@ public class MainMenu : MonoBehaviour
 
     void intialize(PanelRenderer p, VisualElement root, int ver)
     {
+        GameAudio.AddButtonClicks(root);
         root.Q<Button>("start").clicked += () =>
         {
             LoadGame();

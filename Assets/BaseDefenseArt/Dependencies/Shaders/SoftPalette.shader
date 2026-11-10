@@ -2,7 +2,7 @@ Shader "BaseDefense/Soft Palette Towers"
 {
     Properties
     {
-        _MainTex ("Original texture (preserved)", 2D) = "white" {}
+        _MainTex ("Original texture (preserved)", 2D) = "white" {} [HideInInspector] _GlossaryUnlit("Glossary unlit (set by the glossary only)",Float)=0
         _PaletteStrength ("Palette simplification", Range(0,1)) = 0.92
         _TextureDetail ("Original tonal detail", Range(0,1)) = 0.22
         _MipBias ("Fine detail suppression", Range(0,4)) = 1.5
@@ -19,7 +19,7 @@ Shader "BaseDefense/Soft Palette Towers"
         CGPROGRAM
         #pragma surface surf Standard fullforwardshadows
         #pragma target 3.0
-        sampler2D _MainTex;
+        sampler2D _MainTex; float _GlossaryUnlit;
         half _PaletteStrength, _TextureDetail, _MipBias, _CrystalMode;
         fixed4 _MetalColor, _WoodColor, _GoldColor, _CrystalColor;
         struct Input { float2 uv_MainTex; };
@@ -43,6 +43,8 @@ Shader "BaseDefense/Soft Palette Towers"
             o.Smoothness = 0.06;
             o.Emission = simplified * blue * 0.06;
             o.Alpha = 1;
+            // Glossary portraits: flat, unlit colour (no light, no shadow). 0 in the game = unchanged.
+            o.Emission+=o.Albedo*_GlossaryUnlit; o.Albedo*=1-_GlossaryUnlit; o.Smoothness*=1-_GlossaryUnlit;
         }
         ENDCG
     }

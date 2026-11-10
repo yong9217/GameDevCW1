@@ -13,7 +13,7 @@ public class RTSCameraController : MonoBehaviour
     public float yaw = 45f;
     [Range(15f, 90f)] public float fieldOfView = 35f;
     [Tooltip("Distance from the camera to the ground point it looks at.")]
-    [Min(1f)] public float distance = 35f;
+    [Min(1f)] public float distance = 43.75f;
 
     [Header("Movement")]
     [Tooltip("Pan speed in world units per second (real time, so it also works while the tutorial pauses the game).")]

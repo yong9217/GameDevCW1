@@ -334,7 +334,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2499849600277392231}
@@ -352,8 +352,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa06bbe15e560074b96c94a6d2aed846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 120
-  killReward: 2
+  maxHealth: 100
+  killReward: 1
   wallet: {fileID: 0}
   corpseLifetime: 2
   slowMultiplier: 0.5
@@ -391,10 +391,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0405f65b863c8c43a34d00c49e0b917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyBrain
-  towerDetectionRadius: 10
-  baseDetectionRadius: 2
-  attackRange: 0.8
-  baseStandOff: 0.5
+  towerDetectionRadius: 8
+  baseDetectionRadius: 3
+  attackRange: 0.64
+  baseStandOff: 0.75
   attackDamage: 8
   attackInterval: 0.7
   hitFraction: 0.45
@@ -405,13 +405,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   hitEffect: {fileID: 0}
+  hitFeedbackLead: 0
   hitEffectScale: 1
   hitEffectLifetime: 1.5
   cameraShakeAmplitude: 0
   cameraShakeDuration: 0.2
   stuckSeconds: 2
-  stuckMoveDistance: 0.25
-  stuckReachMargin: 0.5
+  stuckMoveDistance: 0.2
+  stuckReachMargin: 0.4
 --- !u!136 &4898369032071341401
 CapsuleCollider:
   m_ObjectHideFlags: 0

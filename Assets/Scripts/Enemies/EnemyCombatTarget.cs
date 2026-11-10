@@ -60,6 +60,7 @@ public sealed class EnemyCombatTarget : MonoBehaviour
         else health = Mathf.Max(0, health - amount);
         if (CurrentHealth > 0) return;
         Active.Remove(this);
+        if (kind == TargetKind.Tower) GameAudio.PlayCombat("tower_destroyed");
         if (kind == TargetKind.Tower && destroyTowerOnDeath) Destroy(gameObject);
         // Base defeat/game-over remains the teammate's responsibility.
         Destroyed?.Invoke();

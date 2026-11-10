@@ -31,6 +31,7 @@ public class GameEnd : MonoBehaviour
         msh.locked = true;
         // Freeze the whole game behind the defeat screen. Try again / Main menu set the time scale back to 1.
         Time.timeScale = 0f;
+        GameAudio.EndGame(false);
         if (lostFXs)
         {
             var fx = lostFXs.main;
@@ -48,6 +49,7 @@ public class GameEnd : MonoBehaviour
         over = true;
         msh.locked = true;
         Debug.Log("All waves beaten. You win!");
+        GameAudio.EndGame(true);
 
         foreach (ParticleSystem ps in winFXs)
         {

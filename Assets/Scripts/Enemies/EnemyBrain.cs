@@ -115,7 +115,6 @@ public sealed class EnemyBrain : MonoBehaviour
         var selected = forcedTarget ? forcedTarget : lockedTower ? lockedTower : SelectTarget();
         if (selected != CurrentTarget)
         {
-            if (swingPending) Diag("target changed " + Name(CurrentTarget) + " -> " + Name(selected));
             CurrentTarget = selected;
             swingPending = false;
             pendingVictim = null;
@@ -136,8 +135,6 @@ public sealed class EnemyBrain : MonoBehaviour
         bool canStrike = inRange && ClearMeleePath(CurrentTarget);
         if (!canStrike)
         {
-            if (swingPending) Diag("lost strike: inRange=" + inRange + " dist=" + CurrentTarget.DistanceFrom(transform.position).ToString("F3") +
-                " range=" + RangeFor(CurrentTarget).ToString("F3") + " path=" + diagPath + " vel=" + agent.velocity.magnitude.ToString("F3"));
             swingPending = false;
             attackEnds = 0;
             State = CurrentTarget.kind == EnemyCombatTarget.TargetKind.Base ? BehaviourState.Moving : BehaviourState.Chasing;
@@ -172,15 +169,21 @@ public sealed class EnemyBrain : MonoBehaviour
         if (swingPending && feedbackPending && Time.time >= feedbackAt)
         {
             feedbackPending = false;
-            if (pendingVictim && pendingVictim.IsAlive) HitFeedback(pendingVictim);
+            // Only when the blow will really land (same checks as the damage below): no shake on a swing at air.
+            if (pendingVictim && pendingVictim == CurrentTarget && pendingVictim.IsAlive &&
+                pendingVictim.DistanceFrom(transform.position) <= RangeFor(pendingVictim) && ClearMeleePath(pendingVictim))
+                HitFeedback(pendingVictim);
         }
         if (swingPending && Time.time >= hitAt)
         {
             swingPending = false;
             if (pendingVictim && pendingVictim == CurrentTarget && pendingVictim.IsAlive &&
                 pendingVictim.DistanceFrom(transform.position) <= RangeFor(pendingVictim) && ClearMeleePath(pendingVictim))
+            {
                 pendingVictim.TakeDamage(attackDamage);
-            else Diag("hit dropped: victim=" + Name(pendingVictim) + " path=" + diagPath);
+                // The boss has its own heavier hit sound (HitFeedback); everyone else uses the normal one.
+                if (cameraShakeAmplitude <= 0f) GameAudio.PlayCombat("melee_hit");
+            }
         }
         if (Time.time >= nextAttack && CurrentTarget && CurrentTarget.IsAlive &&
             (direction.sqrMagnitude < .0001f || Vector3.Angle(transform.forward, direction) <= 10))
@@ -201,7 +204,11 @@ public sealed class EnemyBrain : MonoBehaviour
     // Effect + camera shake at the point of the victim facing this enemy. Only enemies with these fields set (the boss) use it.
     void HitFeedback(EnemyCombatTarget victim)
     {
-        if (cameraShakeAmplitude > 0f) RTSCameraController.Shake(cameraShakeAmplitude, cameraShakeDuration);
+        if (cameraShakeAmplitude > 0f)
+        {
+            RTSCameraController.Shake(cameraShakeAmplitude, cameraShakeDuration);
+            GameAudio.PlayCombat("boss_hit");
+        }
         if (!hitEffect) return;
         Vector3 from = transform.position + Vector3.up;
         Vector3 point = victim.attackBounds && victim.attackBounds.enabled
@@ -229,7 +236,7 @@ public sealed class EnemyBrain : MonoBehaviour
         var nearest = NearestTargetInReach();
         if (nearest && nearest != CurrentTarget)
         {
-            Debug.Log("[Unstuck] " + name + " was stuck for " + stuckSeconds.ToString("F1") + "s, now attacking " + Name(nearest), this);
+            Debug.Log("[Unstuck] " + name + " was stuck for " + stuckSeconds.ToString("F1") + "s, now attacking " + nearest.name, this);
             forcedTarget = nearest;
         }
     }
@@ -345,25 +352,18 @@ public sealed class EnemyBrain : MonoBehaviour
     bool ClearMeleePath(EnemyCombatTarget target)
     {
         // Off the NavMesh (fallback march) there is nothing to test against, so the strike is allowed.
-        if (!agent.enabled || !agent.isOnNavMesh) { diagPath = "fallback (off NavMesh)"; return true; }
+        if (!agent.enabled || !agent.isOnNavMesh) return true;
         if (!NavMesh.SamplePosition(ApproachPoint(target), out var end, 2, agent.areaMask) ||
-            NavMesh.Raycast(agent.nextPosition, end.position, out _, agent.areaMask)) { diagPath = "navmesh blocked"; return false; }
+            NavMesh.Raycast(agent.nextPosition, end.position, out _, agent.areaMask)) return false;
         // Sampling can land on the near side of a wall. Also check the actual target position.
         Vector3 origin = transform.position + Vector3.up * .6f;
         Vector3 line = target.transform.position + Vector3.up * .6f - origin;
         foreach (var hit in Physics.RaycastAll(origin, line.normalized, line.magnitude,
                      meleeObstacleLayers, QueryTriggerInteraction.Ignore))
             if (!hit.collider.GetComponentInParent<EnemyHealth>() &&
-                !hit.collider.GetComponentInParent<EnemyCombatTarget>()) { diagPath = "blocked by collider '" + hit.collider.name + "' root '" + hit.collider.transform.root.name + "'"; return false; }
-        diagPath = "clear";
+                !hit.collider.GetComponentInParent<EnemyCombatTarget>()) return false;
         return true;
     }
-
-    // TEMP DIAGNOSTICS (SwingDiag) - remove after the half-swing bug is found.
-    string diagPath = "-";
-    static string Name(EnemyCombatTarget t) => t ? t.name + "(" + t.kind + ")" : "none";
-    void Diag(string message) => Debug.Log("[SwingDiag] t=" + Time.time.ToString("F2") + " " + name +
-        " target=" + Name(CurrentTarget) + " sinceSwing=" + (Time.time - (hitAt - Mathf.Max(.05f, attackInterval) * Mathf.Clamp01(hitFraction))).ToString("F2") + " | " + message);
 
     void Stop()
     {

@@ -96,6 +96,7 @@ public sealed class TowerPreviewEffects : MonoBehaviour
         if (target && target.isActiveAndEnabled && target.IsAlive)
         {
             target.Damage(damage);
+            GameAudio.PlayCombat(cannon ? "hit_cannon" : "hit_arrow");
             if (owner) owner.hits++;
             Burst(target.AimPoint, cannon ? new Color(1,.45f,.12f) : new Color(1,.85f,.4f), cannon ? .8f : .35f, cannon ? 28 : 9);
         }

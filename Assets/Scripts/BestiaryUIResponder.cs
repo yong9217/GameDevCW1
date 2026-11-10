@@ -13,6 +13,7 @@ public class BestiaryUIResponder : MonoBehaviour
 
     void Init(PanelRenderer p, VisualElement root, int ver)
     {
+        GameAudio.AddButtonClicks(root);
         root.Q<Button>("exit").clicked += () =>
         {
             gameObject.SetActive(false);

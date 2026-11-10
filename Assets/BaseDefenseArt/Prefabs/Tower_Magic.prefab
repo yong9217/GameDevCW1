@@ -54,11 +54,11 @@ MonoBehaviour:
   muzzle: {fileID: 441732943611128952}
   fixedBase: {fileID: 2918206877987776936}
   recoilPart: {fileID: 0}
-  range: 9
+  range: 7.2
   damage: 20
   interval: 0.8
   maxChainTargets: 3
-  chainRange: 4.5
+  chainRange: 3.6
   distanceTieTolerance: 0.05
   attacking: 1
   shots: 0

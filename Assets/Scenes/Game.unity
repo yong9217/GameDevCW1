@@ -2255,7 +2255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6f39b111226a4b41b8d95e66b84345d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEconomy
-  startCash: 5
+  startCash: 10
   maxCash: 100
   towerToCost:
   - key: {fileID: 4442090434529925730, guid: d51d6f566523ed941be7fe30be7f0b8f, type: 3}
@@ -3435,7 +3435,7 @@ MonoBehaviour:
   pitch: 50
   yaw: 45
   fieldOfView: 35
-  distance: 35
+  distance: 43.75
   panSpeed: 12
   maxOffset: 10
   startFocus: {fileID: 1695025994}
@@ -4903,7 +4903,7 @@ MonoBehaviour:
   active: 1
   bank: {fileID: 698331966}
   towerPrefab: {fileID: 0}
-  towerScale: 0.4
+  towerScale: 0.32
   ui: {fileID: 226410542}
   debug: 0
   placementClearance: 0
@@ -5725,10 +5725,6 @@ PrefabInstance:
       propertyPath: debug
       value: 
       objectReference: {fileID: 1189514047}
-    - target: {fileID: 8121454398712387273, guid: 33b38fac4d5843449b82c5f732b0f008, type: 3}
-      propertyPath: startHP
-      value: 200
-      objectReference: {fileID: 0}
     - target: {fileID: 8121454398712387273, guid: 33b38fac4d5843449b82c5f732b0f008, type: 3}
       propertyPath: destructable
       value: 1

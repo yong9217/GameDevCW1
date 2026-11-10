@@ -2,7 +2,7 @@ Shader "BaseDefense/Cannon Painted Steel and Timber"
 {
     Properties
     {
-        _MainTex ("Original cannon texture",2D)="white"{}
+        _MainTex ("Original cannon texture",2D)="white"{} [HideInInspector] _GlossaryUnlit("Glossary unlit (set by the glossary only)",Float)=0
         _Part ("0 barrel, 1 carriage",Float)=0
         _Steel ("Blue steel",Color)=(.20,.27,.32,1)
         _Brass ("Warm brass fittings",Color)=(.53,.34,.13,1)
@@ -16,7 +16,7 @@ Shader "BaseDefense/Cannon Painted Steel and Timber"
         CGPROGRAM
         #pragma surface surf Standard fullforwardshadows vertex:vert
         #pragma target 3.0
-        sampler2D _MainTex;
+        sampler2D _MainTex; float _GlossaryUnlit;
         half _Part,_Detail;
         fixed4 _Steel,_Brass,_Paint,_Timber;
         struct Input {float2 uv_MainTex;float3 modelPos;};
@@ -68,6 +68,8 @@ Shader "BaseDefense/Cannon Painted Steel and Timber"
             o.Metallic=fittings*.18;
             o.Smoothness=lerp(.08,.22,fittings);
             o.Alpha=1;
+            // Glossary portraits: flat, unlit colour (no light, no shadow). 0 in the game = unchanged.
+            o.Emission+=o.Albedo*_GlossaryUnlit; o.Albedo*=1-_GlossaryUnlit; o.Smoothness*=1-_GlossaryUnlit;
         }
         ENDCG
     }

@@ -24,6 +24,7 @@ public class PauseAPI : MonoBehaviour
     void Init(PanelRenderer p, VisualElement root, int ver)
     {
         overlay = root.Q<VisualElement>("overlay");
+        GameAudio.AddButtonClicks(root);
         root.Q<Button>("exit").clicked += TogglePause;
         root.Q<Button>("resume").clicked += TogglePause;
         root.Q<Button>("restart").clicked += () => LoadScene(SceneManager.GetActiveScene().name);
@@ -50,6 +51,7 @@ public class PauseAPI : MonoBehaviour
             RoyalFade.Hide(overlay);
         }
         if (msh) msh.active = !paused;
+        GameAudio.SetPaused(paused);
     }
 
     static void LoadScene(string name)

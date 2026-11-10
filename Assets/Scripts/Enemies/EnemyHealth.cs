@@ -72,6 +72,8 @@ public sealed class EnemyHealth : MonoBehaviour
 
         // Schedule cleanup before notifying subscribers, so it does not depend on their behaviour.
         Destroy(gameObject, Mathf.Max(corpseLifetime, DeathClipLength(animator)));
+        GameAudio.PlayCombat("enemy_death");
+        if (killReward > 0) GameAudio.PlayCombat("coin");
         Died?.Invoke();
     }
 
