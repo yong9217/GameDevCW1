@@ -2645,6 +2645,7 @@ MonoBehaviour:
   firstCountdown: 20
   countdownBetweenWaves: 15
   messageSeconds: 8
+  bossEntranceInIntro: 5
   victoryMessage: Victory! The castle is safe!
   waves:
   - title: 'Tutorial 1/3: Arrow Tower'
@@ -3760,7 +3761,7 @@ PanelRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1002
   m_MaskInteraction: 0
   serializedVersion: 1
   m_PanelSettings: {fileID: 11400000, guid: 58371e06850662e4b8f091a7834ae79e, type: 2}
@@ -5725,6 +5726,10 @@ PrefabInstance:
       propertyPath: debug
       value: 
       objectReference: {fileID: 1189514047}
+    - target: {fileID: 8121454398712387273, guid: 33b38fac4d5843449b82c5f732b0f008, type: 3}
+      propertyPath: startHP
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8121454398712387273, guid: 33b38fac4d5843449b82c5f732b0f008, type: 3}
       propertyPath: destructable
       value: 1
