@@ -75,6 +75,10 @@ public class GameFlow : MonoBehaviour
     [Header("Messages")]
     [TextArea] public string victoryMessage = "Victory! The castle is safe!";
 
+    [Header("Infinite Mode")]
+    public bool infinite;
+    int nWavesWon = 0;
+
     public List<Wave> waves = DefaultWaves();
 
     enum State { Countdown, Running, Won, Lost }
@@ -207,7 +211,19 @@ public class GameFlow : MonoBehaviour
 
     void WaveCleared()
     {
-        waveIndex++;
+        if (infinite)
+        {
+            nWavesWon++;
+            waveIndex = (waveIndex + 1) % waves.Count;
+            waves[waveIndex] = NextWave(waves[waveIndex]);
+
+            //Could also add an increasing function to append new waves
+
+            //Implement cost increasing on towers
+        } else
+        {
+            waveIndex++;
+        }
         UpdateWaveMeter();
         if (waveIndex >= waves.Count)
         {
@@ -218,6 +234,17 @@ public class GameFlow : MonoBehaviour
             return;
         }
         BeginCountdown(countdownBetweenWaves);
+    }
+
+    Wave NextWave(Wave curSetup)
+    {
+        curSetup.title = $"Wave {nWavesWon+1}";
+
+        //Have some function to increase:
+        //arcDegree - start from 30, slowly ramp to 360
+        //spawnGroup - Each SpawnGroup has (EnemyType, count, interval between each spawn, start-delay)
+
+        return curSetup;
     }
 
     IEnumerator SpawnGroupRoutine(SpawnGroup group, float arc)

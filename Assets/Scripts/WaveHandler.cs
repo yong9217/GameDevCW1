@@ -75,6 +75,8 @@ public class WaveHandler : MonoBehaviour
             curWave = n;
             spawningDone = ss.spawners.Count == 0;
 
+            Debug.Log($"Starting wave {n}");
+
             foreach (Spawner sp in ss.spawners.ToList())
             {
                 sp.Activate();

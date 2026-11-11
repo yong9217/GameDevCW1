@@ -39,5 +39,8 @@ public class MainMenu : MonoBehaviour
         {
             credits.gameObject.SetActive(true);
         };
+        root.Q<Button>("infinite").clicked += () => {
+            SceneManager.LoadScene(2);
+        };
     }
 }
