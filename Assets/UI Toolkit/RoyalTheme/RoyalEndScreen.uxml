@@ -7,6 +7,20 @@
                 <ui:Label text="— Kingdom Sentinels —" name="subtitle" class="royal-subtitle"/>
                 <ui:VisualElement class="royal-divider"/>
                 <ui:Label text="The castle stands." name="message" class="royal-text"/>
+                <ui:VisualElement name="infinite" class="lb-section" style="display: none;">
+                    <ui:VisualElement name="lbEntry" class="lb-entry">
+                        <ui:Label text="A new top 5 time! Enter your name:" class="royal-text lb-prompt"/>
+                        <ui:TextField name="lbName" max-length="12" class="lb-name"/>
+                        <ui:VisualElement class="lb-entry-buttons">
+                            <ui:Button text="Save" name="lbSave" class="royal-button royal-button--primary lb-button"/>
+                            <ui:Button text="Don't record" name="lbSkip" class="royal-button lb-button"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="lbBoard" class="lb-board">
+                        <ui:Label text="TOP 5 - LONGEST DEFENCE" class="royal-credits-heading lb-heading"/>
+                        <ui:VisualElement name="lbRows"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
                 <ui:VisualElement name="credits" class="royal-credits">
                     <ui:Label text="MADE BY" class="royal-credits-heading"/>
                     <ui:VisualElement name="names" style="align-items: center;"/>

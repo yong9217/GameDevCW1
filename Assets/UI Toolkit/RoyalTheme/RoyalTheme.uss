@@ -209,3 +209,107 @@
     margin: 0;
     padding: 0;
 }
+
+/* ---------- Tutorial paper (TutorialPaper.cs) ----------
+   A large parchment sheet that pauses the game until the player closes it. */
+.paper-overlay { background-color: rgba(24, 16, 6, 0.72); }
+.paper-panel {
+    width: 1080px;
+    padding: 12px;
+    border-width: 6px;
+    border-radius: 10px;
+    translate: 0 0;
+    transition-property: scale, translate;
+    transition-duration: 0.25s;
+}
+.royal-overlay.royal-hidden .paper-panel { scale: 0.9 0.9; translate: 0 40px; }
+.paper-inner { padding: 30px 56px 26px 56px; }
+.paper-step { font-size: 22px; letter-spacing: 4px; margin: 0 0 6px 0; }
+.paper-title { font-size: 56px; white-space: normal; }
+.paper-divider { margin: 20px 80px 24px 80px; }
+.paper-body { flex-direction: row; align-items: flex-start; margin: 0 0 26px 0; }
+.paper-icon {
+    width: 190px;
+    height: 190px;
+    flex-shrink: 0;
+    margin: 4px 36px 0 0;
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: rgb(92, 62, 30);
+    border-width: 4px;
+    border-color: rgb(60, 38, 16);
+    border-radius: 8px;
+}
+.paper-icon--none { display: none; }
+.paper-icon--arrow { background-image: url("/Assets/UI Toolkit/TowerIcons/Icon_Arrow.png"); }
+.paper-icon--cannon { background-image: url("/Assets/UI Toolkit/TowerIcons/Icon_Cannon.png"); }
+.paper-icon--magic { background-image: url("/Assets/UI Toolkit/TowerIcons/Icon_Magic.png"); }
+.paper-lines { flex-grow: 1; flex-shrink: 1; }
+.paper-line-row { flex-direction: row; align-items: flex-start; margin: 0 0 14px 0; }
+.paper-bullet {
+    width: 11px;
+    height: 11px;
+    flex-shrink: 0;
+    margin: 16px 18px 0 2px;
+    rotate: 45deg;
+    background-color: rgb(122, 59, 34);
+}
+.paper-line {
+    -unity-font-definition: url("Fonts/CrimsonText-Regular.ttf");
+    font-size: 30px;
+    color: rgb(74, 50, 22);
+    white-space: normal;
+    flex-shrink: 1;
+    margin: 0;
+    padding: 0;
+}
+.paper-button { width: 380px; height: 70px; align-self: center; font-size: 30px; margin: 0 0 8px 0; }
+.paper-hint {
+    -unity-font-definition: url("Fonts/CrimsonText-Regular.ttf");
+    font-size: 20px;
+    color: rgb(138, 106, 58);
+    -unity-text-align: middle-center;
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------- Infinite mode result: name entry + local top 5 (EndScreenUI) ---------- */
+.lb-section { margin: 4px 0 18px 0; }
+.lb-entry { align-items: stretch; margin: 0 0 14px 0; }
+.lb-prompt { margin: 0 0 10px 0; }
+.lb-name { margin: 0 40px 14px 40px; }
+.lb-name > #unity-text-input {
+    -unity-font-definition: url("Fonts/CrimsonText-Bold.ttf");
+    font-size: 30px;
+    height: 54px;
+    padding: 0 14px 0 14px;
+    color: rgb(74, 50, 22);
+    background-color: rgb(250, 242, 220);
+    border-width: 2px;
+    border-color: rgb(168, 136, 90);
+    border-radius: 4px;
+    -unity-text-align: middle-center;
+}
+.lb-entry-buttons { flex-direction: row; justify-content: center; }
+.lb-button { width: 230px; margin: 0 8px 0 8px; }
+.lb-board { align-items: stretch; }
+.lb-heading { -unity-text-align: middle-center; margin: 6px 0 10px 0; }
+.lb-row {
+    flex-direction: row;
+    align-items: center;
+    height: 42px;
+    padding: 0 18px 0 18px;
+    margin: 0 30px 4px 30px;
+    border-radius: 4px;
+}
+.lb-row--new { background-color: rgba(214, 160, 40, 0.35); }
+.lb-rank, .lb-player, .lb-time, .lb-empty {
+    -unity-font-definition: url("Fonts/CrimsonText-Regular.ttf");
+    font-size: 26px;
+    color: rgb(74, 50, 22);
+    margin: 0;
+    padding: 0;
+}
+.lb-rank { width: 50px; -unity-font-definition: url("Fonts/Cinzel.ttf"); }
+.lb-player { flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-time { width: 120px; -unity-text-align: middle-right; -unity-font-definition: url("Fonts/Cinzel.ttf"); }
+.lb-empty { -unity-text-align: middle-center; color: rgb(138, 106, 58); }

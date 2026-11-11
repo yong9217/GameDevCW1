@@ -25,7 +25,7 @@ public static class TowerPlacement
 
     // Any scene object whose name starts with one of these (case-insensitive) is a decoration that
     // towers cannot be placed on. Add a prefix here when new kinds of decoration are added to the map.
-    static readonly string[] DecorationPrefixes = { "tree", "bush", "berrybush", "stone", "single_stone", "rock", "grass" };
+    static readonly string[] DecorationPrefixes = { "tree", "bush", "berrybush", "stone", "single_stone", "rock", "grass", "bones", "sign", "wagon" };
 
     // Size of the blocked circle around each decoration: this fraction of its half-width (so the leaf
     // canopy does not block a huge area), but never smaller than the minimum. Tune these two numbers.

@@ -16,6 +16,8 @@ public class MouseStateHandler : MonoBehaviour
 
     public bool debug;
     Action onPlace = () => {};
+    // Raised after a tower has been built and paid for, with the prefab it was built from (used by the tutorial).
+    public event Action<GameObject> TowerPlaced;
 
     // The "cannot build here" popup shows only for the FIRST illegal click of a game.
     // This is an instance field on purpose: Start Game and Restart Game both reload the scene, which creates a
@@ -107,6 +109,7 @@ public class MouseStateHandler : MonoBehaviour
         {
             Debug.Log("Insufficient funds to buy tower!");
             GameAudio.Play("ui_deny");
+            if (ui) ui.FlashMoneyDenied();
             return false;
         }
 
@@ -117,6 +120,7 @@ public class MouseStateHandler : MonoBehaviour
         GameAudio.Play("build");
 
         onPlace();
+        TowerPlaced?.Invoke(towerPrefab);
 
         return true;
     }

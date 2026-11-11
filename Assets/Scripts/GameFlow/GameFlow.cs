@@ -6,7 +6,9 @@ using UnityEngine.AI;
 using UnityEngine.UIElements;
 
 // Runs the whole match on one map: 3 tutorial waves, 2 normal waves, then the boss wave.
-//  - Tutorial text only informs. It never pauses the game and never waits for the player.
+//  - Each tutorial wave opens with a parchment "paper" (TutorialPaper) that pauses the game until the player
+//    closes it. The paper explains the rules; the rest is shown in play: the asked-for tower card blinks until it
+//    is built, "Start now" blinks after the first tower, coins fly to the gold HUD, the castle bar blinks when hit.
 //  - Between waves there is a countdown; the player can press "Start now" to skip it.
 //  - Enemies appear on a ring around the base, inside an arc that widens as the game goes on.
 // Every wave is one entry in the "Waves" list below and can be edited in the Inspector.
@@ -43,6 +45,17 @@ public class GameFlow : MonoBehaviour
         [Tooltip("Shown when this wave starts.")]
         [TextArea] public string startMessage;
         public List<SpawnGroup> groups = new List<SpawnGroup>();
+
+        [Header("Tutorial paper (pauses the game when the countdown to this wave begins)")]
+        [Tooltip("Small line above the title, e.g. 'Tutorial 1 of 3'.")]
+        public string paperStep;
+        [Tooltip("Leave empty for no paper.")]
+        public string paperTitle;
+        public TutorialPaper.Icon paperIcon;
+        [Tooltip("One bullet point per line. {waves} = total number of waves. Rich text such as <b>bold</b> works.")]
+        [TextArea(4, 12)] public string paperText;
+        [Tooltip("Tower card that blinks after the paper until the player builds that tower: 0 = Arrow, 1 = Cannon, 2 = Magic, -1 = none.")]
+        [Range(-1, 2)] public int highlightCard = -1;
     }
 
     [Header("Enemy prefabs")]
@@ -74,6 +87,12 @@ public class GameFlow : MonoBehaviour
 
     [Header("Messages")]
     [TextArea] public string victoryMessage = "Victory! The castle is safe!";
+    [Tooltip("Tutorial, first wave: shown once the first tower is built, while \"Start now\" blinks.")]
+    [TextArea] public string firstTowerMessage = "Well done! Press Start now to call the enemies, or wait for the timer.";
+    [Tooltip("Tutorial, first wave: shown when the first enemy is defeated.")]
+    [TextArea] public string firstKillMessage = "Each defeated enemy gives you gold. Spend it on more towers!";
+    [Tooltip("Shown once per game, the first time the castle loses health.")]
+    [TextArea] public string castleHitMessage = "The castle is hit! If its health reaches 0, you lose.";
 
     [Header("Infinite Mode")]
     public bool infinite;
@@ -94,12 +113,24 @@ public class GameFlow : MonoBehaviour
     Label hudLabel;
     Button startNowButton;
 
+    // Wave track (right side): one segment per wave, filled when that wave starts; the last one is the boss.
+    VisualElement waveTrack;
+    Label waveTrackCount;
+    readonly List<VisualElement> waveSegments = new List<VisualElement>();
+    int wavesStarted;
+
     // Speech bubble above the castle.
     VisualElement bubble;
     Label bubbleText;
     Button bubbleClose;
     string pendingMessage;
     float bubbleHideAt = -1f, bubbleShownAt;
+
+    // Tutorial
+    TutorialPaper paper;
+    int hintedCard = -1;
+    bool startNowHinted, firstKillHinted, castleHitHinted;
+    float lastCastleHP;
 
     void Awake()
     {
@@ -115,10 +146,24 @@ public class GameFlow : MonoBehaviour
         // The old speech boxes come from the scene without an end action; their close button would log errors.
         if (speech && speech.textBoxes != null)
             foreach (var box in speech.textBoxes) box?.OnSpeechEnd(() => { });
+
+        // Tutorial helpers are added here so the scene needs no extra set-up.
+        paper = GetComponent<TutorialPaper>();
+        if (!paper) paper = gameObject.AddComponent<TutorialPaper>();
+        if (!GetComponent<GoldPopups>()) gameObject.AddComponent<GoldPopups>();
+        if (mouse) mouse.TowerPlaced += OnTowerPlaced;
+        EnemyHealth.AnyDied += OnEnemyDied;
+    }
+
+    void OnDestroy()
+    {
+        if (mouse) mouse.TowerPlaced -= OnTowerPlaced;
+        EnemyHealth.AnyDied -= OnEnemyDied;
     }
 
     void Start()
     {
+        if (castle) lastCastleHP = castle.GetHP();
         waveIndex = 0;
         BeginCountdown(firstCountdown);
         GameAudio.SetMusic(MusicFor(0));
@@ -135,7 +180,21 @@ public class GameFlow : MonoBehaviour
             StopAllCoroutines();
             if (hudBox != null) hudBox.style.display = DisplayStyle.None;
             HideBubble();
+            StopHints();
             return;
+        }
+
+        // The first time the castle loses health, show it: its bar blinks and the rule is said once.
+        if (castle)
+        {
+            float hp = castle.GetHP();
+            if (!castleHitHinted && hp < lastCastleHP - .001f)
+            {
+                castleHitHinted = true;
+                HealthBars.FlashBase(2.5f);
+                Say(castleHitMessage);
+            }
+            lastCastleHP = hp;
         }
 
         if (state == State.Countdown)
@@ -161,13 +220,70 @@ public class GameFlow : MonoBehaviour
     {
         state = State.Countdown;
         countdown = seconds;
-        Say(waves.Count > waveIndex ? waves[waveIndex].prepMessage : null);
+        StopHints();
+        Wave wave = waveIndex < waves.Count ? waves[waveIndex] : null;
+        if (wave != null && paper && !string.IsNullOrWhiteSpace(wave.paperTitle))
+        {
+            // The game is paused while the paper is open; the countdown only starts once it is closed.
+            string text = (wave.paperText ?? "").Replace("{waves}", waves.Count.ToString());
+            paper.Show(wave.paperStep, wave.paperTitle, text, wave.paperIcon, () => AfterPaper(wave));
+        }
+        else
+        {
+            AfterPaper(wave);
+        }
+    }
+
+    void AfterPaper(Wave wave)
+    {
+        if (wave == null || state != State.Countdown) return;
+        Say(wave.prepMessage);
+        if (wave.highlightCard >= 0 && hud)
+        {
+            hintedCard = wave.highlightCard;
+            hud.SetCardHint(hintedCard, true);
+        }
+    }
+
+    void OnTowerPlaced(GameObject prefab)
+    {
+        // The card the tutorial asked for stops blinking once that tower is built.
+        if (hintedCard >= 0 && hud && hud.CardPrefab(hintedCard) == prefab)
+        {
+            hud.SetCardHint(hintedCard, false);
+            hintedCard = -1;
+        }
+        // First tutorial wave: after the first tower, point at "Start now".
+        if (waveIndex == 0 && state == State.Countdown && !startNowHinted)
+        {
+            startNowHinted = true;
+            UIPulse.Start(startNowButton);
+            Say(firstTowerMessage);
+        }
+    }
+
+    void OnEnemyDied(EnemyHealth enemy)
+    {
+        if (waveIndex == 0 && !firstKillHinted && enemy && enemy.killReward > 0)
+        {
+            firstKillHinted = true;
+            Say(firstKillMessage);
+        }
+    }
+
+    void StopHints()
+    {
+        UIPulse.Stop(startNowButton);
+        if (hud) hud.ClearCardHints();
+        hintedCard = -1;
     }
 
     // Also called by the "Start now" button.
     public void StartWave()
     {
         if (state != State.Countdown || waveIndex >= waves.Count) return;
+        // A click that reaches "Start now" through an open tutorial paper must not start the wave behind it.
+        if (TutorialPaper.IsOpen) return;
         var wave = waves[waveIndex];
         state = State.Running;
         arcCentre = UnityEngine.Random.Range(0f, 360f);
@@ -180,6 +296,9 @@ public class GameFlow : MonoBehaviour
             toSpawn += group.count;
             StartCoroutine(SpawnGroupRoutine(group, wave.arcDegrees));
         }
+        UIPulse.Stop(startNowButton);
+        wavesStarted = infinite ? nWavesWon + 1 : waveIndex + 1;
+        UpdateWaveMeter();
         Say(wave.startMessage);
         GameAudio.Play("jingle_wave");
         GameAudio.SetMusic(MusicFor(waveIndex));
@@ -228,6 +347,7 @@ public class GameFlow : MonoBehaviour
         if (waveIndex >= waves.Count)
         {
             state = State.Won;
+            StopHints();
             Say(victoryMessage);
             RefreshHud();
             if (gameEnd) gameEnd.CueWin();
@@ -261,39 +381,8 @@ public class GameFlow : MonoBehaviour
 
     void Spawn(EnemyKind kind, float arc)
     {
-        GameObject prefab = PrefabFor(kind);
-        if (!prefab)
-        {
-            Debug.LogError($"GameFlow: no prefab assigned for {kind} enemies.", this);
-            return;
-        }
-        Vector3 centre = castle ? castle.transform.position : Vector3.zero;
-        centre.y = 0f;
-        Vector3 position = centre;
-        bool found = false;
-        for (int attempt = 0; attempt < 12 && !found; attempt++)
-        {
-            float angle = (arcCentre + UnityEngine.Random.Range(-arc * .5f, arc * .5f)) * Mathf.Deg2Rad;
-            float distance = spawnDistance + UnityEngine.Random.Range(-spawnJitter, spawnJitter);
-            Vector3 candidate = centre + new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle)) * distance;
-            if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, 3f, NavMesh.AllAreas))
-            {
-                position = hit.position;
-                found = true;
-            }
-        }
-        if (!found)
-        {
-            Debug.LogWarning("GameFlow: no walkable ground found at the spawn ring; check spawnDistance.", this);
-            float angle = arcCentre * Mathf.Deg2Rad;
-            position = centre + new Vector3(Mathf.Sin(angle), 0f, Mathf.Cos(angle)) * spawnDistance;
-        }
-        Vector3 look = centre - position;
-        look.y = 0f;
-        if (kind == EnemyKind.Boss) GameAudio.Play("boss_arrive");
-        GameObject enemy = Instantiate(prefab, position, look.sqrMagnitude > .01f ? Quaternion.LookRotation(look) : Quaternion.identity);
-        // No walkable ground was found, so this enemy starts off the NavMesh: let it walk straight at the castle instead of standing still.
-        if (!found && enemy.TryGetComponent(out EnemyBrain brain)) brain.EnableOffMeshFallback();
+        EnemySpawn.AtRing(PrefabFor(kind), castle ? castle.transform.position : Vector3.zero, arcCentre, arc,
+            spawnDistance, spawnJitter, kind == EnemyKind.Boss, this);
     }
 
     GameObject PrefabFor(EnemyKind kind) => kind switch
@@ -304,14 +393,54 @@ public class GameFlow : MonoBehaviour
         _ => normalEnemy,
     };
 
+    // Fills one segment per wave that has started: empty before the first wave, full when the boss wave starts.
     void UpdateWaveMeter()
     {
-        if (!hud || waves.Count == 0) return;
-        float remaining = Mathf.Clamp(waves.Count - waveIndex, 0, waves.Count);
-        hud.UpdateWaveMeter(100f * remaining / waves.Count, true);
+        if (waveSegments.Count == 0) return;
+        int total = waveSegments.Count;
+        int started = Mathf.Clamp(wavesStarted, 0, total);
+        for (int i = 0; i < total; i++)
+        {
+            waveSegments[i].EnableInClassList("filled", i < started);
+            waveSegments[i].EnableInClassList("current", i == started - 1 && state == State.Running);
+        }
+        if (waveTrackCount != null) waveTrackCount.text = $"{started} / {total}";
     }
 
-    // ---------------- HUD ----------------
+    void BuildWaveTrack(VisualElement root)
+    {
+        waveTrack?.RemoveFromHierarchy();
+        waveSegments.Clear();
+        // The old rotated "Enemy Forces" bar from UIMenu.uxml is replaced by this track.
+        var oldMeter = root.Q<VisualElement>("WaveHUD");
+        if (oldMeter != null) oldMeter.style.display = DisplayStyle.None;
+
+        // Look: RoyalHud.uss (#WaveTrack, .wave-seg ...).
+        waveTrack = new VisualElement { name = "WaveTrack", pickingMode = PickingMode.Ignore };
+        var title = new Label("Waves") { pickingMode = PickingMode.Ignore };
+        title.AddToClassList("wave-track-title");
+        waveTrackCount = new Label { pickingMode = PickingMode.Ignore };
+        waveTrackCount.AddToClassList("wave-track-count");
+        var column = new VisualElement { pickingMode = PickingMode.Ignore };
+        column.AddToClassList("wave-track-column");
+        for (int i = 0; i < waves.Count; i++)
+        {
+            bool boss = i == waves.Count - 1;
+            var seg = new VisualElement { pickingMode = PickingMode.Ignore };
+            seg.AddToClassList("wave-seg");
+            if (boss) seg.AddToClassList("boss");
+            var label = new Label(boss ? "Boss" : (i + 1).ToString()) { pickingMode = PickingMode.Ignore };
+            label.AddToClassList("wave-seg-label");
+            seg.Add(label);
+            column.Add(seg);   // column-reverse: wave 1 sits at the bottom, the boss on top
+            waveSegments.Add(seg);
+        }
+        waveTrack.Add(title);
+        waveTrack.Add(waveTrackCount);
+        waveTrack.Add(column);
+        root.Add(waveTrack);
+        UpdateWaveMeter();
+    }
 
     void BuildHud(PanelRenderer panel, VisualElement root, int version)
     {
@@ -340,6 +469,8 @@ public class GameFlow : MonoBehaviour
         hudBox.Add(hudLabel);
         hudBox.Add(startNowButton);
         root.Add(hudBox);
+        BuildWaveTrack(root);
+        if (startNowHinted && state == State.Countdown && waveIndex == 0) UIPulse.Start(startNowButton);
         RefreshHud();
     }
 
@@ -414,22 +545,40 @@ public class GameFlow : MonoBehaviour
         new Wave
         {
             title = "Tutorial 1/3: Arrow Tower", arcDegrees = 60f,
-            prepMessage = "The castle is under attack! Pick the Arrow Tower card, then click the ground.",
-            startMessage = "Arrow towers fire fast. Defeated enemies give you gold.",
+            prepMessage = "Pick the blinking Arrow Tower card, then click on the ground near the castle.",
+            startMessage = "Here they come! Your towers shoot by themselves.",
+            paperStep = "Tutorial 1 of 3", paperTitle = "Defend the Castle!", paperIcon = TutorialPaper.Icon.Arrow, highlightCard = 0,
+            paperText =
+                "Enemies are marching on your castle. If its health drops to <b>0</b>, you lose.\n" +
+                "Survive all <b>{waves}</b> waves to win. The first 3 waves teach you how to play.\n" +
+                "To build, click a tower card at the bottom, then click on empty ground. <b>Right-click</b> cancels.\n" +
+                "Towers cost gold. Your gold is shown at the top left.\n" +
+                "Start with an <b>Arrow Tower</b>: it is cheap and fires fast at normal soldiers.",
             groups = { new SpawnGroup(EnemyKind.Normal, 4, 3f) },
         },
         new Wave
         {
             title = "Tutorial 2/3: Cannon Tower", arcDegrees = 90f,
-            prepMessage = "Armoured Heavies spotted! Cannon towers hit hard - build one to break them.",
+            prepMessage = "Build a Cannon Tower before the Heavies arrive!",
             startMessage = "Heavies are slow but tough. Let the cannons do the work!",
+            paperStep = "Tutorial 2 of 3", paperTitle = "Heavy Soldiers", paperIcon = TutorialPaper.Icon.Cannon, highlightCard = 1,
+            paperText =
+                "<b>Heavy</b> soldiers are slow, but tough enough to shrug off arrows.\n" +
+                "The <b>Cannon Tower</b> fires slowly, but every shot hits very hard.\n" +
+                "Build one where the Heavies will walk. Tougher enemies also give more gold.",
             groups = { new SpawnGroup(EnemyKind.Heavy, 3, 5f), new SpawnGroup(EnemyKind.Normal, 2, 3f, 2f) },
         },
         new Wave
         {
             title = "Tutorial 3/3: Magic Tower", arcDegrees = 30f,
-            prepMessage = "Fast raiders incoming! Magic towers hit 3 enemies at once and slow them.",
+            prepMessage = "Build a Magic Tower to catch the fast raiders!",
             startMessage = "Here they come, fast and all together!",
+            paperStep = "Tutorial 3 of 3", paperTitle = "Fast Raiders", paperIcon = TutorialPaper.Icon.Magic, highlightCard = 2,
+            paperText =
+                "<b>Fast</b> raiders rush in as a pack. Each one is weak, but they are hard to stop one by one.\n" +
+                "The <b>Magic Tower</b>'s lightning jumps between enemies standing close together: it can hit up to <b>3</b> at once.\n" +
+                "Every enemy it hits is also <b>slowed down</b>, giving your other towers more time to shoot.\n" +
+                "This is the last tutorial wave. After it, enemies come from more directions, so mix all three towers.",
             groups = { new SpawnGroup(EnemyKind.Fast, 8, .4f) },
         },
         new Wave

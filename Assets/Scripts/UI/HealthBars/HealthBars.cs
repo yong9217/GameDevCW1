@@ -27,6 +27,8 @@ public sealed class HealthBars : MonoBehaviour
     public float border = .03f;
 
     static HealthBars instance;
+    // Until this (real) time the castle's bar blinks, to show the player it is being hit.
+    static float baseFlashUntil;
     static Sprite pixel;
     static Material material;
 
@@ -46,7 +48,10 @@ public sealed class HealthBars : MonoBehaviour
     readonly List<Object> toRemove = new List<Object>();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void ResetStatics() { instance = null; }
+    static void ResetStatics() { instance = null; baseFlashUntil = 0f; }
+
+    // Makes the castle's health bar blink for a few seconds (tutorial: the first time the castle is hit).
+    public static void FlashBase(float seconds) => baseFlashUntil = Time.unscaledTime + seconds;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void Bootstrap()
@@ -87,7 +92,7 @@ public sealed class HealthBars : MonoBehaviour
         seen.Clear();
 
         // Only during a match: menus may show a decorative castle that must not get a bar.
-        if (!FindAnyObjectByType<GameFlow>())
+        if (!FindAnyObjectByType<GameFlow>() && !InfiniteFlow.Current)
         {
             foreach (var pair in bars) if (pair.Value.root) Destroy(pair.Value.root);
             bars.Clear();
@@ -158,6 +163,15 @@ public sealed class HealthBars : MonoBehaviour
         // Fill shrinks towards the left edge.
         bar.fill.localScale = new Vector3(w * ratio, height, 1f);
         bar.fill.localPosition = new Vector3(-w * (1f - ratio) * .5f, 0f, -.001f);
+
+        if (bar.target && bar.target.kind == EnemyCombatTarget.TargetKind.Base)
+        {
+            bool blink = Time.unscaledTime < baseFlashUntil && Mathf.Repeat(Time.unscaledTime, .3f) < .15f;
+            bar.fillRenderer.color = blink ? Color.white : friendlyColour;
+            float grow = Time.unscaledTime < baseFlashUntil ? 1.6f : 1f;
+            bar.background.localScale = new Vector3((w + border * 2f), (height + border * 2f) * grow, 1f);
+            bar.fill.localScale = new Vector3(w * ratio, height * grow, 1f);
+        }
     }
 
     SpriteRenderer MakeQuad(string name, Transform parent, Color colour, int order)

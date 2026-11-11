@@ -114,3 +114,103 @@
     white-space: normal;
     -unity-text-align: middle-center;
 }
+
+/* Tutorial: "Start now" blinks once the first tower is built (GameFlow + UIPulse). */
+#GameFlowStartNow.pulse {
+    transition-property: border-color, scale, background-color;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-in-out;
+}
+#GameFlowStartNow.pulse-on {
+    border-color: rgb(255, 208, 0);
+    background-color: rgb(170, 84, 44);
+    scale: 1.1 1.1;
+}
+
+/* Gold HUD feedback (UIResponder): a short bump when coins arrive, red + shake when the player cannot pay. */
+.money-hud {
+    transition-property: scale;
+    transition-duration: 0.12s;
+}
+.money-hud.gain { scale: 1.15 1.15; }
+.money-hud.deny .money-label { color: rgb(255, 70, 50); }
+
+/* Floating "+N" gold with a coin where an enemy dies; it flies to the gold HUD (GoldPopups.cs). */
+.gold-popup { flex-direction: row; align-items: center; }
+.gold-popup-label {
+    -unity-font-definition: url("Fonts/Cinzel.ttf");
+    -unity-font-style: bold;
+    font-size: 64px;
+    color: rgb(255, 228, 92);
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: rgb(60, 30, 0);
+    margin: 0 8px 0 0;
+    padding: 0;
+}
+.gold-popup-coin {
+    width: 72px;
+    height: 72px;
+    background-image: url("/Assets/UI Toolkit/HUDIcons/Icon_Coin.png");
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+/* Wave track on the right (GameFlow): one segment per wave, filled when that wave starts; the boss on top. */
+#WaveTrack {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    width: 250px;
+    padding: 22px 26px 26px 26px;
+    align-items: stretch;
+    background-color: rgb(239, 226, 192);
+    border-width: 5px;
+    border-color: rgb(107, 74, 36);
+    border-radius: 8px;
+}
+.wave-track-title {
+    -unity-font-definition: url("Fonts/Cinzel.ttf");
+    -unity-font-style: bold;
+    font-size: 44px;
+    letter-spacing: 2px;
+    color: rgb(74, 50, 22);
+    -unity-text-align: middle-center;
+    margin: 0;
+    padding: 0;
+}
+.wave-track-count {
+    -unity-font-definition: url("Fonts/Cinzel.ttf");
+    font-size: 34px;
+    color: rgb(138, 106, 58);
+    -unity-text-align: middle-center;
+    margin: 0 0 14px 0;
+    padding: 0;
+}
+.wave-track-column { flex-direction: column-reverse; }
+.wave-seg {
+    height: 74px;
+    margin: 6px 0 6px 0;
+    justify-content: center;
+    background-color: rgba(107, 74, 36, 0.12);
+    border-width: 4px;
+    border-color: rgb(168, 136, 90);
+    border-radius: 8px;
+    transition-property: background-color, border-color, scale;
+    transition-duration: 0.35s;
+}
+.wave-seg-label {
+    -unity-font-definition: url("Fonts/Cinzel.ttf");
+    -unity-font-style: bold;
+    font-size: 34px;
+    color: rgb(168, 136, 90);
+    -unity-text-align: middle-center;
+    margin: 0;
+    padding: 0;
+    transition-property: color;
+    transition-duration: 0.35s;
+}
+.wave-seg.filled { background-color: rgb(150, 62, 34); border-color: rgb(90, 42, 22); }
+.wave-seg.filled .wave-seg-label { color: rgb(245, 234, 208); }
+.wave-seg.current { scale: 1.06 1.06; border-color: rgb(255, 208, 0); }
+.wave-seg.boss { height: 90px; border-color: rgb(196, 150, 40); }
+.wave-seg.boss .wave-seg-label { font-size: 38px; }
+.wave-seg.boss.filled { background-color: rgb(110, 24, 18); border-color: rgb(255, 208, 0); }

@@ -19,6 +19,12 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    // Infinite mode has its own scene and map.
+    void LoadInfinite()
+    {
+        SceneManager.LoadScene("Infinite");
+    }
+
     void intialize(PanelRenderer p, VisualElement root, int ver)
     {
         GameAudio.AddButtonClicks(root);
@@ -26,6 +32,8 @@ public class MainMenu : MonoBehaviour
         {
             LoadGame();
         };
+        var infinite = root.Q<Button>("infinite");
+        if (infinite != null) infinite.clicked += LoadInfinite;
         root.Q<Button>("exit").clicked += () =>
         {
             Debug.Log("Exited");
@@ -38,9 +46,6 @@ public class MainMenu : MonoBehaviour
         root.Q<Button>("credits").clicked += () =>
         {
             credits.gameObject.SetActive(true);
-        };
-        root.Q<Button>("infinite").clicked += () => {
-            SceneManager.LoadScene(2);
         };
     }
 }

@@ -214,3 +214,17 @@
 
 /* Cannot afford: the coin greys out together with the rest of the card. */
 .tower-card.locked .cost-coin { -unity-background-image-tint-color: rgb(92, 92, 92); }
+
+/* ---- tutorial hint: the card the tutorial asks for blinks orange until that tower is built (UIPulse) ---- */
+.tower-card.pulse {
+    transition-property: border-color, scale;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-in-out;
+}
+.tower-card.pulse-on,
+.tower-card.pulse-on:hover,
+.tower-card.pulse-on:active,
+.tower-card.pulse-on:focus {
+    border-color: rgb(255, 120, 30);
+    scale: 1.04 1.04;
+}

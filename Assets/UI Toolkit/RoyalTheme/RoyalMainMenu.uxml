@@ -1,14 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/RoyalTheme/RoyalTheme.uss?fileID=7433441132597879392&amp;guid=b0c3868de209c224eb7c722d0cfef796&amp;type=3#RoyalTheme"/>
-    <ui:VisualElement picking-mode="Ignore" class="royal-menu-root">
+    <ui:Style src="RoyalTheme.uss"/>
+    <ui:VisualElement class="royal-menu-root" picking-mode="Ignore">
         <ui:VisualElement class="royal-panel royal-menu-panel">
             <ui:VisualElement class="royal-inner">
                 <ui:Label text="Kingdom" class="royal-title royal-menu-title"/>
                 <ui:Label text="Sentinels" class="royal-title royal-menu-title"/>
                 <ui:Label text="— Defend the castle —" class="royal-subtitle"/>
                 <ui:VisualElement class="royal-divider"/>
-                <ui:Button text="Start game" name="start" class="royal-button royal-button--primary"/>
-                <ui:Button text="Infinite Mode" name="infinite" class="royal-button"/>
+                <ui:Button text="Campaign" name="start" class="royal-button royal-button--primary"/>
+                <ui:Button text="Infinite Mode" name="infinite" class="royal-button royal-button--primary"/>
                 <ui:Button text="Glossary" name="bestiary" class="royal-button"/>
                 <ui:Button text="Credits" name="credits" class="royal-button"/>
                 <ui:Button text="Exit" name="exit" class="royal-button"/>

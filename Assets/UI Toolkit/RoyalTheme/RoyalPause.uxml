@@ -13,4 +13,20 @@
             <ui:Button text="×" name="exit" class="royal-close"/>
         </ui:VisualElement>
     </ui:VisualElement>
+    <!-- Tutorial paper (TutorialPaper.cs). Kept after the pause overlay so it is drawn on top of it. -->
+    <ui:VisualElement name="TutorialPaper" class="royal-overlay royal-hidden paper-overlay" style="display: none;">
+        <ui:VisualElement class="royal-panel paper-panel">
+            <ui:VisualElement class="royal-inner paper-inner">
+                <ui:Label text="Tutorial 1 of 3" name="PaperStep" class="royal-subtitle paper-step"/>
+                <ui:Label text="Defend the Castle!" name="PaperTitle" class="royal-title paper-title"/>
+                <ui:VisualElement class="royal-divider paper-divider"/>
+                <ui:VisualElement class="paper-body">
+                    <ui:VisualElement name="PaperIcon" class="paper-icon"/>
+                    <ui:VisualElement name="PaperLines" class="paper-lines"/>
+                </ui:VisualElement>
+                <ui:Button text="To battle!" name="PaperClose" class="royal-button royal-button--primary paper-button"/>
+                <ui:Label text="or press Enter" class="paper-hint"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

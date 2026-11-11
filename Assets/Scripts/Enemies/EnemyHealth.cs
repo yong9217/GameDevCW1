@@ -20,12 +20,14 @@ public sealed class EnemyHealth : MonoBehaviour
     public Vector3 AimPoint => transform.position + Vector3.up * .65f;
     public float CurrentSpeedMultiplier => Time.time < slowedUntil ? slowMultiplier : 1;
     public event Action Died;
+    // Raised for every enemy that dies (gold popups, tutorial hints).
+    public static event Action<EnemyHealth> AnyDied;
 
     bool dead;
     float slowedUntil;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void ResetRegistry() { Active.Clear(); nextTargetOrder = 0; }
+    static void ResetRegistry() { Active.Clear(); nextTargetOrder = 0; AnyDied = null; }
 
     void OnEnable() { if (IsAlive) Active.Add(this); }
     void OnDisable() => Active.Remove(this);
@@ -75,6 +77,7 @@ public sealed class EnemyHealth : MonoBehaviour
         GameAudio.PlayCombat("enemy_death");
         if (killReward > 0) GameAudio.PlayCombat("coin");
         Died?.Invoke();
+        AnyDied?.Invoke(this);
     }
 
     static float DeathClipLength(Animator animator)
