@@ -138,27 +138,27 @@ public static class EnemyBehaviourSetup
     public static void ConnectScene()
     {
         var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-        var wallet = UnityEngine.Object.FindFirstObjectByType<PlayerEconomy>();
+        var wallet = UnityEngine.Object.FindAnyObjectByType<PlayerEconomy>();
         if (!wallet) Debug.LogWarning("No PlayerEconomy found. Assign EnemyHealth.wallet when the teammate creates the wallet.");
-        foreach (var health in UnityEngine.Object.FindObjectsByType<EnemyHealth>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        foreach (var health in UnityEngine.Object.FindObjectsByType<EnemyHealth>(FindObjectsInactive.Include))
         {
             if (health.gameObject.scene != scene) continue;
             Undo.RecordObject(health, "Connect enemy wallet");
             health.wallet = wallet;
             PrefabUtility.RecordPrefabInstancePropertyModifications(health);
         }
-        foreach (var baseHealth in UnityEngine.Object.FindObjectsByType<Base>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        foreach (var baseHealth in UnityEngine.Object.FindObjectsByType<Base>(FindObjectsInactive.Include))
             if (baseHealth.gameObject.scene == scene)
                 ConfigureTargetObject(baseHealth.gameObject, EnemyCombatTarget.TargetKind.Base, true);
 
-        if (!UnityEngine.Object.FindFirstObjectByType<EnemyNavigationSurface>())
+        if (!UnityEngine.Object.FindAnyObjectByType<EnemyNavigationSurface>())
         {
             var root = new GameObject("Enemy Navigation");
             Undo.RegisterCreatedObjectUndo(root, "Create enemy navigation");
             var surface = Undo.AddComponent<EnemyNavigationSurface>(root);
             // Fit the level's static collision geometry; enemy/target sources are excluded at bake time.
             var bounds = new Bounds(Vector3.zero, new Vector3(60, 10, 60));
-            foreach (var collider in UnityEngine.Object.FindObjectsByType<Collider>(FindObjectsSortMode.None))
+            foreach (var collider in UnityEngine.Object.FindObjectsByType<Collider>())
                 if (collider.gameObject.scene == scene && !collider.GetComponentInParent<EnemyHealth>() &&
                     !collider.GetComponentInParent<EnemyCombatTarget>() && !collider.isTrigger)
                     bounds.Encapsulate(collider.bounds);

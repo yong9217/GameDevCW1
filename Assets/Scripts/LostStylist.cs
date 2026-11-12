@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 public class LostStylist : MonoBehaviour
 {
     PanelRenderer pr;
-    public Stylist stylist = new Stylist();
+    [System.NonSerialized] public Stylist stylist = new Stylist();
 
     void Awake()
     {

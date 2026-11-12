@@ -3,8 +3,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 // Infinite mode: hold the castle as long as possible on the wasteland map.
-//  - No tutorial and no last wave: a run only ends when the castle falls.
-//  - The survival timer is shown at the top centre (it stops while the game is paused).
+//  - No last wave: a run only ends when the castle falls.
+//  - The first time the mode is entered in a launch of the game, a parchment paper (TutorialPaper) explains the rules.
+//  - The survival timer is shown at the top centre (it stops while the game is paused), with the countdown to the
+//    next wave (InfiniteWaveDirector.NextWaveIn) underneath.
 //  - Spawn() puts enemies on the ring around the castle; the wave design (InfiniteWaveDirector) uses it.
 //  - When the castle falls, the defeat screen (EndScreenUI) shows the time and the local top-5 leaderboard.
 public class InfiniteFlow : MonoBehaviour
@@ -38,13 +40,34 @@ public class InfiniteFlow : MonoBehaviour
     // Raised once, when the castle falls, with the final time.
     public event Action<float> RunEnded;
 
+    [Header("Intro paper")]
+    [Tooltip("Shown once per launch of the game, the first time Infinite mode is entered. The game is paused while it is open.")]
+    public string introTitle = "Hold the Line!";
+    [Tooltip("One bullet point per line. {interval} becomes the seconds between waves.")]
+    [TextArea(4, 12)] public string introText =
+        "There is no last wave: hold the castle for as long as you can.\n" +
+        "A new wave arrives every <b>{interval}</b> seconds, even if the last one is still fighting. Each wave is bigger and comes from more directions.\n" +
+        "Bosses join in from time to time, and later on towers get more expensive, so spend your gold wisely.\n" +
+        "The top of the screen shows your time and when the next wave comes.\n" +
+        "Build as in the Campaign: click a tower card, then click on empty ground. <b>Right-click</b> cancels.\n" +
+        "Your best times go on this computer's <b>Top 5</b> leaderboard (also on the main menu).";
+
+    // Set once the intro paper has been shown in this launch of the game ("Play again" does not show it again).
+    static bool introShown;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void ResetStatics() => introShown = false;
+
     bool over;
     VisualElement hudBox;
-    Label hudLabel;
+    Label hudLabel, nextWaveLabel;
+    InfiniteWaveDirector waves;
+    TutorialPaper paper;
 
     void Awake()
     {
         Current = this;
+        waves = GetComponent<InfiniteWaveDirector>();
         if (!castle) castle = FindAnyObjectByType<Base>();
         if (!gameEnd) gameEnd = FindAnyObjectByType<GameEnd>();
         if (!mouse) mouse = FindAnyObjectByType<MouseStateHandler>();
@@ -55,6 +78,9 @@ public class InfiniteFlow : MonoBehaviour
         // The speech bubble only belongs to the campaign tutorial.
         if (speech) speech.gameObject.SetActive(false);
         if (!GetComponent<GoldPopups>()) gameObject.AddComponent<GoldPopups>();
+        // Added in Awake (as GameFlow does) so it hooks the pause panel's UI before it loads.
+        paper = GetComponent<TutorialPaper>();
+        if (!paper) paper = gameObject.AddComponent<TutorialPaper>();
     }
 
     void OnDestroy()
@@ -65,6 +91,18 @@ public class InfiniteFlow : MonoBehaviour
     void Start()
     {
         GameAudio.SetMusic(GameAudio.Music.Battle);
+        ShowIntroPaper();
+    }
+
+    // The same parchment paper as the campaign tutorial: it pauses the whole game (including the wave countdown)
+    // until the player closes it.
+    void ShowIntroPaper()
+    {
+        if (introShown) return;
+        introShown = true;
+        if (!paper) return;
+        string interval = waves ? Mathf.RoundToInt(waves.secondsBetweenWaves).ToString() : "a few";
+        paper.Show("Infinite Mode", introTitle, (introText ?? "").Replace("{interval}", interval), TutorialPaper.Icon.None);
     }
 
     void Update()
@@ -129,13 +167,21 @@ public class InfiniteFlow : MonoBehaviour
         s.top = 30;
         s.left = Length.Percent(50);
         s.translate = new Translate(Length.Percent(-50), 0);
-        s.flexDirection = FlexDirection.Row;
+        s.flexDirection = FlexDirection.Column;
         s.alignItems = Align.Center;
         s.paddingTop = 14; s.paddingBottom = 14; s.paddingLeft = 34; s.paddingRight = 34;
 
         hudLabel = new Label { name = "GameFlowLabel", pickingMode = PickingMode.Ignore };
         hudLabel.style.fontSize = 46;
         hudBox.Add(hudLabel);
+
+        // Second, smaller line: countdown to the next wave (same font as the line above, lighter ink).
+        nextWaveLabel = new Label { name = "GameFlowLabel", pickingMode = PickingMode.Ignore };
+        nextWaveLabel.style.fontSize = 26;
+        nextWaveLabel.style.color = new Color(122f / 255f, 59f / 255f, 34f / 255f);
+        nextWaveLabel.style.marginTop = 2;
+        hudBox.Add(nextWaveLabel);
+
         root.Add(hudBox);
         RefreshHud();
     }
@@ -144,5 +190,12 @@ public class InfiniteFlow : MonoBehaviour
     {
         if (hudLabel == null || hudLabel.panel == null) return;
         hudLabel.text = "Time  " + FormatTime(SurvivedSeconds);
+
+        if (nextWaveLabel == null) return;
+        bool showCountdown = waves && waves.isActiveAndEnabled && !over;
+        nextWaveLabel.style.display = showCountdown ? DisplayStyle.Flex : DisplayStyle.None;
+        if (!showCountdown) return;
+        int seconds = Mathf.CeilToInt(Mathf.Max(0f, waves.NextWaveIn));
+        nextWaveLabel.text = (waves.WavesStarted == 0 ? "First wave in " : "Next wave in ") + seconds + "s";
     }
 }

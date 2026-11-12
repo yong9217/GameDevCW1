@@ -9,10 +9,27 @@
                 <ui:VisualElement class="royal-divider"/>
                 <ui:Button text="Campaign" name="start" class="royal-button royal-button--primary"/>
                 <ui:Button text="Infinite Mode" name="infinite" class="royal-button royal-button--primary"/>
+                <ui:Button text="Leaderboard" name="leaderboard" class="royal-button"/>
                 <ui:Button text="Glossary" name="bestiary" class="royal-button"/>
                 <ui:Button text="Credits" name="credits" class="royal-button"/>
                 <ui:Button text="Exit" name="exit" class="royal-button"/>
             </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <!-- Infinite mode top 5 of this computer (filled by MainMenu.cs from InfiniteLeaderboard). -->
+    <ui:VisualElement name="leaderboardOverlay" class="royal-overlay" style="display: none;">
+        <ui:VisualElement class="royal-panel">
+            <ui:VisualElement class="royal-inner">
+                <ui:Label text="Leaderboard" class="royal-title"/>
+                <ui:Label text="— Infinite Mode —" class="royal-subtitle"/>
+                <ui:VisualElement class="royal-divider"/>
+                <ui:VisualElement class="lb-section lb-board">
+                    <ui:Label text="TOP 5 - LONGEST DEFENCE" class="royal-credits-heading lb-heading"/>
+                    <ui:VisualElement name="leaderboardRows"/>
+                </ui:VisualElement>
+                <ui:Label text="Times are saved on this computer only." class="royal-text royal-text--small"/>
+            </ui:VisualElement>
+            <ui:Button text="×" name="leaderboardClose" class="royal-close"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

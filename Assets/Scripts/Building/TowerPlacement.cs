@@ -86,7 +86,7 @@ public static class TowerPlacement
 
         // Towers and the base. Search scene objects instead of the combat registry: visible dead
         // towers still occupy ground until their GameObject is removed or deactivated.
-        foreach (var existing in Object.FindObjectsByType<EnemyCombatTarget>(FindObjectsSortMode.None))
+        foreach (var existing in Object.FindObjectsByType<EnemyCombatTarget>())
         {
             var existingBox = existing.attackBounds as BoxCollider;
             Bounds occupied;
@@ -162,7 +162,7 @@ public static class TowerPlacement
 
         decorationScene = scene;
         decorationSpots = new List<DecorationSpot>();
-        foreach (var t in Object.FindObjectsByType<Transform>(FindObjectsSortMode.None))
+        foreach (var t in Object.FindObjectsByType<Transform>())
         {
             if (!IsDecorationName(t.name)) continue;
             // Parts of a decoration (child meshes) are covered by their parent.

@@ -35,20 +35,27 @@ public class InfiniteWaveDirector : MonoBehaviour
         }, "DebugCat");
     }
 
+    // Waves started so far (0 before the first wave).
+    public int WavesStarted { get; private set; }
+    // Seconds (game time) until the next wave starts; shown on the HUD under the survival timer.
+    public float NextWaveIn { get; private set; }
+
     void Start() => StartCoroutine(RunWaves());
 
+    // Counts down in game time (Time.deltaTime), so pauses and tutorial papers stop the countdown too.
     IEnumerator RunWaves()
     {
-        yield return new WaitForSeconds(firstWaveDelay);
-        int wave = 0;
+        NextWaveIn = firstWaveDelay;
         while (flow.IsRunning)
         {
-            wave++;
-            StartCoroutine(SpawnWave(wave));
-
-            //Put some msg about next wave in... OR we keep permanently in timer
-
-            yield return new WaitForSeconds(secondsBetweenWaves);
+            NextWaveIn -= Time.deltaTime;
+            if (NextWaveIn <= 0f)
+            {
+                WavesStarted++;
+                StartCoroutine(SpawnWave(WavesStarted));
+                NextWaveIn += secondsBetweenWaves;
+            }
+            yield return null;
         }
     }
 

@@ -36,7 +36,7 @@ public class GlossaryPreviewFraming : MonoBehaviour
     {
         float end = Time.realtimeSinceStartup + MeasureDelay;
         while (Time.realtimeSinceStartup < end) yield return null;
-        foreach (var cam in FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        foreach (var cam in FindObjectsByType<Camera>(FindObjectsInactive.Include))
             if (cam.targetTexture && cam.targetTexture.name.Contains("PreviewPort")) Frame(cam);
         Destroy(gameObject);
     }
@@ -95,8 +95,8 @@ public class GlossaryPreviewFraming : MonoBehaviour
     static Transform FindSubject(Camera cam)
     {
         var candidates = new HashSet<Transform>();
-        foreach (var t in FindObjectsByType<EnemyCombatTarget>(FindObjectsInactive.Include, FindObjectsSortMode.None)) candidates.Add(t.transform);
-        foreach (var e in FindObjectsByType<EnemyHealth>(FindObjectsInactive.Include, FindObjectsSortMode.None)) candidates.Add(e.transform);
+        foreach (var t in FindObjectsByType<EnemyCombatTarget>(FindObjectsInactive.Include)) candidates.Add(t.transform);
+        foreach (var e in FindObjectsByType<EnemyHealth>(FindObjectsInactive.Include)) candidates.Add(e.transform);
 
         Vector3 origin = cam.transform.position, look = cam.transform.forward;
         origin.y = 0f; look.y = 0f; look.Normalize();

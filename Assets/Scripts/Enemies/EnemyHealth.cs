@@ -68,7 +68,7 @@ public sealed class EnemyHealth : MonoBehaviour
             animator.Play("Death", 0, 0);
         }
 
-        if (!wallet) wallet = FindFirstObjectByType<PlayerEconomy>();
+        if (!wallet) wallet = FindAnyObjectByType<PlayerEconomy>();
         if (wallet) wallet.Deposit(Mathf.Max(0, killReward),gameObject.name);
         else Debug.LogWarning("Enemy died without a PlayerEconomy wallet; assign EnemyHealth.wallet before combat.", this);
 
