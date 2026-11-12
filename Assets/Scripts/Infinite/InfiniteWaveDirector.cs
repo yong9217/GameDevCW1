@@ -15,6 +15,11 @@ public class InfiniteWaveDirector : MonoBehaviour
     [Min(0f)] public float firstWaveDelay = 15f;
     [Tooltip("Seconds from the start of one wave to the start of the next.")]
     [Min(1f)] public float secondsBetweenWaves = 25f;
+
+    [Header("Spawn delays")]
+    [SerializeField] public Dictionary<GameFlow.EnemyKind,float> spawnDelays = new Dictionary<GameFlow.EnemyKind, float>();
+
+    [Header("References")]
     public PlayerEconomy bank;
     public Debugger debug;
 
@@ -35,7 +40,7 @@ public class InfiniteWaveDirector : MonoBehaviour
     IEnumerator RunWaves()
     {
         yield return new WaitForSeconds(firstWaveDelay);
-        int wave = 10;
+        int wave = 0;
         while (flow.IsRunning)
         {
             wave++;
@@ -58,20 +63,22 @@ public class InfiniteWaveDirector : MonoBehaviour
 
         int bosses, normals, fasts, heavies;
 
-        if(wave > 9)
+        if(wave > 9) //Wave 10 and beyond, gives the 1st 9 waves to setup
         {
-            normals = Mathf.RoundToInt(wave*Mathf.Log(wave)/4f + 6.6f);
+            //The intention is to grow *slightly* faster than linear to guarantee an end
+            //Has O(xlog(x))
+            normals = Mathf.RoundToInt(wave*Mathf.Log(wave)/4f + 6.6f);     //Look at the funcs
             fasts = Mathf.RoundToInt(wave*Mathf.Log(wave)/4f + 4.4f);
             heavies = Mathf.RoundToInt(wave*Mathf.Log(wave)/10f + 1f);
-            bosses = Mathf.FloorToInt((wave-2)/4 - 1);
+            //This can increase linearly cuz its boss
+            bosses = Mathf.FloorToInt((wave-2)/4 - 1);                      //Increase by 1 every 4 waves
 
+            //The intention is to grow faster than linear
+            //Has O(x^2)
             foreach (GameObject tower in bank.towerToCost.Keys.ToArray())
             {
+                //Change towerToCost instead of Catalog directly to avoid decimal points while keeping int values
                 bank.towerToCost[tower] += (2f*wave - 1f)/100;
-
-                bank.AssignCatalog(tower.name, Mathf.Round(bank.towerToCost[tower]));
-
-                Debug.Log(bank.PrintCatalog());
 
                 /*
                 Working:
@@ -83,8 +90,10 @@ public class InfiniteWaveDirector : MonoBehaviour
                 */
 
                 //This way, I dont need to store seperate values for each tower and they can all scale with just 1 func
+
+                bank.AssignCatalog(tower.name, Mathf.Round(bank.towerToCost[tower]));
             }
-        } else
+        } else //Behaviour for the first 9 waves
         {
             normals = 2 + wave; //Number of normals to spawn scale linearly with wave
 
@@ -104,9 +113,10 @@ public class InfiniteWaveDirector : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < normals && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Normal, centre, arc); yield return new WaitForSeconds(1.2f); }
-        for (int i = 0; i < heavies && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Heavy, centre, arc); yield return new WaitForSeconds(0f); }
-        for (int i = 0; i < fasts && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Fast, centre, arc); yield return new WaitForSeconds(.5f); }
-        for (int i = 0; i < bosses && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Boss, centre, arc); yield return new WaitForSeconds(3f); }
+        //Actually spawn the stuff
+        for (int i = 0; i < normals && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Normal, centre, arc); yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Normal]); }
+        for (int i = 0; i < heavies && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Heavy, centre, arc); yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Heavy]); }
+        for (int i = 0; i < fasts && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Fast, centre, arc); yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Fast]); }
+        for (int i = 0; i < bosses && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Boss, centre, arc); yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Boss]); }
     }
 }
