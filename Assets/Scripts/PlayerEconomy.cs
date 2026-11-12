@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -46,11 +47,6 @@ public class PlayerEconomy : MonoBehaviour
         {
             Debug.Log(this);
         }, eventName: "Wallet");
-
-        debug.Add("l", () =>
-        {
-            Debug.Log(debug.GetCamSize());
-        }, "Cam Size");
     }
 
     public bool Spend(float buy)
@@ -161,10 +157,68 @@ public class PlayerEconomy : MonoBehaviour
         uiR = r;
     }
 
+    public void UpdateCatalog(string tower, Func<float,float> update)
+    {
+        if(catalog.ContainsKey(tower))
+        {
+            float temp = update(catalog[tower]);
+            catalog[tower] = temp;
+
+            Debug.Log($"Tower {tower} now costs {catalog[tower]}, calculated {temp}");
+        } else
+        {
+            Debug.LogError($"No tower '{tower}' in catalog!");
+        }
+    }
+
+    public void UpdateCatalog(GameObject tower, Func<float,float> update)
+    {
+        UpdateCatalog(tower.name, update);
+    }
+
+    public void AssignCatalog(string tower, float newPrice)
+    {
+        if(newPrice < 0)
+        {
+            Debug.LogWarning("Price cannot be negative!");
+            return;
+        }
+
+        if (catalog.ContainsKey(tower))
+        {
+            catalog[tower] = newPrice;
+        } else
+        {
+            Debug.LogError($"No tower '{tower}' in catalog!");
+        }
+    }
+
+    public float Request(string tower)
+    {
+        return catalog[tower];
+    }
+
+    public float Request(GameObject tower)
+    {
+        return Request(tower.name);
+    }
+
     public override string ToString()
     {
         string ot = $"Player wallet: {totalCash} / {maxCash} $\n";
         ot += $"(Started with {startCash} $; income only from kill rewards)";
+
+        return ot;
+    }
+
+    public string PrintCatalog()
+    {
+        string ot = "Catalog:\n";
+
+        foreach (KeyValuePair<string, float> kv in catalog)
+        {
+            ot += $"{kv.Key} : {kv.Value}\n";
+        }
 
         return ot;
     }
