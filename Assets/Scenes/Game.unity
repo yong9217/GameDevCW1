@@ -2666,7 +2666,7 @@ MonoBehaviour:
   firstKillMessage: "Each defeated enemy gives you gold. Spend it on more towers!"
   castleHitMessage: "The castle is hit! If its health reaches 0, you lose."
   waves:
-  - title: 'Tutorial 1/3: Arrow Tower'
+  - title: Tutorial 1/3
     arcDegrees: 60
     prepMessage: "Pick the blinking Arrow Tower card, then click on the ground near the castle."
     startMessage: "Here they come! Your towers shoot by themselves."
@@ -2680,7 +2680,7 @@ MonoBehaviour:
     paperIcon: 1
     paperText: "Enemies are marching on your castle. If its health drops to <b>0</b>, you lose.\nSurvive all <b>{waves}</b> waves to win. The first 3 waves teach you how to play.\nTo build, click a tower card at the bottom, then click on empty ground. <b>Right-click</b> cancels.\nTowers cost gold. Your gold is shown at the top left.\nStart with an <b>Arrow Tower</b>: it is cheap and fires fast at normal soldiers."
     highlightCard: 0
-  - title: 'Tutorial 2/3: Cannon Tower'
+  - title: Tutorial 2/3
     arcDegrees: 90
     prepMessage: "Build a Cannon Tower before the Heavies arrive!"
     startMessage: "Heavies are slow but tough. Let the cannons do the work!"
@@ -2698,7 +2698,7 @@ MonoBehaviour:
     paperIcon: 2
     paperText: "<b>Heavy</b> soldiers are slow, but tough enough to shrug off arrows.\nThe <b>Cannon Tower</b> fires slowly, but every shot hits very hard.\nBuild one where the Heavies will walk. Tougher enemies also give more gold."
     highlightCard: 1
-  - title: 'Tutorial 3/3: Magic Tower'
+  - title: Tutorial 3/3
     arcDegrees: 30
     prepMessage: "Build a Magic Tower to catch the fast raiders!"
     startMessage: "Here they come, fast and all together!"
