@@ -481,11 +481,13 @@ public class GameFlow : MonoBehaviour
         switch (state)
         {
             case State.Countdown:
-                hudLabel.text = $"{title} in {Mathf.CeilToInt(Mathf.Max(0f, countdown))}s";
+                // The last wave is the boss wave: its small enemies come first, so the line talks about the battle, not the boss.
+                string coming = waveIndex == waves.Count - 1 ? "The final battle begins" : "Enemies arrive";
+                hudLabel.text = $"{title} - {coming} in {Mathf.CeilToInt(Mathf.Max(0f, countdown))}s";
                 startNowButton.style.display = DisplayStyle.Flex;
                 break;
             case State.Running:
-                hudLabel.text = $"{title}  -  enemies left: {toSpawn + EnemyHealth.Active.Count}";
+                hudLabel.text = $"{title} - Enemies left: {toSpawn + EnemyHealth.Active.Count}";
                 startNowButton.style.display = DisplayStyle.None;
                 break;
             case State.Won:
