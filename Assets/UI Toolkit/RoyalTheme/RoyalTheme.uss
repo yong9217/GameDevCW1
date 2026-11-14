@@ -313,3 +313,6 @@
 .lb-player { flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lb-time { width: 120px; -unity-text-align: middle-right; -unity-font-definition: url("Fonts/Cinzel.ttf"); }
 .lb-empty { -unity-text-align: middle-center; color: rgb(138, 106, 58); }
+
+/* Infinite Mode button before the Campaign has been won (MainMenu.cs). */
+.royal-button--locked { opacity: 0.5; border-color: rgb(150, 132, 104); }

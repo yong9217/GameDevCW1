@@ -13,7 +13,7 @@ public sealed class EnemyHealth : MonoBehaviour
     [Min(0)] public int killReward = 1;
     public PlayerEconomy wallet;
     [Min(0)] public float corpseLifetime = 3;
-    [Range(.05f, 1)] public float slowMultiplier = .5f;
+    [Range(.05f, 1)] public float slowMultiplier = .6f;
 
     public float CurrentHealth { get; private set; }
     public bool IsAlive => CurrentHealth > 0 && !dead;

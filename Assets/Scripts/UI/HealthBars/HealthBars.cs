@@ -13,6 +13,8 @@ public sealed class HealthBars : MonoBehaviour
     [Header("Colours")]
     public Color friendlyColour = new Color(.25f, .85f, .3f);
     public Color enemyColour = new Color(.9f, .2f, .2f);
+    [Tooltip("Enemy bar colour while the enemy is slowed by the magic tower.")]
+    public Color slowedColour = new Color(.35f, .75f, 1f);
     public Color backgroundColour = new Color(0f, 0f, 0f, .65f);
 
     [Header("Size (world units)")]
@@ -105,6 +107,7 @@ public sealed class HealthBars : MonoBehaviour
             seen.Add(enemy);
             var bar = GetOrCreate(enemy, enemy.transform, enemy, null);
             Show(bar, enemy.CurrentHealth, enemy.maxHealth, false, cam);
+            if (bar.fillRenderer) bar.fillRenderer.color = enemy.CurrentSpeedMultiplier < 1f ? slowedColour : enemyColour;
         }
 
         foreach (var target in EnemyCombatTarget.Active)

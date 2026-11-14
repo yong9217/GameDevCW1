@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
@@ -32,8 +33,12 @@ public class MainMenu : MonoBehaviour
         {
             LoadGame();
         };
-        var infinite = root.Q<Button>("infinite");
-        if (infinite != null) infinite.clicked += LoadInfinite;
+        infiniteButton = root.Q<Button>("infinite");
+        if (infiniteButton != null) infiniteButton.clicked += () =>
+        {
+            if (ModeUnlocks.InfiniteUnlocked) LoadInfinite();
+            else if (lockedOverlay != null) { lockedOverlay.BringToFront(); RoyalFade.Show(lockedOverlay); }
+        };
         root.Q<Button>("exit").clicked += () =>
         {
             Debug.Log("Exited");
@@ -56,6 +61,66 @@ public class MainMenu : MonoBehaviour
         if (leaderboard != null) leaderboard.clicked += ShowLeaderboard;
         var close = root.Q<Button>("leaderboardClose");
         if (close != null) close.clicked += () => RoyalFade.Hide(leaderboardOverlay);
+
+        // Infinite Mode is locked until the Campaign has been won once on this computer.
+        lockedOverlay = root.Q<VisualElement>("lockedOverlay");
+        unlockOverlay = root.Q<VisualElement>("unlockOverlay");
+        if (lockedOverlay != null) RoyalFade.HideNow(lockedOverlay);
+        if (unlockOverlay != null) RoyalFade.HideNow(unlockOverlay);
+        var lockedOk = root.Q<Button>("lockedOk");
+        if (lockedOk != null) lockedOk.clicked += () => RoyalFade.Hide(lockedOverlay);
+        var unlockOk = root.Q<Button>("unlockOk");
+        if (unlockOk != null) unlockOk.clicked += () => RoyalFade.Hide(unlockOverlay);
+        RefreshInfiniteLock();
+
+        // First visit to the menu after winning the Campaign (also after a restart of the game): congratulate once.
+        if (ModeUnlocks.CelebrationPending && unlockOverlay != null)
+        {
+            ModeUnlocks.MarkCelebrated();
+            unlockOverlay.BringToFront();
+            RoyalFade.Show(unlockOverlay);
+        }
+    }
+
+    VisualElement lockedOverlay, unlockOverlay;
+    Button infiniteButton;
+
+    void RefreshInfiniteLock()
+    {
+        if (infiniteButton == null) return;
+        bool unlocked = ModeUnlocks.InfiniteUnlocked;
+        infiniteButton.text = unlocked ? "Infinite Mode" : "Infinite Mode (Locked)";
+        infiniteButton.EnableInClassList("royal-button--primary", unlocked);
+        infiniteButton.EnableInClassList("royal-button--locked", !unlocked);
+    }
+
+    // Hidden shortcut for demos on a new computer: hold Shift and press B, L, G within 2 seconds.
+    static readonly Key[] secretKeys = { Key.B, Key.L, Key.G };
+    int secretStep;
+    float secretStarted;
+
+    void Update()
+    {
+        var kb = Keyboard.current;
+        if (kb == null || ModeUnlocks.InfiniteUnlocked) return;
+        if (!kb.shiftKey.isPressed || (secretStep > 0 && Time.unscaledTime - secretStarted > 2f))
+        {
+            secretStep = 0;
+            if (!kb.shiftKey.isPressed) return;
+        }
+        if (kb[secretKeys[secretStep]].wasPressedThisFrame)
+        {
+            if (secretStep == 0) secretStarted = Time.unscaledTime;
+            if (++secretStep < secretKeys.Length) return;
+            secretStep = 0;
+            ModeUnlocks.UnlockSilently();
+            RefreshInfiniteLock();
+            GameAudio.Play("ui_click");
+        }
+        else if (kb.anyKey.wasPressedThisFrame && !kb.leftShiftKey.wasPressedThisFrame && !kb.rightShiftKey.wasPressedThisFrame)
+        {
+            secretStep = 0;
+        }
     }
 
     VisualElement leaderboardOverlay, leaderboardRows;

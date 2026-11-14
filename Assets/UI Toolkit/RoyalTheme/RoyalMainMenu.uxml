@@ -32,4 +32,27 @@
             <ui:Button text="×" name="leaderboardClose" class="royal-close"/>
         </ui:VisualElement>
     </ui:VisualElement>
+    <!-- Shown when the locked Infinite Mode button is clicked. -->
+    <ui:VisualElement name="lockedOverlay" class="royal-overlay" style="display: none;">
+        <ui:VisualElement class="royal-panel">
+            <ui:VisualElement class="royal-inner">
+                <ui:Label text="Locked" class="royal-title"/>
+                <ui:VisualElement class="royal-divider"/>
+                <ui:Label text="Win the Campaign once to unlock &lt;b&gt;Infinite Mode&lt;/b&gt;." class="royal-text" style="margin-bottom: 24px;"/>
+                <ui:Button text="OK" name="lockedOk" class="royal-button royal-button--primary"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <!-- Shown once, on the first visit to the menu after the Campaign has been won. -->
+    <ui:VisualElement name="unlockOverlay" class="royal-overlay" style="display: none;">
+        <ui:VisualElement class="royal-panel" style="width: 920px;">
+            <ui:VisualElement class="royal-inner">
+                <ui:Label text="Congratulations!" class="royal-title"/>
+                <ui:Label text="— You have defended the kingdom —" class="royal-subtitle"/>
+                <ui:VisualElement class="royal-divider"/>
+                <ui:Label text="You unlocked &lt;b&gt;INFINITE MODE&lt;/b&gt;: hold the castle for as long as you can and set a record on the leaderboard." class="royal-text" style="margin-bottom: 24px;"/>
+                <ui:Button text="OK" name="unlockOk" class="royal-button royal-button--primary"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

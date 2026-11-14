@@ -52,7 +52,7 @@ MonoBehaviour:
   killReward: 2
   wallet: {fileID: 0}
   corpseLifetime: 2
-  slowMultiplier: 0.5
+  slowMultiplier: 0.6
 --- !u!195 &713022901386894033
 NavMeshAgent:
   m_ObjectHideFlags: 0

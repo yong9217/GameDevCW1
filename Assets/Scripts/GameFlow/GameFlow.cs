@@ -97,6 +97,8 @@ public class GameFlow : MonoBehaviour
     [TextArea] public string firstKillMessage = "Each defeated enemy gives you gold. Spend it on more towers!";
     [Tooltip("Shown once per game, the first time the castle loses health.")]
     [TextArea] public string castleHitMessage = "The castle is hit! If its health reaches 0, you lose.";
+    [Tooltip("Tutorial waves: shown once when the bubble is free, only if the player has not moved the camera yet.")]
+    [TextArea] public string cameraTipMessage = "Tip: press W A S D to look around. Enemies may come from any side!";
 
     [Header("Infinite Mode")]
     public bool infinite;
@@ -129,12 +131,14 @@ public class GameFlow : MonoBehaviour
     Label bubbleText;
     Button bubbleClose;
     string pendingMessage;
+    // Messages wait here while another one is shown, so no message is ever replaced before it can be read.
+    readonly Queue<string> bubbleQueue = new Queue<string>();
     float bubbleHideAt = -1f, bubbleShownAt;
 
     // Tutorial
     TutorialPaper paper;
     int hintedCard = -1;
-    bool startNowHinted, firstKillHinted, castleHitHinted;
+    bool startNowHinted, firstKillHinted, castleHitHinted, cameraHinted;
     float lastCastleHP;
 
     void Awake()
@@ -184,7 +188,7 @@ public class GameFlow : MonoBehaviour
             state = State.Lost;
             StopAllCoroutines();
             if (hudBox != null) hudBox.style.display = DisplayStyle.None;
-            HideBubble();
+            ClearBubble();
             StopHints();
             return;
         }
@@ -200,6 +204,18 @@ public class GameFlow : MonoBehaviour
                 Say(castleHitMessage);
             }
             lastCastleHP = hp;
+        }
+
+        // Camera tip: lowest priority. Only during a tutorial wave, when no message is shown or waiting,
+        // and only if the player has never moved the camera.
+        if (!cameraHinted && state == State.Running && IsTutorialWave(waveIndex))
+        {
+            if (RTSCameraController.HasMoved) cameraHinted = true;
+            else if (!BubbleBusy && bubbleQueue.Count == 0)
+            {
+                cameraHinted = true;
+                Say(cameraTipMessage);
+            }
         }
 
         if (state == State.Countdown)
@@ -360,6 +376,9 @@ public class GameFlow : MonoBehaviour
         {
             state = State.Won;
             StopHints();
+            // Winning the Campaign once unlocks Infinite Mode (the main menu congratulates the player).
+            if (!infinite) ModeUnlocks.MarkCampaignWon();
+            ClearBubble();
             Say(victoryMessage);
             RefreshHud();
             if (gameEnd) gameEnd.CueWin();
@@ -526,13 +545,31 @@ public class GameFlow : MonoBehaviour
             box.style.paddingBottom = 26;
         }
 
-        if (!string.IsNullOrEmpty(pendingMessage)) Say(pendingMessage);
+        if (!string.IsNullOrEmpty(pendingMessage)) ShowBubble(pendingMessage);
         else if (bubbleHideAt < 0f) HideBubble();
     }
 
+    bool BubbleBusy => bubbleHideAt > 0f || !string.IsNullOrEmpty(pendingMessage);
+
+    bool IsTutorialWave(int index) =>
+        index >= 0 && index < waves.Count &&
+        (waves[index].title ?? "").IndexOf("tutorial", StringComparison.OrdinalIgnoreCase) >= 0;
+
+    // Shows the message now if the bubble is free; otherwise it waits its turn (each message stays messageSeconds,
+    // or until the player closes it with the X).
     void Say(string message)
     {
         if (string.IsNullOrWhiteSpace(message)) return;
+        if (BubbleBusy)
+        {
+            if (!bubbleQueue.Contains(message)) bubbleQueue.Enqueue(message);
+            return;
+        }
+        ShowBubble(message);
+    }
+
+    void ShowBubble(string message)
+    {
         if (bubble == null || bubbleText == null)
         {
             pendingMessage = message;
@@ -545,11 +582,21 @@ public class GameFlow : MonoBehaviour
         bubbleHideAt = Time.time + messageSeconds;
     }
 
+    // Hides the current message and shows the next waiting one, if any.
     void HideBubble()
     {
         bubbleHideAt = -1f;
         if (bubble != null) bubble.style.scale = new StyleScale(new Vector2(0f, 0f));
         if (bubbleClose != null) bubbleClose.visible = false;
+        if (bubbleQueue.Count > 0) ShowBubble(bubbleQueue.Dequeue());
+    }
+
+    // Game over: drop everything still waiting.
+    void ClearBubble()
+    {
+        bubbleQueue.Clear();
+        pendingMessage = null;
+        HideBubble();
     }
 
     // ---------------- Default wave table ----------------
@@ -558,7 +605,7 @@ public class GameFlow : MonoBehaviour
     {
         new Wave
         {
-            title = "Tutorial 1/3: Arrow Tower", arcDegrees = 60f,
+            title = "Tutorial 1/3", arcDegrees = 60f,
             prepMessage = "Pick the blinking Arrow Tower card, then click on the ground near the castle.",
             startMessage = "Here they come! Your towers shoot by themselves.",
             paperStep = "Tutorial 1 of 3", paperTitle = "Defend the Castle!", paperIcon = TutorialPaper.Icon.Arrow, highlightCard = 0,
@@ -567,12 +614,13 @@ public class GameFlow : MonoBehaviour
                 "Survive all <b>{waves}</b> waves to win. The first 3 waves teach you how to play.\n" +
                 "To build, click a tower card at the bottom, then click on empty ground. <b>Right-click</b> cancels.\n" +
                 "Towers cost gold. Your gold is shown at the top left.\n" +
+                "Use <b>W A S D</b> to move the camera and look around the castle.\n" +
                 "Start with an <b>Arrow Tower</b>: it is cheap and fires fast at normal soldiers.",
             groups = { new SpawnGroup(EnemyKind.Normal, 4, 3f) },
         },
         new Wave
         {
-            title = "Tutorial 2/3: Cannon Tower", arcDegrees = 90f,
+            title = "Tutorial 2/3", arcDegrees = 90f,
             prepMessage = "Build a Cannon Tower before the Heavies arrive!",
             startMessage = "Heavies are slow but tough. Let the cannons do the work!",
             paperStep = "Tutorial 2 of 3", paperTitle = "Heavy Soldiers", paperIcon = TutorialPaper.Icon.Cannon, highlightCard = 1,
@@ -584,7 +632,7 @@ public class GameFlow : MonoBehaviour
         },
         new Wave
         {
-            title = "Tutorial 3/3: Magic Tower", arcDegrees = 30f,
+            title = "Tutorial 3/3", arcDegrees = 30f,
             prepMessage = "Build a Magic Tower to catch the fast raiders!",
             startMessage = "Here they come, fast and all together!",
             paperStep = "Tutorial 3 of 3", paperTitle = "Fast Raiders", paperIcon = TutorialPaper.Icon.Magic, highlightCard = 2,

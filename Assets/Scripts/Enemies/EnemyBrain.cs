@@ -379,6 +379,13 @@ public sealed class EnemyBrain : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(direction), turnSpeed * Time.deltaTime);
     }
 
+    // Slowed enemies (magic tower) also walk in slow motion, so the slow is easy to see.
+    void LateUpdate()
+    {
+        if (animator && health && health.IsAlive && animationState == "Walk")
+            animator.speed = health.CurrentSpeedMultiplier;
+    }
+
     void Play(string state, bool restart = false, float duration = 1)
     {
         if (!animator || !animator.runtimeAnimatorController) return;

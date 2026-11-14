@@ -2550,6 +2550,8 @@ MonoBehaviour:
 
       Towers cost gold. Your gold is shown at the top left.
 
+      Use <b>W A S D</b> to move the camera and look around the castle.
+
       Start with an <b>Arrow Tower</b>: it is cheap and fires fast at normal soldiers.'
     highlightCard: 0
   - title: Tutorial 2/3
