@@ -978,7 +978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 3000
-  killReward: 5
+  killReward: 10
   wallet: {fileID: 0}
   corpseLifetime: 2
   slowMultiplier: 0.5

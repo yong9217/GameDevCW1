@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerEconomy : MonoBehaviour
 {
@@ -17,6 +16,7 @@ public class PlayerEconomy : MonoBehaviour
     public Debugger debug;
     public string debugKey;
     public bool Monopoly;
+    public bool log = false;
 
     void Awake()
     {
@@ -116,7 +116,10 @@ public class PlayerEconomy : MonoBehaviour
 
         UpdateCash();
 
-        Debug.Log($"Deposited {totalDepo} from {(source.Length <= 0 ? "Unknown" : source)}");
+        if (log)
+        {
+            Debug.Log($"Deposited {totalDepo} from {(source.Length <= 0 ? "Unknown" : source)}");
+        }
 
         return totalCash < maxCash;
     }
@@ -164,7 +167,10 @@ public class PlayerEconomy : MonoBehaviour
             float temp = update(catalog[tower]);
             catalog[tower] = temp;
 
-            Debug.Log($"Tower {tower} now costs {catalog[tower]}, calculated {temp}");
+            if (log)
+            {
+                Debug.Log($"Tower {tower} now costs {catalog[tower]}, calculated {temp}");
+            }
         } else
         {
             Debug.LogError($"No tower '{tower}' in catalog!");

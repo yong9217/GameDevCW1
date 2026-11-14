@@ -40,6 +40,10 @@ public class GameFlow : MonoBehaviour
         public string title;
         [Tooltip("Width of the arc the enemies come from, in degrees. 360 = from every side.")]
         [Range(10f, 360f)] public float arcDegrees = 60f;
+        [Tooltip("Check if new attack angle should be relative to the previous")]
+        public bool relativeToPrevWave = false;
+        [Tooltip("Possbile angles of attack, relative to the castle if not relative to previous wave. x = starting legal angle, y = ending legal angle. Exp. (30,60) = Can choose any angle between 30 and 60. Negative values are allowed")]
+        public Vector2 attackAngleDegrees = new Vector2(0f,30f);
         [Tooltip("Shown when the countdown to this wave begins.")]
         [TextArea] public string prepMessage;
         [Tooltip("Shown when this wave starts.")]
@@ -107,6 +111,7 @@ public class GameFlow : MonoBehaviour
     float arcCentre;
     int groupsRunning;
     int toSpawn;
+    float prevWaveAngle = 0f;
 
     // HUD (top centre): wave title + countdown, and the "Start now" button.
     VisualElement hudBox;
@@ -286,7 +291,14 @@ public class GameFlow : MonoBehaviour
         if (TutorialPaper.IsOpen) return;
         var wave = waves[waveIndex];
         state = State.Running;
-        arcCentre = UnityEngine.Random.Range(0f, 360f);
+        arcCentre = UnityEngine.Random.Range(wave.attackAngleDegrees.x, wave.attackAngleDegrees.y);
+
+        if (wave.relativeToPrevWave)
+        {
+            arcCentre += prevWaveAngle;
+        }
+        prevWaveAngle = arcCentre;
+
         groupsRunning = 0;
         toSpawn = 0;
         foreach (var group in wave.groups)

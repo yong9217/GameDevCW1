@@ -15,6 +15,8 @@ public class InfiniteWaveDirector : MonoBehaviour
     [Min(0f)] public float firstWaveDelay = 15f;
     [Tooltip("Seconds from the start of one wave to the start of the next.")]
     [Min(1f)] public float secondsBetweenWaves = 25f;
+    [Tooltip("Begin wave scaling from the stated wave")]
+    [Min(0)]public int waveScaleFrom = 10;
 
     [Header("Spawn delays")]
     [SerializeField] public Dictionary<GameFlow.EnemyKind,float> spawnDelays = new Dictionary<GameFlow.EnemyKind, float>();
@@ -70,7 +72,9 @@ public class InfiniteWaveDirector : MonoBehaviour
 
         int bosses, normals, fasts, heavies;
 
-        if(wave > 9) //Wave 10 and beyond, gives the 1st 9 waves to setup
+        float dmgCoeff = 1f;
+
+        if(wave > waveScaleFrom - 1) //Wave 10 and beyond, gives the 1st 9 waves to setup
         {
             //The intention is to grow *slightly* faster than linear to guarantee an end
             //Has O(xlog(x))
@@ -79,6 +83,8 @@ public class InfiniteWaveDirector : MonoBehaviour
             heavies = Mathf.RoundToInt(wave*Mathf.Log(wave)/10f + 1f);
             //This can increase linearly cuz its boss
             bosses = Mathf.FloorToInt((wave-2)/4 - 1);                      //Increase by 1 every 4 waves
+
+            dmgCoeff = 4f*Mathf.Log(wave)-4f*Mathf.Log(waveScaleFrom)+1f;   //Increases enemy damage
 
             //The intention is to grow faster than linear
             //Has O(x^2)
@@ -111,9 +117,6 @@ public class InfiniteWaveDirector : MonoBehaviour
             if(wave == 5)
             {
                 bosses = 1;
-            } else if(wave == 8)
-            {
-                bosses = 1;
             } else
             {
                 bosses = 0;
@@ -121,9 +124,9 @@ public class InfiniteWaveDirector : MonoBehaviour
         }
 
         //Actually spawn the stuff
-        for (int i = 0; i < normals && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Normal, centre, arc); yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Normal]); }
-        for (int i = 0; i < heavies && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Heavy, centre, arc); yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Heavy]); }
-        for (int i = 0; i < fasts && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Fast, centre, arc); yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Fast]); }
-        for (int i = 0; i < bosses && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Boss, centre, arc); yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Boss]); }
+        for (int i = 0; i < normals && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Normal, centre, arc).GetComponent<EnemyBrain>().attackDamage *=  dmgCoeff; yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Normal]); }
+        for (int i = 0; i < heavies && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Heavy, centre, arc).GetComponent<EnemyBrain>().attackDamage *=  dmgCoeff; yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Heavy]); }
+        for (int i = 0; i < fasts && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Fast, centre, arc).GetComponent<EnemyBrain>().attackDamage *=  dmgCoeff; yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Fast]); }
+        for (int i = 0; i < bosses && flow.IsRunning; i++) { flow.Spawn(GameFlow.EnemyKind.Boss, centre, arc).GetComponent<EnemyBrain>().attackDamage *=  dmgCoeff; yield return new WaitForSeconds(spawnDelays[GameFlow.EnemyKind.Boss]); }
     }
 }

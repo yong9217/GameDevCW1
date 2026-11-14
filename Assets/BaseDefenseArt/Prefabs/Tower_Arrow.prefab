@@ -652,7 +652,7 @@ MonoBehaviour:
   fixedBase: {fileID: 5654181310755685960}
   recoilPart: {fileID: 7181181717103142540}
   range: 7.2
-  damage: 21
+  damage: 28
   interval: 0.7
   maxChainTargets: 3
   chainRange: 2.8

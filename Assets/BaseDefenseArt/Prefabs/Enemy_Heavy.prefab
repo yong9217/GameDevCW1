@@ -334,7 +334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 500
-  killReward: 2
+  killReward: 4
   wallet: {fileID: 0}
   corpseLifetime: 2
   slowMultiplier: 0.5
@@ -386,6 +386,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   hitEffect: {fileID: 0}
+  hitFeedbackLead: 0
   hitEffectScale: 1
   hitEffectLifetime: 1.5
   cameraShakeAmplitude: 0
