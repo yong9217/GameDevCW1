@@ -120,10 +120,11 @@ public class GameFlow : MonoBehaviour
     Label hudLabel;
     Button startNowButton;
 
-    // Wave track (right side): one segment per wave, filled when that wave starts; the last one is the boss.
+    // Wave route (right side): a dotted march route with one dot per wave; the last stop is the boss.
     VisualElement waveTrack;
     Label waveTrackCount;
     readonly List<VisualElement> waveSegments = new List<VisualElement>();
+    readonly List<VisualElement> waveLinks = new List<VisualElement>();   // waveLinks[i] leads up to wave i + 1
     int wavesStarted;
 
     // Speech bubble above the castle.
@@ -432,9 +433,13 @@ public class GameFlow : MonoBehaviour
         int started = Mathf.Clamp(wavesStarted, 0, total);
         for (int i = 0; i < total; i++)
         {
+            // filled = this wave has started; current = it is being fought; next = the countdown is for it.
             waveSegments[i].EnableInClassList("filled", i < started);
             waveSegments[i].EnableInClassList("current", i == started - 1 && state == State.Running);
+            waveSegments[i].EnableInClassList("next", i == started && state == State.Countdown);
         }
+        for (int i = 0; i < waveLinks.Count; i++)
+            waveLinks[i].EnableInClassList("filled", i + 1 < started);
         if (waveTrackCount != null) waveTrackCount.text = $"{started} / {total}";
     }
 
@@ -442,11 +447,12 @@ public class GameFlow : MonoBehaviour
     {
         waveTrack?.RemoveFromHierarchy();
         waveSegments.Clear();
+        waveLinks.Clear();
         // The old rotated "Enemy Forces" bar from UIMenu.uxml is replaced by this track.
         var oldMeter = root.Q<VisualElement>("WaveHUD");
         if (oldMeter != null) oldMeter.style.display = DisplayStyle.None;
 
-        // Look: RoyalHud.uss (#WaveTrack, .wave-seg ...).
+        // Look: RoyalHud.uss (#WaveTrack, .wave-stop, .wave-dot, .wave-link ...). Not boxes, so nothing looks clickable.
         waveTrack = new VisualElement { name = "WaveTrack", pickingMode = PickingMode.Ignore };
         var title = new Label("Waves") { pickingMode = PickingMode.Ignore };
         title.AddToClassList("wave-track-title");
@@ -457,20 +463,48 @@ public class GameFlow : MonoBehaviour
         for (int i = 0; i < waves.Count; i++)
         {
             bool boss = i == waves.Count - 1;
-            var seg = new VisualElement { pickingMode = PickingMode.Ignore };
-            seg.AddToClassList("wave-seg");
-            if (boss) seg.AddToClassList("boss");
-            var label = new Label(boss ? "Boss" : (i + 1).ToString()) { pickingMode = PickingMode.Ignore };
-            label.AddToClassList("wave-seg-label");
-            seg.Add(label);
-            column.Add(seg);   // column-reverse: wave 1 sits at the bottom, the boss on top
-            waveSegments.Add(seg);
+            if (i > 0)
+            {
+                // Dotted path between two stops.
+                var link = new VisualElement { pickingMode = PickingMode.Ignore };
+                link.AddToClassList("wave-link");
+                for (int d = 0; d < 3; d++)
+                {
+                    var dot = new VisualElement { pickingMode = PickingMode.Ignore };
+                    dot.AddToClassList("wave-link-dot");
+                    link.Add(dot);
+                }
+                column.Add(link);
+                waveLinks.Add(link);
+            }
+            var stop = new VisualElement { pickingMode = PickingMode.Ignore };
+            stop.AddToClassList("wave-stop");
+            if (boss) stop.AddToClassList("boss");
+            var holder = new VisualElement { pickingMode = PickingMode.Ignore };
+            holder.AddToClassList("wave-dot-holder");
+            var dotMark = new VisualElement { pickingMode = PickingMode.Ignore };
+            dotMark.AddToClassList("wave-dot");
+            holder.Add(dotMark);
+            var label = new Label(StopName(i, boss)) { pickingMode = PickingMode.Ignore };
+            label.AddToClassList("wave-stop-label");
+            stop.Add(holder);
+            stop.Add(label);
+            column.Add(stop);   // column-reverse: the first wave sits at the bottom, the boss on top
+            waveSegments.Add(stop);
         }
         waveTrack.Add(title);
         waveTrack.Add(waveTrackCount);
         waveTrack.Add(column);
         root.Add(waveTrack);
         UpdateWaveMeter();
+    }
+
+    // "Tutorial 1/3" -> "Tutorial 1", "Wave 2/3" -> "Wave 2", last wave -> "Boss".
+    string StopName(int index, bool boss)
+    {
+        if (boss) return "Boss";
+        string title = (waves[index].title ?? "").Split('/')[0].Trim();
+        return string.IsNullOrEmpty(title) ? $"Wave {index + 1}" : title;
     }
 
     void BuildHud(PanelRenderer panel, VisualElement root, int version)
