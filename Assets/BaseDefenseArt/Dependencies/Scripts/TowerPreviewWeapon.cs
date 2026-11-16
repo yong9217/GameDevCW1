@@ -15,7 +15,11 @@ public sealed class TowerPreviewWeapon : MonoBehaviour
     [Range(1, 3)] public int maxChainTargets = 3;
     [Min(0)] public float chainRange = 3.5f;
     [Min(0)] public float distanceTieTolerance = .05f;
-    public float SlowDuration => Mathf.Max(.05f, interval) * .5f;
+    // Crystal tower: the slow lasts one attack interval plus slowLinger, just enough that an enemy that keeps
+    // getting hit stays slowed without its blue bar / slow walk flickering between two hits.
+    [Tooltip("Crystal tower: seconds the slow lasts beyond one attack interval (only to stop flicker).")]
+    [Min(0)] public float slowLinger = .1f;
+    public float SlowDuration => Mathf.Max(.05f, interval) + slowLinger;
     public bool attacking = true;
     public int shots, hits, chainHits;
     public float maxYawChange, maxBaseMovement, maxRecoil;

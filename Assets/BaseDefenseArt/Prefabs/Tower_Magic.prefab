@@ -56,7 +56,7 @@ MonoBehaviour:
   recoilPart: {fileID: 0}
   range: 7.2
   damage: 20
-  interval: 0.8
+  interval: 1
   maxChainTargets: 3
   chainRange: 3.6
   distanceTieTolerance: 0.05

@@ -25,6 +25,8 @@ public class RTSCameraController : MonoBehaviour
     public Transform startFocus;
 
     static RTSCameraController instance;
+    // True once the player has moved the camera in this scene (the tutorial stops reminding them).
+    public static bool HasMoved { get; private set; }
 
     Camera cam;
     Vector3 start;
@@ -47,6 +49,7 @@ public class RTSCameraController : MonoBehaviour
     void Awake()
     {
         instance = this;
+        HasMoved = false;
         cam = GetComponent<Camera>();
         start = startFocus ? new Vector3(startFocus.position.x, 0f, startFocus.position.z) : Vector3.zero;
         Apply();
@@ -54,7 +57,9 @@ public class RTSCameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        offset += ReadMoveInput() * panSpeed * Time.unscaledDeltaTime;
+        Vector2 move = ReadMoveInput();
+        if (move != Vector2.zero) HasMoved = true;
+        offset += move * panSpeed * Time.unscaledDeltaTime;
         offset.x = Mathf.Clamp(offset.x, -maxOffset, maxOffset);
         offset.y = Mathf.Clamp(offset.y, -maxOffset, maxOffset);
         Apply();

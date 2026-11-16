@@ -313,7 +313,7 @@ public class UIResponder : MonoBehaviour
             return;
         }
 
-        MoneyHUD.text = $"{bank.GetTotal():0.##}";
+        MoneyHUD.text = $"{bank.GetTotal():0.##}/{bank.maxCash:0.##}";
         // The old fill bar is optional; the HUD is now just a coin icon and the amount.
         if (MoneyMeter != null) MoneyMeter.style.width = Length.Percent(bank.GetPercent());
     }
