@@ -154,13 +154,14 @@
     -unity-background-scale-mode: scale-to-fit;
 }
 
-/* Wave track on the right (GameFlow): one segment per wave, filled when that wave starts; the boss on top. */
+/* Wave route on the right (GameFlow): a dotted march route, one dot per wave, the boss medallion on top.
+   Round dots and ink colours on purpose: nothing here may look like a button. */
 #WaveTrack {
     position: absolute;
     top: 40px;
     right: 40px;
-    width: 250px;
-    padding: 22px 26px 26px 26px;
+    width: 340px;
+    padding: 24px 28px 30px 28px;
     align-items: stretch;
     background-color: rgb(239, 226, 192);
     border-width: 5px;
@@ -186,31 +187,47 @@
     padding: 0;
 }
 .wave-track-column { flex-direction: column-reverse; }
-.wave-seg {
-    height: 74px;
-    margin: 6px 0 6px 0;
-    justify-content: center;
-    background-color: rgba(107, 74, 36, 0.12);
+
+.wave-stop { flex-direction: row; align-items: center; height: 64px; }
+.wave-stop.boss { height: 90px; }
+.wave-dot-holder { width: 70px; height: 100%; align-items: center; justify-content: center; }
+.wave-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
     border-width: 4px;
-    border-color: rgb(168, 136, 90);
-    border-radius: 8px;
+    border-color: rgba(107, 74, 36, 0.5);
+    background-color: rgba(0, 0, 0, 0);
     transition-property: background-color, border-color, scale;
     transition-duration: 0.35s;
 }
-.wave-seg-label {
+.wave-stop-label {
     -unity-font-definition: url("Fonts/Cinzel.ttf");
-    -unity-font-style: bold;
-    font-size: 34px;
-    color: rgb(168, 136, 90);
-    -unity-text-align: middle-center;
-    margin: 0;
+    font-size: 32px;
+    color: rgba(107, 74, 36, 0.55);
+    margin: 0 0 0 12px;
     padding: 0;
     transition-property: color;
     transition-duration: 0.35s;
 }
-.wave-seg.filled { background-color: rgb(150, 62, 34); border-color: rgb(90, 42, 22); }
-.wave-seg.filled .wave-seg-label { color: rgb(245, 234, 208); }
-.wave-seg.current { scale: 1.06 1.06; border-color: rgb(255, 208, 0); }
-.wave-seg.boss { height: 90px; border-color: rgb(196, 150, 40); }
-.wave-seg.boss .wave-seg-label { font-size: 38px; }
-.wave-seg.boss.filled { background-color: rgb(110, 24, 18); border-color: rgb(255, 208, 0); }
+/* started: inked in */
+.wave-stop.filled .wave-dot { background-color: rgb(74, 50, 22); border-color: rgb(74, 50, 22); }
+.wave-stop.filled .wave-stop-label { color: rgb(74, 50, 22); }
+/* countdown to this wave: gold ring */
+.wave-stop.next .wave-dot { border-color: rgb(212, 160, 40); border-width: 5px; scale: 1.15 1.15; }
+.wave-stop.next .wave-stop-label { color: rgb(160, 112, 20); }
+/* being fought: glowing gold dot */
+.wave-stop.current .wave-dot { background-color: rgb(232, 182, 52); border-color: rgb(255, 238, 170); scale: 1.35 1.35; }
+.wave-stop.current .wave-stop-label { color: rgb(160, 112, 20); -unity-font-style: bold; }
+/* boss medallion */
+.wave-stop.boss .wave-dot { width: 62px; height: 62px; border-radius: 31px; border-width: 6px; border-color: rgba(110, 24, 18, 0.6); }
+.wave-stop.boss .wave-stop-label { font-size: 40px; -unity-font-style: bold; color: rgba(110, 24, 18, 0.6); }
+.wave-stop.boss.next .wave-dot { border-color: rgb(212, 160, 40); }
+.wave-stop.boss.filled .wave-dot { background-color: rgb(110, 24, 18); border-color: rgb(110, 24, 18); }
+.wave-stop.boss.current .wave-dot { background-color: rgb(110, 24, 18); border-color: rgb(232, 182, 52); scale: 1.15 1.15; }
+.wave-stop.boss.filled .wave-stop-label, .wave-stop.boss.current .wave-stop-label { color: rgb(110, 24, 18); }
+
+/* dotted path between two stops */
+.wave-link { width: 70px; height: 34px; align-items: center; justify-content: space-around; }
+.wave-link-dot { width: 6px; height: 6px; border-radius: 3px; background-color: rgba(107, 74, 36, 0.35); }
+.wave-link.filled .wave-link-dot { background-color: rgb(74, 50, 22); }
