@@ -10,6 +10,9 @@
                     <ui:Label text="MADE BY" class="royal-credits-heading"/>
                     <ui:Label text="Yong You Shen" class="royal-credits-name"/>
                     <ui:Label text="Xia Jin Qing" class="royal-credits-name"/>
+                    <ui:Label text="ASSETS USED" class="royal-credits-heading" style="margin-top: 28px;"/>
+                    <ui:Label text="Music — RandomMind (OpenGameArt)" class="royal-text" style="font-size: 24px; margin-bottom: 2px;"/>
+                    <ui:Label text="Sounds &amp; models — Kenney (kenney.nl)" class="royal-text" style="font-size: 24px; margin-bottom: 0;"/>
                 </ui:VisualElement>
             </ui:VisualElement>
             <ui:Button text="×" name="exit" class="royal-close"/>
